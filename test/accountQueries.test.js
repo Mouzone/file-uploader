@@ -12,7 +12,7 @@ describe('Query Account Table', () => {
         const result = await prisma.account.findUnique(query)
         expect(result).to.include({
             username: "user",
-            password: "password",
+            password: "password"
         })
 
         await prisma.account.delete(query)
