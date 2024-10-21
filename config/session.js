@@ -2,6 +2,7 @@ const session = require('express-session')
 const { Pool } = require('pg')
 const pgSession = require('connect-pg-simple')(session)
 
+// todo: refactor using prisma-session store
 module.exports = session({
     store: new pgSession({
         pool: new Pool({ connectionString: process.env.DATABASE_URL }),

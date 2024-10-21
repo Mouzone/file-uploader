@@ -2,6 +2,7 @@ const Account = require('../queries/accountQueries')
 const { body, validationResult } = require('express-validator')
 const bcrypt = require("bcryptjs")
 
+// todo: add more error handling
 module.exports.indexGet = (req, res) => {
     const authenticated = req.session.passport?.user
     res.render("index", { authenticated })
