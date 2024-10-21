@@ -1,11 +1,12 @@
 const Account = require('../queries/accountQueries')
 const { body, validationResult } = require('express-validator')
 const bcrypt = require("bcryptjs")
+const passport = require("../config/passport");
 
 // todo: add more error handling
 module.exports.indexGet = (req, res) => {
     const authenticated = req.session.passport?.user
-    res.render("index", { authenticated })
+    res.render("index", { authenticated, errorMessage: "" })
 }
 
 module.exports.signUpGet = (req, res) => {
@@ -58,6 +59,24 @@ module.exports.signUpPost = [
         }
     }
 ]
+
+module.exports.logInPost = (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+        if (err) {
+
+        }
+        if (!user) {
+            console.log(info.message)
+            return res.render("index", { authenticated: false, errorMessage: info.message })
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                return next(err)
+            }
+            return res.redirect("/")
+        })
+    })(req, res, next)
+}
 
 module.exports.logOutPost = (req, res, next) => {
     req.logout((error) => {

@@ -6,11 +6,7 @@ const passport = require('../config/passport')
 appRouter.get("/", appController.indexGet)
 appRouter.get("/sign-up", appController.signUpGet)
 appRouter.post("/sign-up", appController.signUpPost)
-// todo: figure out how to redirect with errors on fail
-appRouter.post("/log-in", passport.authenticate(
-    "local",
-    {successRedirect: "/", failureRedirect: "/log-in"}
-))
+appRouter.post("/log-in", appController.logInPost)
 appRouter.post("/log-out", appController.logOutPost)
 
 module.exports = appRouter
