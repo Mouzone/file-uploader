@@ -20,7 +20,7 @@ model Account {
 }
 
 model Session {
-  id     String  @id @db.VarChar
+  sid     String  @id @db.VarChar
   sess    Json
   expire  DateTime
 
