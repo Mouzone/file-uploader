@@ -4,11 +4,11 @@ const bcrypt = require("bcryptjs")
 
 module.exports.indexGet = (req, res) => {
     const authenticated = req.session.passport?.user
-    res.render("index", {authenticated})
+    res.render("index", { authenticated })
 }
 
 module.exports.signUpGet = (req, res) => {
-    res.render("sign-up", {errors: []})
+    res.render("sign-up", { errors: [] })
 }
 
 const validateUser = [
