@@ -6,6 +6,9 @@
         <title>Sign Up</title>
     </head>
     <body>
+        <% errors.forEach(error => { %>
+            <%= error.msg %>
+        <% }) %>
         <form action="/sign-up" method="POST">
             <label for="username"> Username: </label>
             <input type="text" id="username" name="username" required>
