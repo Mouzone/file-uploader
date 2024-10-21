@@ -20,8 +20,9 @@ model Account {
 }
 
 model Session {
-  id        String   @id
-  sid       String   @unique
-  data      String
-  expiresAt   DateTime
+  id     String  @id @db.VarChar
+  sess    Json
+  expire  DateTime
+
+  @@index([expire], name: "IDX_session_expire")
 }
