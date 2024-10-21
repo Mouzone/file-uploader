@@ -5,9 +5,10 @@
         <title> File Uploader </title>
     </head>
     <body>
-<!--    if user exists show login form -->
-        <%- include('components/log-in') -%>
-<!--    else show file upload form-->
-        <%- include('components/file-upload') -%>
+        <% if (!authenticated) { %>
+            <%- include('components/log-in') -%>
+        <% } else { %>
+            <%- include('components/file-upload') -%>
+        <% } %>
     </body>
 </html>

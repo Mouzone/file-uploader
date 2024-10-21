@@ -2,7 +2,8 @@ const Account = require('../queries/accountQueries')
 const bcrypt = require("bcryptjs");
 
 module.exports.indexGet = (req, res) => {
-    res.render("index", {})
+    const authenticated = req.session.passport?.user
+    res.render("index", {authenticated})
 }
 
 module.exports.signUpGet = (req, res) => {
@@ -10,7 +11,7 @@ module.exports.signUpGet = (req, res) => {
 }
 
 module.exports.signUpPost = async (req, res) => {
-    // todo: validate inputs and compare password to confirm_password
+    // todo: validate inputs and compare password to confirm_password, on fail go back to sign-up
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
     await Account.createUser(req.body.username, hashedPassword)
     res.render("index", {})
