@@ -14,10 +14,29 @@ datasource db {
 }
 
 model Account {
-  id Int @id @default(autoincrement())
-  username String @db.VarChar(255) @unique
-  password String @db.VarChar(255)
+  id       Int      @id @default(autoincrement())
+  username String   @db.VarChar(255) @unique
+  password String   @db.VarChar(255)
+  files    File[]
 }
+
+model File {
+  id          Int      @id @default(autoincrement())
+  name        String
+  size        Int
+  upload_time DateTime
+  account     Account   @relation(fields: [account_id], references: [id])
+  account_id  Int
+  folder      Folder?   @relation(fields: [folder_id], references: [id])
+  folder_id   Int?
+}
+
+model Folder {
+  id    Int    @id @default(autoincrement())
+  name  String
+  files File[]
+}
+
 
 model Session {
   id        String   @id
