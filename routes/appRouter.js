@@ -10,5 +10,6 @@ appRouter.post("/log-in", passport.authenticate(
     "local",
     {successRedirect: "/", failureRedirect: "/log-in"}
 ))
+appRouter.post("/log-out", appController.logOutPost)
 
 module.exports = appRouter

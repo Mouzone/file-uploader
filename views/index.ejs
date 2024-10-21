@@ -8,6 +8,9 @@
         <% if (!authenticated) { %>
             <%- include('components/log-in') -%>
         <% } else { %>
+            <form action="/log-out" method="POST">
+                <button type="submit"> Log Out </button>
+            </form>
             <%- include('components/file-upload') -%>
         <% } %>
     </body>

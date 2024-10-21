@@ -16,3 +16,20 @@ module.exports.signUpPost = async (req, res) => {
     await Account.createUser(req.body.username, hashedPassword)
     res.render("index", {})
 }
+
+module.exports.logOutPost = (req, res, next) => {
+    req.logout((error) => {
+        if (error) {
+            return next(error)
+        }
+
+        req.session.destroy((error) => {
+            if (error) {
+                return next(error)
+            }
+
+            res.clearCookie('connect.sid')
+            res.redirect("/")
+        })
+    })
+}
