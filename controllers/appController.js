@@ -94,3 +94,7 @@ module.exports.logOutPost = (req, res, next) => {
         })
     })
 }
+
+module.exports.uploadPost = (req, res) => {
+    
+}
