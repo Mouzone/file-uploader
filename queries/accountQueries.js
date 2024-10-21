@@ -10,3 +10,19 @@ module.exports.createUser = async (username, password) => {
         }
     })
 }
+
+module.exports.findByUsername = async (username) => {
+    return prisma.account.findUnique({
+        where: {
+            username: username,
+        }
+    })
+}
+
+module.exports.findById = async (id) => {
+    return prisma.account.findUnique({
+        where: {
+            id: id,
+        }
+    })
+}
