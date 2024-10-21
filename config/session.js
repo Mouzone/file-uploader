@@ -2,7 +2,6 @@ const session = require('express-session')
 const { PrismaSessionStore } = require('@quixo3/prisma-session-store')
 const { PrismaClient } = require('@prisma/client')
 
-// todo: refactor using prisma-session store
 module.exports = session({
     store: new PrismaSessionStore(
         new PrismaClient(),
