@@ -1,4 +1,4 @@
-const account = require('../queries/accountQueries')
+const Account = require('../queries/accountQueries')
 
 module.exports.indexGet = (req, res) => {
     res.render("index", {})
@@ -10,6 +10,6 @@ module.exports.signUpGet = (req, res) => {
 
 module.exports.signUpPost = async (req, res) => {
     // todo: validate inputs and compare password to confirm_password
-    await account.createUser(req.body.username, req.body.password)
+    await Account.createUser(req.body.username, req.body.password)
     res.render("index", {})
 }
