@@ -3,7 +3,6 @@ const { body, validationResult } = require('express-validator')
 const bcrypt = require("bcryptjs")
 const passport = require("../config/passport");
 
-// todo: add more error handling
 module.exports.indexGet = (req, res) => {
     const authenticated = req.session.passport?.user
     res.render("index", { authenticated, errorMessage: "" })
@@ -95,6 +94,9 @@ module.exports.logOutPost = (req, res, next) => {
     })
 }
 
+
 module.exports.uploadPost = (req, res) => {
-    
+    console.log(req.file, req.body)
+    // todo: add details to db
+    res.redirect("/")
 }
