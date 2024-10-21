@@ -38,7 +38,7 @@ module.exports.signUpPost = [
     async (req, res) => {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
-            return res.status(400).render("sign-up", {errors: errors.array()})
+            return res.status(400).render("sign-up", { errors: errors.array() })
         }
         const { username, password } = req.body
         try {
@@ -61,17 +61,17 @@ module.exports.signUpPost = [
 ]
 
 module.exports.logInPost = (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-        if (err) {
-
+    passport.authenticate("local", (error, user, info) => {
+        if (error) {
+            next(error)
         }
         if (!user) {
             console.log(info.message)
             return res.render("index", { authenticated: false, errorMessage: info.message })
         }
-        req.logIn(user, (err) => {
-            if (err) {
-                return next(err)
+        req.logIn(user, (error) => {
+            if (error) {
+                return next(error)
             }
             return res.redirect("/")
         })
