@@ -7,14 +7,13 @@ const passport = require("../config/passport");
 
 module.exports.indexGet = async (req, res) => {
     const authenticated = req.session.passport?.user
-    const files = authenticated
+    const items = authenticated
                   ? {
                         folders: await Folder.getFoldersByAccountId(req.session.passport.user),
                         files: await File.getFilesNotInFolders(req.session.passport.user)
                     }
                   : {}
-    console.log(files)
-    res.render("index", { authenticated, errorMessage: "", files })
+    res.render("index", { authenticated, errorMessage: "", items })
 }
 
 module.exports.signUpGet = (req, res) => {
@@ -105,6 +104,7 @@ module.exports.logOutPost = (req, res, next) => {
 // todo: make sure files and folders are unique
 module.exports.uploadPost = async (req, res) => {
     const { originalname, size } = req.file
+    // todo if name already fix it
     await File.createFile(originalname, size, new Date(), req.session.passport.user)
     res.redirect("/")
 }

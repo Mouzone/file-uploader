@@ -19,8 +19,18 @@
                 <button type="submit"> Submit </button>
             </form>
             <form action="/create-folder" method="POST">
+                <label for="name"> Name: </label>
+                <input type="text" id="name" name="name">
                 <button type="submit"> Create Folder </button>
             </form>
+            <div>
+                <% items.folders.forEach( folder => { %>
+                    <%= folder.name %>
+                <% }) %>
+                <% items.files.forEach( file => { %>
+                    <%= file.name %>
+                <% }) %>
+            </div>
         <% } %>
     </body>
 </html>
