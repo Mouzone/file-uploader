@@ -7,7 +7,7 @@ module.exports.folderGet = async (req, res) => {
         folders: await Folder.getFoldersByParent(folder_id),
         files: await File.getFilesByFolderId(folder_id)
     }
-    res.render("/folder", { items })
+    res.render("folder", { items })
 }
 
 module.exports.folderUploadPost = async (req, res) => {

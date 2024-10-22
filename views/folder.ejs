@@ -20,8 +20,18 @@
         <button type="submit"> Create Folder </button>
     </form>
     <div id="items">
-        <% files.forEach( file => { %>
-            <a class="item" href="/files/<%= file.id %>">
+        <% items.folders.forEach( folder => { %>
+            <a class="item" href="/folder/<%= folder.id %>">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <title>folder</title>
+                    <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" />
+                </svg>
+                <%= folder.name %>
+            </a>
+
+        <% }) %>
+        <% items.files.forEach( file => { %>
+            <a class="item" href="/file/<%= file.id %>">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <title>file</title>
                     <path d="M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6Z" />

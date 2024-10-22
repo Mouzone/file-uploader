@@ -1,12 +1,12 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
-module.exports.createFolder = async (account_id, name, parent=null) => {
+module.exports.createFolder = async (account_id, name, outer_folder=null) => {
     return prisma.folder.create({
         data: {
             name,
             account_id,
-            parent
+            outer_folder
         }
     })
 }
@@ -39,10 +39,10 @@ module.exports.getFolderId = async (account_id, name) => {
     })
 }
 
-module.exports.getFoldersByParent = async (parent) => {
+module.exports.getFoldersByParent = async (outer_folder) => {
     return prisma.folder.findMany({
         where: {
-            parent,
+            outer_folder,
         }
     })
 }
