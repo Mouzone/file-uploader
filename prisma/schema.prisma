@@ -23,6 +23,7 @@ model Account {
 
 model File {
   id          Int      @id @default(autoincrement())
+  originalName  String
   name        String
   size        Int
   upload_time DateTime
