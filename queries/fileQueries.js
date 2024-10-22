@@ -21,3 +21,11 @@ module.exports.getFilesNotInFolders = async (account_id) => {
         }
     })
 }
+
+module.exports.getFilesByFolderId = async (folder_id) => {
+    return prisma.file.findMany({
+        where: {
+            folder_id: folder_id,
+        }
+    })
+}

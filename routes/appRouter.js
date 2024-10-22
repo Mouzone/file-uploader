@@ -10,6 +10,8 @@ appRouter.post("/sign-up", appController.signUpPost)
 appRouter.post("/log-in", appController.logInPost)
 appRouter.post("/log-out", appController.logOutPost)
 appRouter.post("/upload", upload.single('file'), appController.uploadPost)
-appRouter.post("/create-folder", appController.createFolder)
+appRouter.post("/create-folder", appController.createFolderPost)
+appRouter.get("/folders/:folder_id", appController.foldersGet)
+// appRouter.get("/files/:file_id", appController.filesGet)
 
 module.exports = appRouter
