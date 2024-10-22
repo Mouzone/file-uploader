@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title> File Uploader </title>
+        <link rel="stylesheet" href="/index.css">
     </head>
     <body>
         <% if (!authenticated) { %>
@@ -23,12 +24,25 @@
                 <input type="text" id="name" name="name">
                 <button type="submit"> Create Folder </button>
             </form>
-            <div>
+            <div id="items">
                 <% items.folders.forEach( folder => { %>
-                    <%= folder.name %>
+                    <div class="item">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <title>folder</title>
+                            <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" />
+                        </svg>
+                        <%= folder.name %>
+                    </div>
+
                 <% }) %>
                 <% items.files.forEach( file => { %>
-                    <%= file.name %>
+                    <div class="item">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <title>file</title>
+                            <path d="M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6Z" />
+                        </svg>
+                        <%= file.name %>
+                    </div>
                 <% }) %>
             </div>
         <% } %>

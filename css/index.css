@@ -1,0 +1,21 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+svg {
+    width: 50px;
+}
+
+div#items {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+}
+
+div.item {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
