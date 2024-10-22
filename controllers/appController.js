@@ -50,11 +50,12 @@ module.exports.logOutPost = (req, res, next) => {
         })
     })
 }
+// todo: make upload such that it stores the newName
 // todo: make sure files and folders are unique
 module.exports.uploadPost = async (req, res) => {
-    const { originalname, size } = req.file
+    const { originalname, filename, size } = req.file
     // todo if name already fix it
-    await File.createFile(originalname, size, new Date(), req.session.passport.user)
+    await File.createFile(originalname, filename, size, new Date(), req.session.passport.user)
     res.redirect("/")
 }
 

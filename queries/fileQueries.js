@@ -1,9 +1,10 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
-module.exports.createFile = async (name, size, upload_time, account_id, folder_id = null) => {
+module.exports.createFile = async (original_name, name, size, upload_time, account_id, folder_id = null) => {
     await prisma.file.create({
         data: {
+            original_name,
             name,
             size,
             upload_time,

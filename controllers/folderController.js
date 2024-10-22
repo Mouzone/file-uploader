@@ -10,11 +10,13 @@ module.exports.folderGet = async (req, res) => {
     res.render("folder", { items })
 }
 
+// todo: make upload such that it stores the newName
 module.exports.folderUploadPost = async (req, res) => {
-    const { originalname, size } = req.file
+    const { originalname, filename, size } = req.file
     // todo if name already fix it
     await File.createFile(
         originalname,
+        filename,
         size,
         new Date(),
         req.session.passport.user,

@@ -1,3 +1,6 @@
+const multer = require('multer')
+const upload = multer(({ dest: './public/data/uploads' }))
+
 const { Router } = require('express')
 const appRouter = Router()
 const signUpRouter = require('./signUpRouter')
@@ -12,7 +15,7 @@ appRouter.use("/folder", folderRouter)
 appRouter.get("/", appController.indexGet)
 appRouter.post("/log-in", appController.logInPost)
 appRouter.post("/log-out", appController.logOutPost)
-appRouter.post("/upload", appController.uploadPost)
+appRouter.post("/upload", upload.single('file'), appController.uploadPost)
 appRouter.post("/create-folder", appController.createFolderPost)
 
 module.exports = appRouter
