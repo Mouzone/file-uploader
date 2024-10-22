@@ -1,4 +1,5 @@
 const Account = require('../queries/accountQueries')
+const Folder = require('../queries/folderQueries')
 const { body, validationResult } = require('express-validator')
 const bcrypt = require("bcryptjs")
 const passport = require("../config/passport");
@@ -98,5 +99,10 @@ module.exports.logOutPost = (req, res, next) => {
 module.exports.uploadPost = (req, res) => {
     console.log(req.file, req.body)
     // todo: add details to db
+    res.redirect("/")
+}
+
+module.exports.createFolder = async (req, res) => {
+    await Folder.createFolder(req.session.passport.user, req.body.name)
     res.redirect("/")
 }

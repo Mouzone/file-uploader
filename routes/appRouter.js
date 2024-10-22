@@ -10,5 +10,5 @@ appRouter.post("/sign-up", appController.signUpPost)
 appRouter.post("/log-in", appController.logInPost)
 appRouter.post("/log-out", appController.logOutPost)
 appRouter.post("/upload", upload.single('file'), appController.uploadPost)
-
+appRouter.post("/create-folder", appController.createFolder)
 module.exports = appRouter
