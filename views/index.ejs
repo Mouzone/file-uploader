@@ -14,7 +14,13 @@
             <form action="/log-out" method="POST">
                 <button type="submit"> Log Out </button>
             </form>
-            <%- include('components/file-upload') -%>
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="file" id="file" name="file">
+                <button type="submit"> Submit </button>
+            </form>
+            <form action="/create-folder" method="POST">
+                <button type="submit"> Create Folder </button>
+            </form>
         <% } %>
     </body>
 </html>
