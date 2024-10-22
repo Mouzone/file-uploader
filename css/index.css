@@ -14,8 +14,10 @@ div#items {
     padding: 10px;
 }
 
-div.item {
+a.item {
     display: flex;
     flex-direction: column;
     text-align: center;
+    text-decoration: none;
+    color: black;
 }
