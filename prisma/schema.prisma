@@ -36,6 +36,9 @@ model Folder {
   id    Int     @id @default(autoincrement())
   name  String
   files File[]
+  outer_folder Int?
+  parent Folder? @relation("ParentChild", fields: [outer_folder], references: [id])
+  children Folder[] @relation("ParentChild")
 
   account    Account @relation(fields: [account_id], references: [id])
   account_id Int
