@@ -10,28 +10,21 @@ module.exports.createFolder = async (account_id, name) => {
     })
 }
 
-module.exports.deleteFolder = async (account_id, name) => {
+module.exports.deleteFolder = async (folder_id) => {
     await prisma.folder.delete({
         where: {
-            name: name,
-            account_id: account_id
-        }
-    })
-}
-
-module.exports.getFolder = async (account_id, name) => {
-    return prisma.folder.findUnique({
-        where: {
-            name: name,
-            account_id: account_id,
+            id: folder_id
         }
     })
 }
 
 module.exports.getFoldersByAccountId = async (account_id) => {
-    return prisma.folder.findMany({
+    return prisma.account.findUnique({
         where: {
-            account_id: account_id,
+            id: account_id
+        },
+        include: {
+            folders: true
         }
     })
 }
