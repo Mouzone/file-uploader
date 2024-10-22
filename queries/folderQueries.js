@@ -1,6 +1,7 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
+// todo: write test
 module.exports.createFolder = async (account_id, name) => {
     return prisma.folder.create({
         data: {
@@ -27,4 +28,8 @@ module.exports.getFoldersByAccountId = async (account_id) => {
             folders: true
         }
     })
+}
+
+module.exports.getFolderId = async (account_id, name) => {
+
 }

@@ -30,6 +30,9 @@ module.exports.getId = async (username) => {
     return prisma.account.findUnique({
         where: {
             username: username
+        },
+        select: {
+            id: true,
         }
     })
 }
