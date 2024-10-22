@@ -1,6 +1,7 @@
 const {body, validationResult} = require("express-validator");
 const Account = require("../queries/accountQueries");
 const bcrypt = require("bcryptjs");
+
 module.exports.signUpGet = (req, res) => {
     res.render("sign-up", { errors: [] })
 }
