@@ -33,14 +33,13 @@ model File {
 }
 
 model Folder {
-  id     Int     @id @default(autoincrement())
-  name   String
-  files  File[]
-  
+  id    Int     @id @default(autoincrement())
+  name  String
+  files File[]
+
   account    Account @relation(fields: [account_id], references: [id])
   account_id Int
 }
-
 
 model Session {
   id        String   @id
