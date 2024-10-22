@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta content="viewport" >
+        <title> File </title>
+        <link rel="stylesheet" href="/file.css">
+    </head>
+    <body>
+        <div>
+            <div id="info">
+                <p> <%= file.name %> </p>
+                <p> <%= file.size %> </p>
+                <p> <%= file.upload_time %> </p>
+            </div>
+            <form action="/file/<%= file.id %>/download" method="POST">
+                <button type="submit"> Download </button>
+            </form>
+        </div>
+    </body>
+</html>

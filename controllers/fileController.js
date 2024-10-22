@@ -1,3 +1,4 @@
+const path = require("node:path");
 const File = require('../queries/fileQueries')
 
 module.exports.fileGet = async (req, res) => {
@@ -6,8 +7,8 @@ module.exports.fileGet = async (req, res) => {
 }
 
 module.exports.fileDownload = async (req, res) => {
-    const { name } = await File.getFileNameById(req.params.file_id)
-    const filePath = path.join(__dirname, "public/data/uploads", name)
+    const { name } = await File.getFileNameById(parseInt(req.params.file_id))
+    const filePath = path.join(__dirname, "../public/data/uploads", name)
 
     res.download(filePath, name, err => {
         if (err) {
