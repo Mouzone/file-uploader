@@ -41,8 +41,8 @@ module.exports.getFolderId = async (account_id, name) => {
     })
 }
 
-module.exports.getAllUserItems = async (account_id) => {
-    return prisma.account.findUnique({
+module.exports.getFilesInFolders = async (account_id) => {
+    return prisma.folder.findMany({
         where: {
             id: account_id,
         },

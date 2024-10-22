@@ -5,9 +5,16 @@ const { body, validationResult } = require('express-validator')
 const bcrypt = require("bcryptjs")
 const passport = require("../config/passport");
 
-module.exports.indexGet = (req, res) => {
+module.exports.indexGet = async (req, res) => {
     const authenticated = req.session.passport?.user
-    res.render("index", { authenticated, errorMessage: "" })
+    const files = authenticated
+                  ? {
+                        folders: await Folder.getFilesInFolders(),
+                        files: await File.getFilesNotInFolders(req.session.passport.user)
+                    }
+                  : {}
+    console.log(files)
+    res.render("index", { authenticated, errorMessage: "", files })
 }
 
 module.exports.signUpGet = (req, res) => {
@@ -95,8 +102,7 @@ module.exports.logOutPost = (req, res, next) => {
         })
     })
 }
-
-
+// todo: make sure files and folders are unique
 module.exports.uploadPost = async (req, res) => {
     const { originalname, size } = req.file
     await File.createFile(originalname, size, new Date(), req.session.passport.user)

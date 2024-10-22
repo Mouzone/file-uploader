@@ -12,3 +12,12 @@ module.exports.createFile = async (name, size, upload_time, account_id, folder_i
         }
     })
 }
+
+module.exports.getFilesNotInFolders = async (account_id) => {
+    return prisma.file.findMany({
+        where: {
+            account_id: account_id,
+            folder_id: null,
+        }
+    })
+}
