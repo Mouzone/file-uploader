@@ -40,3 +40,14 @@ module.exports.getFolderId = async (account_id, name) => {
         }
     })
 }
+
+module.exports.getAllUserItems = async (account_id) => {
+    return prisma.account.findUnique({
+        where: {
+            id: account_id,
+        },
+        include: {
+            files: true,
+        }
+    })
+}
