@@ -19,12 +19,9 @@ module.exports.deleteFolder = async (folder_id) => {
 }
 
 module.exports.getFoldersByAccountId = async (account_id) => {
-    return prisma.account.findUnique({
+    return prisma.folder.findMany({
         where: {
             id: account_id
-        },
-        include: {
-            folders: true
         }
     })
 }
@@ -37,17 +34,6 @@ module.exports.getFolderId = async (account_id, name) => {
         },
         select: {
             id: true
-        }
-    })
-}
-
-module.exports.getFilesInFolders = async (account_id) => {
-    return prisma.folder.findMany({
-        where: {
-            id: account_id,
-        },
-        include: {
-            files: true,
         }
     })
 }
