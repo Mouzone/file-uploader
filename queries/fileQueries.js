@@ -29,3 +29,19 @@ module.exports.getFilesByFolderId = async (folder_id) => {
         }
     })
 }
+
+module.exports.getFileById = async (file_id) => {
+    return prisma.file.findUnique({
+        where: {
+            id: file_id,
+        }
+    })
+}
+
+module.exports.getFileNameById = async (file_id) => {
+    return prisma.file.findUnique({
+        where: {
+            id: file_id,
+        }
+    })
+}
