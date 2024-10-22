@@ -9,7 +9,7 @@ module.exports.indexGet = async (req, res) => {
     const authenticated = req.session.passport?.user
     const files = authenticated
                   ? {
-                        folders: await Folder.getFilesInFolders(),
+                        folders: await Folder.getFilesInFolders(req.session.passport.user),
                         files: await File.getFilesNotInFolders(req.session.passport.user)
                     }
                   : {}
