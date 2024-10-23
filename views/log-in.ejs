@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> File Uploader </title>
+    <link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <%= errorMessage %>
+    <form action="/log-in" method="POST">
+        <label for="username"> Username: </label>
+        <input type="text" id="username" name="username">
+        <label for="password"> Password: </label>
+        <input type="password" id="password" name="password">
+        <button type="submit"> Log In </button>
+    </form>
+    <a href="/sign-up"> Sign Up </a>
+</body>
+</html>
