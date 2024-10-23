@@ -1,5 +1,7 @@
 const Folder = require("../queries/folderQueries")
 const File = require("../queries/fileQueries")
+const {getFoldersByParent} = require("../queries/folderQueries");
+const {getFilesByFolderId} = require("../queries/fileQueries");
 
 module.exports.folderGet = async (req, res) => {
     const folder_id = parseInt(req.params.folder_id)
@@ -39,10 +41,30 @@ module.exports.folderCreateFolderPost = async (req, res) => {
 
 module.exports.folderDeletePost = async (req, res) => {
     const folder_id = parseInt(req.params.folder_id)
-    const { outer_folder } = await Folder.getFolderById(folder_id)
-    await Folder.deleteFolder(folder_id)
+    const folder_to_delete = await Folder.getFolderById(folder_id)
 
-    outer_folder
-        ? res.redirect(`/folder/${outer_folder}`)
+    const folder_ids = []
+    const files = []
+    const to_see = [ folder_to_delete ]
+    while (to_see.length > 0) {
+        const curr_folder = to_see.shift()
+        const files_to_add = await File.getFilesByFolderId(curr_folder.id)
+        const folders_to_add = await Folder.getFoldersByParent(curr_folder.id)
+
+        folder_ids.push(curr_folder.id)
+        files.push(...files_to_add)
+        to_see.push(...folders_to_add)
+    }
+
+    await Promise.all(folder_ids.map(async (folder_id) => {
+        return Folder.deleteFolder(folder_id)
+    }))
+
+    await Promise.all(files.map(async (file) => {
+        return File.deleteFile(file.id)
+    }))
+
+    folder_to_delete.outer_folder
+        ? res.redirect(`/folder/${folder_to_delete.outer_folder}`)
         : res.redirect(`/`)
 }
