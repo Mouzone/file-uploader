@@ -43,7 +43,7 @@ module.exports.logOutPost = (req, res, next) => {
             if (error) {
                 return next(error)
             }
-
+            res.clearCookie('Idea-6ac65566')
             res.clearCookie('connect.sid')
             res.redirect("/")
         })
