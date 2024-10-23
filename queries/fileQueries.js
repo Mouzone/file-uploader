@@ -54,3 +54,11 @@ module.exports.deleteFile = async (file_id) => {
         }
     })
 }
+
+module.exports.getFileByName = async (file_name) => {
+    return prisma.file.findMany({
+        where: {
+            original_name: file_name
+        }
+    })
+}

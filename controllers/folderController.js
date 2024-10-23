@@ -18,11 +18,24 @@ module.exports.folderGet = async (req, res) => {
     res.render("folder", { items, folder_id, prev_folder, name })
 }
 
+// todo: take off the extension
 module.exports.folderUploadPost = async (req, res) => {
     const { originalname, filename, size } = req.file
-    // todo if name already fix it
+
+    let new_original_name = originalname
+    let curr_suffix = 1
+    let result
+
+    do {
+        new_original_name = originalname.split("_")[0]
+        new_original_name += `_${curr_suffix}`
+
+        result = await File.getFileByName(new_original_name)
+        curr_suffix++
+    } while (result.length > 0)
+
     await File.createFile(
-        originalname,
+        new_original_name,
         filename,
         size,
         new Date(),
