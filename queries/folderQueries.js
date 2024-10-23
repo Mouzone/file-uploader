@@ -66,7 +66,7 @@ module.exports.getFolderByName = async (name, outer_folder) => {
 }
 
 module.exports.getHomeFolder = async (account_id) => {
-    return prisma.folder.findUnique({
+    return prisma.folder.findMany({
         where: {
             account_id: account_id,
             outer_folder: null

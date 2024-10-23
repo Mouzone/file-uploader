@@ -6,14 +6,18 @@ const bcrypt = require("bcryptjs")
 const passport = require("../config/passport");
 
 module.exports.indexGet = async (req, res) => {
-    const authenticated = req.session.passport?.user
-    const items = authenticated
-                  ? {
-                        folders: await Folder.getParentFoldersByAccountId(req.session.passport.user),
-                        files: await File.getFilesNotInFolders(req.session.passport.user)
-                    }
-                  : {}
-    res.render("index", { authenticated, errorMessage: "", items })
+    if (!req.session.passport?.user) {
+        return res.render("log-in", { errorMessage: "" })
+    }
+
+    const result = await Folder.getHomeFolder(parseInt(req.session.passport.user))
+    const folder_id = result[0].id
+    const items = {
+        folders: await Folder.getFoldersByParent(folder_id),
+        files: await File.getFilesByFolderId(folder_id)
+    }
+
+    res.render("folder", { items, folder_id, prev_folder: null, name: "Home" })
 }
 
 module.exports.logInPost = (req, res, next) => {

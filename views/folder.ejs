@@ -9,8 +9,6 @@
 <body>
     <% if (prev_folder) { %>
         <a href="/folder/<%= prev_folder.id %>"><%= prev_folder.name %></a>
-    <% } else { %>
-        <a href="/"> Home </a>
     <% } %>
     <h1><%= name %></h1>
     <form action="/log-out" method="POST">
