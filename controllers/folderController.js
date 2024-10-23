@@ -36,3 +36,13 @@ module.exports.folderCreateFolderPost = async (req, res) => {
     )
     res.redirect(`/folder/${req.params.folder_id}`)
 }
+
+module.exports.folderDeletePost = async (req, res) => {
+    const folder_id = parseInt(req.params.folder_id)
+    const { outer_folder } = await Folder.getFolderById(folder_id)
+    await Folder.deleteFolder(folder_id)
+
+    outer_folder
+        ? res.redirect(`/folder/${outer_folder}`)
+        : res.redirect(`/`)
+}
