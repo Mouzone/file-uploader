@@ -18,17 +18,20 @@ module.exports.folderGet = async (req, res) => {
     res.render("folder", { items, folder_id, prev_folder, name })
 }
 
-// todo: take off the extension
+// todo: let the default work
+// todo: check only against those in the same folder and for the same user
 module.exports.folderUploadPost = async (req, res) => {
     const { originalname, filename, size } = req.file
 
     let new_original_name = originalname
-    let curr_suffix = 1
+    let curr_suffix = 0
     let result
 
     do {
-        new_original_name = originalname.split("_")[0]
-        new_original_name += `_${curr_suffix}`
+        if (curr_suffix > 0) {
+            new_original_name = originalname.split("_")[0]
+            new_original_name += `_${curr_suffix}`
+        }
 
         result = await File.getFileByName(new_original_name)
         curr_suffix++
