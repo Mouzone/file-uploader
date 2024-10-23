@@ -16,3 +16,13 @@ module.exports.fileDownload = async (req, res) => {
         }
     })
 }
+
+module.exports.fileDelete = async (req, res) => {
+    const file_id = parseInt(req.params.file_id)
+    const { folder_id } = await File.getFileById(file_id)
+    await File.deleteFile(file_id)
+
+    folder_id
+        ? res.redirect(`/folder/${folder_id}`)
+        : res.redirect(`/`)
+}
