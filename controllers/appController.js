@@ -12,12 +12,7 @@ module.exports.indexGet = async (req, res) => {
 
     const result = await Folder.getHomeFolder(parseInt(req.session.passport.user))
     const folder_id = result[0].id
-    const items = {
-        folders: await Folder.getFoldersByParent(folder_id),
-        files: await File.getFilesByFolderId(folder_id)
-    }
-
-    res.render("folder", { items, folder_id, prev_folder: null, name: "Home" })
+    res.redirect(`/folder/${folder_id}`)
 }
 
 module.exports.logInPost = (req, res, next) => {

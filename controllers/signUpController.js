@@ -44,7 +44,7 @@ module.exports.signUpPost = [
                 }
             })
             const { id } = await Account.getId(username)
-            await Folder.createFolder(id, "home")
+            await Folder.createFolder(id, "Home")
             req.session.passport = { user: id }
 
             res.redirect("/")
