@@ -15,10 +15,7 @@ module.exports.folderGet = async (req, res) => {
         files: await File.getFilesByFolderId(folder_id)
     }
     const { name, outer_folder } = await Folder.getFolderById(folder_id)
-    const prev_folder = outer_folder
-        ? await Folder.getFolderById(outer_folder)
-        : null
-    res.render("folder", { items, folder_id, prev_folder, name })
+    res.render("folder", { items, folder_id, outer_folder, name })
 }
 
 module.exports.folderUploadPost = async (req, res) => {
