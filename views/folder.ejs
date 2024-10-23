@@ -46,7 +46,7 @@
             </a>
         <% }) %>
     </div>
-    <form action="/delete" method="POST">
+    <form action="/folder/<%= folder.id %>/delete" method="POST">
         <button type="submit"> Delete </button>
     </form>
 </body>

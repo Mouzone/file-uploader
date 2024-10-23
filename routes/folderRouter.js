@@ -8,5 +8,6 @@ const folderRouter = Router()
 folderRouter.get("/:folder_id", folderController.folderGet)
 folderRouter.post("/:folder_id/upload", upload.single('file'), folderController.folderUploadPost)
 folderRouter.post("/:folder_id/create-folder", folderController.folderCreateFolderPost)
+folderRouter.post("/:folder_id/delete", folderController.folderDeletePost)
 
 module.exports = folderRouter
