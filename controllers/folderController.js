@@ -2,6 +2,8 @@ const Folder = require("../queries/folderQueries")
 const File = require("../queries/fileQueries")
 const {getFoldersByParent} = require("../queries/folderQueries");
 const {getFilesByFolderId} = require("../queries/fileQueries");
+const path = require("node:path");
+const fs = require("fs");
 
 module.exports.folderGet = async (req, res) => {
     const folder_id = parseInt(req.params.folder_id)
@@ -61,6 +63,13 @@ module.exports.folderDeletePost = async (req, res) => {
     }))
 
     await Promise.all(files.map(async (file) => {
+        const filePath = path.join(__dirname, "../public/data/uploads", file.name)
+        fs.unlink(filePath, (error) => {
+            if (error) {
+                console.error("Error deleting the file:", error)
+            }
+        })
+
         return File.deleteFile(file.id)
     }))
 
