@@ -64,3 +64,12 @@ module.exports.getFolderByName = async (name, outer_folder) => {
         }
     })
 }
+
+module.exports.getHomeFolder = async (account_id) => {
+    return prisma.folder.findUnique({
+        where: {
+            account_id: account_id,
+            outer_folder: null
+        }
+    })
+}
