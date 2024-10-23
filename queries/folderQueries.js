@@ -56,10 +56,11 @@ module.exports.getFolderById = async (folder_id) =>{
     })
 }
 
-module.exports.getFolderByName = async (name) => {
+module.exports.getFolderByName = async (name, outer_folder) => {
     return prisma.folder.findMany({
         where: {
-            name
+            name,
+            outer_folder
         }
     })
 }

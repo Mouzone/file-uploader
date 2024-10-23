@@ -62,7 +62,11 @@ module.exports.folderCreateFolderPost = async (req, res) => {
             name += `_${curr_suffix}`
         }
 
-        result = await Folder.getFolderByName(name)
+        result = await Folder.getFolderByName(
+            name,
+            parseInt(req.params.folder_id)
+        )
+
         curr_suffix++
     } while (result.length > 0)
 
