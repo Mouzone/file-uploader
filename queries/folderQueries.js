@@ -19,10 +19,11 @@ module.exports.deleteFolder = async (folder_id) => {
     })
 }
 
-module.exports.getFoldersByAccountId = async (account_id) => {
+module.exports.getParentFoldersByAccountId = async (account_id) => {
     return prisma.folder.findMany({
         where: {
-            account_id
+            account_id,
+            outer_folder: null
         }
     })
 }
