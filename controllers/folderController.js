@@ -6,6 +6,9 @@ const path = require("node:path");
 const fs = require("fs");
 
 module.exports.folderGet = async (req, res) => {
+    if (!req.session.passport?.user) {
+        return res.redirect("/")
+    }
     const folder_id = parseInt(req.params.folder_id)
     const items = {
         folders: await Folder.getFoldersByParent(folder_id),

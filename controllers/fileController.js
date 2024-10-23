@@ -3,6 +3,9 @@ const File = require('../queries/fileQueries')
 const fs = require('fs')
 
 module.exports.fileGet = async (req, res) => {
+    if (!req.session.passport?.user) {
+        return res.redirect("/")
+    }
     const file = await File.getFileById(parseInt(req.params.file_id))
     res.render("file", { file })
 }
