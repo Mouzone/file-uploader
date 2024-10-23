@@ -7,10 +7,13 @@ module.exports.folderGet = async (req, res) => {
         folders: await Folder.getFoldersByParent(folder_id),
         files: await File.getFilesByFolderId(folder_id)
     }
-    res.render("folder", { items, folder_id })
+    const { outer_folder } = await Folder.getFolderById(folder_id)
+    const prev_folder = outer_folder
+        ? await Folder.getFolderById(outer_folder)
+        : null
+    res.render("folder", { items, folder_id, prev_folder })
 }
 
-// todo: make upload such that it stores the newName
 module.exports.folderUploadPost = async (req, res) => {
     const { originalname, filename, size } = req.file
     // todo if name already fix it

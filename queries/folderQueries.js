@@ -46,3 +46,11 @@ module.exports.getFoldersByParent = async (outer_folder) => {
         }
     })
 }
+
+module.exports.getFolderById = async (folder_id) =>{
+    return prisma.folder.findUnique({
+        where: {
+            id: folder_id
+        }
+    })
+}

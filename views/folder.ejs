@@ -6,9 +6,12 @@
     <title> File Uploader </title>
     <link rel="stylesheet" href="/index.css">
 </head>
-<!--todo: add dragging files and folders into each other -->
-<!--todo: fix weird characters appearing-->
 <body>
+    <% if (prev_folder) { %>
+        <a href="/folder/<%= prev_folder.id %>"><%= prev_folder.name %></a>
+    <% } else { %>
+        <a href="/"> Home </a>
+    <% } %>
     <form action="/log-out" method="POST">
         <button type="submit"> Log Out </button>
     </form>
