@@ -1,5 +1,6 @@
 const {body, validationResult} = require("express-validator");
 const Account = require("../queries/accountQueries");
+const Folder = require("../queries/folderQueries")
 const bcrypt = require("bcryptjs");
 
 module.exports.signUpGet = (req, res) => {
@@ -43,6 +44,7 @@ module.exports.signUpPost = [
                 }
             })
             const { id } = await Account.getId(username)
+            await Folder.createFolder(id, "home")
             req.session.passport = { user: id }
 
             res.redirect("/")
