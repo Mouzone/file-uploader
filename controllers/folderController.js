@@ -49,9 +49,23 @@ module.exports.folderUploadPost = async (req, res) => {
 }
 
 module.exports.folderCreateFolderPost = async (req, res) => {
+    let name = req.body.name
+    let curr_suffix = 0
+    let result
+
+    do {
+        if (curr_suffix > 0) {
+            name = name.split("_")[0]
+            name += `_${curr_suffix}`
+        }
+
+        result = await Folder.getFolderByName(name)
+        curr_suffix++
+    } while (result.length > 0)
+
     await Folder.createFolder(
         req.session.passport.user,
-        req.body.name,
+        name,
         parseInt(req.params.folder_id)
     )
     res.redirect(`/folder/${req.params.folder_id}`)
