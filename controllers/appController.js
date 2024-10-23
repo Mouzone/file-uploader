@@ -26,7 +26,7 @@ module.exports.logInPost = (req, res, next) => {
             next(error)
         }
         if (!user) {
-            return res.render("index", { authenticated: false, errorMessage: info.message })
+            return res.render("log-in", { authenticated: false, errorMessage: info.message })
         }
         req.logIn(user, (error) => {
             if (error) {

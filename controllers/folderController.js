@@ -7,7 +7,7 @@ const fs = require("fs");
 
 module.exports.folderGet = async (req, res) => {
     if (!req.session.passport?.user) {
-        return res.redirect("/")
+        res.render("log-in", { errorMessage: ""})
     }
     const folder_id = parseInt(req.params.folder_id)
     const items = {
