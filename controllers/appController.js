@@ -22,7 +22,6 @@ module.exports.logInPost = (req, res, next) => {
             next(error)
         }
         if (!user) {
-            console.log(info.message)
             return res.render("index", { authenticated: false, errorMessage: info.message })
         }
         req.logIn(user, (error) => {
@@ -50,16 +49,52 @@ module.exports.logOutPost = (req, res, next) => {
         })
     })
 }
-// todo: make upload such that it stores the newName
-// todo: make sure files and folders are unique
+
 module.exports.uploadPost = async (req, res) => {
     const { originalname, filename, size } = req.file
-    // todo if name already fix it
-    await File.createFile(originalname, filename, size, new Date(), req.session.passport.user)
+
+    let new_original_name = originalname
+    let curr_suffix = 0
+    let result
+
+    // have user, have folder we are creating it in
+    do {
+        if (curr_suffix > 0) {
+            new_original_name = originalname.split("_")[0]
+            new_original_name += `_${curr_suffix}`
+        }
+
+        result = await File.getFileByName(
+            new_original_name,
+            null
+        )
+
+        curr_suffix++
+    } while (result.length > 0)
+
+    await File.createFile(new_original_name, filename, size, new Date(), req.session.passport.user)
     res.redirect("/")
 }
 
 module.exports.createFolderPost = async (req, res) => {
-    await Folder.createFolder(req.session.passport.user, req.body.name)
+    let name = req.body.name
+    let curr_suffix = 0
+    let result
+
+    do {
+        if (curr_suffix > 0) {
+            name = name.split("_")[0]
+            name += `_${curr_suffix}`
+        }
+
+        result = await Folder.getFolderByName(
+            name,
+            null
+        )
+
+        curr_suffix++
+    } while (result.length > 0)
+
+    await Folder.createFolder(req.session.passport.user, name)
     res.redirect("/")
 }
