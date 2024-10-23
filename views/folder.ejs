@@ -6,15 +6,17 @@
     <title> File Uploader </title>
     <link rel="stylesheet" href="/index.css">
 </head>
+<!--todo: add dragging files and folders into each other -->
+<!--todo: fix weird characters appearing-->
 <body>
     <form action="/log-out" method="POST">
         <button type="submit"> Log Out </button>
     </form>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
+    <form action="/folder/<%= folder_id %>/upload" method="POST" enctype="multipart/form-data">
         <input type="file" id="file" name="file" required>
         <button type="submit"> Submit </button>
     </form>
-    <form action="/create-folder" method="POST">
+    <form action="/folder/<%= folder_id %>/create-folder" method="POST">
         <label for="name"> Name: </label>
         <input type="text" id="name" name="name">
         <button type="submit"> Create Folder </button>
@@ -36,7 +38,7 @@
                     <title>file</title>
                     <path d="M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6Z" />
                 </svg>
-                <%= file.name %>
+                <%= file.original_name %>
             </a>
         <% }) %>
     </div>

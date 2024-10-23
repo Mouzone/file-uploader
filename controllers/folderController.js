@@ -7,7 +7,7 @@ module.exports.folderGet = async (req, res) => {
         folders: await Folder.getFoldersByParent(folder_id),
         files: await File.getFilesByFolderId(folder_id)
     }
-    res.render("folder", { items })
+    res.render("folder", { items, folder_id })
 }
 
 // todo: make upload such that it stores the newName
@@ -22,7 +22,7 @@ module.exports.folderUploadPost = async (req, res) => {
         req.session.passport.user,
         parseInt(req.params.folder_id)
     )
-    res.redirect(`/folders/${req.params.folder_id}`)
+    res.redirect(`/folder/${req.params.folder_id}`)
 }
 
 module.exports.folderCreateFolderPost = async (req, res) => {
@@ -31,5 +31,5 @@ module.exports.folderCreateFolderPost = async (req, res) => {
         req.body.name,
         parseInt(req.params.folder_id)
     )
-    res.redirect(`/folders/${req.params.folder_id}`)
+    res.redirect(`/folder/${req.params.folder_id}`)
 }
