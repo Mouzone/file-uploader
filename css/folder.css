@@ -14,7 +14,8 @@ div#items {
     padding: 10px;
 }
 
-a.item {
+a.folder,
+a.file {
     display: flex;
     flex-direction: column;
     text-align: center;

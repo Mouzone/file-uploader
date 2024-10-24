@@ -25,7 +25,7 @@
     </form>
     <div id="items">
         <% items.folders.forEach( folder => { %>
-            <a class="item" href="/folder/<%= folder.id %>">
+            <a class="folder" href="/folder/<%= folder.id %>" data-id="<%= folder.id %>">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <title>folder</title>
                     <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" />
@@ -35,7 +35,7 @@
 
         <% }) %>
         <% items.files.forEach( file => { %>
-            <a class="item" href="/file/<%= file.id %>">
+            <a class="file" href="/file/<%= file.id %>" data-id="<%= file.id %>">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <title>file</title>
                     <path d="M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6Z" />
@@ -49,6 +49,49 @@
     </form>
 </body>
 <script>
+    const folders = document.querySelectorAll(".folder")
+    const files = document.querySelectorAll(".file")
+    const curr_folder = "<%= folder_id %>"
+    let dragged
+
+    folders.forEach(folder => {
+        folder.addEventListener("dragstart", (event) => {
+            dragged = event.target
+        })
+
+        folder.addEventListener("dragover", (event) => {
+            event.preventDefault()
+        })
+
+        folder.addEventListener("drop", (event) => {
+            event.preventDefault()
+            const dropped = event.target.closest('a')
+
+            fetch('/folder/move', {
+                method: 'POST',
+                body: JSON.stringify({
+                    curr_folder,
+                    dragged: {
+                        type: dragged.className,
+                        id: dragged.dataset.id
+                    },
+                    dropped: {
+                        type: dropped.className,
+                        id: dropped.dataset.id
+                    },
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        })
+    })
+
+    files.forEach(file => {
+        file.addEventListener("dragstart", (event) => {
+            dragged = event.target
+        })
+    })
 
 </script>
 </html>
