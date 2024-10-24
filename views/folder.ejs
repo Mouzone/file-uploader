@@ -15,11 +15,21 @@
             <% } %>
             <p><%= name %></p>
         </div>
-        <div>
-            <%= account.username %>
-            <form action="/log-out" method="POST">
-                <button type="submit"> Log Out </button>
-            </form>
+        <div id="profile">
+            <div id="username">
+                <%= account.username %>
+                <div id="toggle-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <title>menu-up</title>
+                        <path d="M7,15L12,10L17,15H7Z" />
+                    </svg>
+                </div>
+            </div>
+            <div id="menu">
+                <form action="/log-out" method="POST">
+                    <button type="submit"> Log Out </button>
+                </form>
+            </div>
         </div>
 
     </div>
@@ -117,6 +127,30 @@
     })
         .then(response => response.json())
         .then(data => console.log(data))
+
+    const menuUp = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <title>menu-up</title>
+                <path d="M7,15L12,10L17,15H7Z" />
+            </svg>
+        `
+
+    const menuDown = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <title>menu-down</title>
+                <path d="M7,10L12,15L17,10H7Z" />
+            </svg>
+        `
+
+    const menu = document.getElementById("menu")
+    const username = document.getElementById("username")
+    const svg = username.querySelector("svg")
+    const toggle_icon = document.getElementById("toggle-icon")
+    username.addEventListener("click", (event) => {
+        menu.style.display = menu.style.display === "flex" ? "none" : "flex"
+        toggle_icon.innerHTML = toggle_icon.innerHTML.includes("menu-up") ? menuDown : menuUp
+    })
+
 
 </script>
 </html>

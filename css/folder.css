@@ -23,6 +23,28 @@ div#path {
     gap: 10px;
 }
 
+div#username {
+    display: flex;
+}
+
+div#username svg{
+    width: 20px;
+}
+
+div#menu {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    border: solid black;
+    right: 20px;
+}
+
+div#menu button {
+    border: none;
+    background-color: white;
+    padding: 5px;
+}
+
 div#items {
     display: flex;
     gap: 10px;
