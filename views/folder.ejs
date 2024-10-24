@@ -33,16 +33,23 @@
         </div>
 
     </div>
+    <div id="actions">
+        <form id="file-form" action="/folder/<%= folder_id %>/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" id="file" name="file" required>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <title>file-upload</title>
+                <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M13.5,16V19H10.5V16H8L12,12L16,16H13.5M13,9V3.5L18.5,9H13Z" />
+            </svg>
+        </form>
 
-    <form action="/folder/<%= folder_id %>/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" id="file" name="file" required>
-        <button type="submit"> Submit </button>
-    </form>
-    <form action="/folder/<%= folder_id %>/create-folder" method="POST">
-        <label for="name"> Name: </label>
-        <input type="text" id="name" name="name">
-        <button type="submit"> Create Folder </button>
-    </form>
+        <form id="folder-form" action="/folder/<%= folder_id %>/create-folder" method="POST">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <title>folder-plus</title>
+                <path d="M13 19C13 19.34 13.04 19.67 13.09 20H4C2.9 20 2 19.11 2 18V6C2 4.89 2.89 4 4 4H10L12 6H20C21.1 6 22 6.89 22 8V13.81C21.12 13.3 20.1 13 19 13C15.69 13 13 15.69 13 19M20 18V15H18V18H15V20H18V23H20V20H23V18H20Z" />
+            </svg>
+        </form>
+    </div>
+
     <div id="items">
         <% items.folders.forEach( folder => { %>
             <a class="folder" href="/folder/<%= folder.id %>" data-id="<%= folder.id %>">
@@ -151,6 +158,25 @@
         toggle_icon.innerHTML = toggle_icon.innerHTML.includes("menu-up") ? menuDown : menuUp
     })
 
+    const file_form = document.getElementById("file-form")
+    const file_upload_image = file_form.querySelector("svg")
+    const file_input = file_form.querySelector("input")
+    file_upload_image.addEventListener('click', () => {
+        file_input.click()
+    })
 
+    file_input.addEventListener('change', () => {
+        if (this.files.length > 0) {
+            file_form.submit()
+        }
+    })
+
+    // todo: make it consistently use "New Folder" as the name for file making
+    // todo: figure out proper name making cycle, since there will be edit, so by default no name
+    const folder_form = document.getElementById("folder-form")
+    const folder_upload_image = folder_form.querySelector("svg")
+    folder_upload_image.addEventListener('click', () => {
+        folder_form.submit()
+    })
 </script>
 </html>

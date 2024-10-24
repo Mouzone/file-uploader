@@ -45,6 +45,18 @@ div#menu button {
     padding: 5px;
 }
 
+div#actions {
+    display: flex;
+}
+
+div#actions svg{
+    width: 30px;
+}
+
+form#file-form input{
+    display: none;
+}
+
 div#items {
     display: flex;
     gap: 10px;
