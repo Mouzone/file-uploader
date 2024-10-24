@@ -66,11 +66,9 @@
         folder.addEventListener("drop", (event) => {
             event.preventDefault()
             const dropped = event.target.closest('a')
-
-            fetch('/folder/move', {
+            fetch(`/folder/${curr_folder}/move`, {
                 method: 'POST',
                 body: JSON.stringify({
-                    curr_folder,
                     dragged: {
                         type: dragged.className,
                         id: dragged.dataset.id
