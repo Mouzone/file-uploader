@@ -75,7 +75,8 @@ div#actions .menu {
     width: 150px;
 }
 
-div#actions .menu form{
+div#actions .menu form,
+div#folder-form {
     padding: 10px;
     display: flex;
     align-items: center;
