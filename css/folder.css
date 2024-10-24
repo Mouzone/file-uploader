@@ -89,12 +89,14 @@ form#file-form input{
 
 div#items {
     display: flex;
-    gap: 10px;
+    gap: 30px;
     padding: 10px;
+    flex-wrap: wrap;
 }
 
 svg {
-    width: 50px;
+    width: 80px;
+    margin: auto;
 }
 
 a.folder,
@@ -102,4 +104,5 @@ a.file {
     display: flex;
     flex-direction: column;
     text-align: center;
+    justify-content: center;
 }
