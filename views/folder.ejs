@@ -44,9 +44,11 @@
             </a>
         <% }) %>
     </div>
-    <form action="/folder/<%= folder_id %>/delete" method="POST">
-        <button type="submit"> Delete </button>
-    </form>
+    <% if (prev_folder) { %>
+        <form action="/folder/<%= folder_id %>/delete" method="POST">
+            <button type="submit"> Delete </button>
+        </form>
+    <% } %>
 </body>
 <script>
     const folders = document.querySelectorAll(".folder")
