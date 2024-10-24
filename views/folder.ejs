@@ -85,9 +85,9 @@
             })
             .then(response => {
                 if (response.ok) {
-                    window.location.reload(); // Reload the page to fetch updated data
+                    window.location.reload()
                 } else {
-                    console.error('Error updating folder:', response.statusText);
+                    console.error('Error updating folder:', response.statusText)
                 }
             })
         })
