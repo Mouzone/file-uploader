@@ -9,11 +9,15 @@
 <body>
     <div id="navbar">
         <div id="path">
-            <% if (prev_folder) { %>
-                <a href="/folder/<%= prev_folder.id %>"><%= prev_folder.name %></a>
-                <p> > </p>
-            <% } %>
-            <p><%= name %></p>
+            <% for (let i = 0; i < file_path.length; i++) {%>
+                <% const [ name, curr_folder ] = file_path[i] %>
+                <% if ( i !== file_path.length - 1) { %>
+                    <a href="/folder/<%= curr_folder %>"><%= name %></a>
+                    <p> > </p>
+                <% } else { %>
+                    <p><%= name %></p>
+                <% } %>
+            <% }%>
         </div>
         <div id="profile">
             <div id="profile-header">
@@ -84,7 +88,7 @@
             </a>
         <% }) %>
     </div>
-    <% if (prev_folder) { %>
+    <% if (file_path.length >= 2) { %>
         <form action="/folder/<%= folder_id %>/delete" method="POST">
             <button type="submit"> Delete </button>
         </form>

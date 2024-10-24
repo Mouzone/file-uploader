@@ -13,12 +13,16 @@ module.exports.folderGet = async (req, res) => {
         folders: await Folder.getFoldersByParent(folder_id),
         files: await File.getFilesByFolderId(folder_id)
     }
-    const { name, outer_folder } = await Folder.getFolderById(folder_id)
-    const prev_folder = outer_folder
-        ? await Folder.getFolderById(outer_folder)
-        : null
+    const file_path = []
+    let curr_folder = folder_id
+    while (curr_folder) {
+        const { name, outer_folder } = await Folder.getFolderById(curr_folder)
+        file_path.push([name, curr_folder])
+        curr_folder = outer_folder
+    }
+
     const account = await Account.getUsername(req.session.passport.user)
-    res.render("folder", { items, folder_id, prev_folder, name, account })
+    res.render("folder", { items, folder_id, file_path: file_path.reverse(), account })
 }
 
 module.exports.folderUploadPost = async (req, res) => {
