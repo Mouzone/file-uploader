@@ -16,16 +16,16 @@
             <p><%= name %></p>
         </div>
         <div id="profile">
-            <div id="username">
+            <div id="profile-header">
                 <%= account.username %>
-                <div id="toggle-icon">
+                <div class="toggle-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <title>menu-up</title>
                         <path d="M7,15L12,10L17,15H7Z" />
                     </svg>
                 </div>
             </div>
-            <div id="menu">
+            <div class="menu">
                 <form action="/log-out" method="POST">
                     <button type="submit"> Log Out </button>
                 </form>
@@ -34,20 +34,33 @@
 
     </div>
     <div id="actions">
-        <form id="file-form" action="/folder/<%= folder_id %>/upload" method="POST" enctype="multipart/form-data">
-            <input type="file" id="file" name="file" required>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <title>file-upload</title>
-                <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M13.5,16V19H10.5V16H8L12,12L16,16H13.5M13,9V3.5L18.5,9H13Z" />
-            </svg>
-        </form>
+        <div id="actions-header">
+            Actions
+            <div class="toggle-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <title>menu-up</title>
+                    <path d="M7,15L12,10L17,15H7Z" />
+                </svg>
+            </div>
+        </div>
+        <div class="menu">
+            <form id="file-form" action="/folder/<%= folder_id %>/upload" method="POST" enctype="multipart/form-data">
+                <input type="file" id="file" name="file" required>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <title>file-upload</title>
+                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M13.5,16V19H10.5V16H8L12,12L16,16H13.5M13,9V3.5L18.5,9H13Z" />
+                </svg>
+                <p> New File </p>
+            </form>
 
-        <form id="folder-form" action="/folder/<%= folder_id %>/create-folder" method="POST">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <title>folder-plus</title>
-                <path d="M13 19C13 19.34 13.04 19.67 13.09 20H4C2.9 20 2 19.11 2 18V6C2 4.89 2.89 4 4 4H10L12 6H20C21.1 6 22 6.89 22 8V13.81C21.12 13.3 20.1 13 19 13C15.69 13 13 15.69 13 19M20 18V15H18V18H15V20H18V23H20V20H23V18H20Z" />
-            </svg>
-        </form>
+            <form id="folder-form" action="/folder/<%= folder_id %>/create-folder" method="POST">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <title>folder-plus</title>
+                    <path d="M13 19C13 19.34 13.04 19.67 13.09 20H4C2.9 20 2 19.11 2 18V6C2 4.89 2.89 4 4 4H10L12 6H20C21.1 6 22 6.89 22 8V13.81C21.12 13.3 20.1 13 19 13C15.69 13 13 15.69 13 19M20 18V15H18V18H15V20H18V23H20V20H23V18H20Z" />
+                </svg>
+                <p> New Folder </p>
+            </form>
+        </div>
     </div>
 
     <div id="items">
@@ -149,19 +162,25 @@
             </svg>
         `
 
-    const menu = document.getElementById("menu")
-    const username = document.getElementById("username")
-    const svg = username.querySelector("svg")
-    const toggle_icon = document.getElementById("toggle-icon")
-    username.addEventListener("click", (event) => {
-        menu.style.display = menu.style.display === "flex" ? "none" : "flex"
-        toggle_icon.innerHTML = toggle_icon.innerHTML.includes("menu-up") ? menuDown : menuUp
+    const profile_menu = document.querySelector("div#profile > div.menu")
+    const profile_header = document.getElementById("profile-header")
+    const profile_toggle_icon = profile_header.querySelector(".toggle-icon")
+    profile_header.addEventListener("click", (event) => {
+        profile_menu.style.display = profile_menu.style.display === "flex" ? "none" : "flex"
+        profile_toggle_icon.innerHTML = profile_toggle_icon.innerHTML.includes("menu-up") ? menuDown : menuUp
+    })
+
+    const action_menu = document.querySelector("div#actions > div.menu")
+    const action_header = document.getElementById("actions-header")
+    const action_toggle_icon = action_header.querySelector(".toggle-icon")
+    action_header.addEventListener("click", (event) => {
+        action_menu.style.display = action_menu.style.display === "flex" ? "none" : "flex"
+        action_toggle_icon.innerHTML = action_toggle_icon.innerHTML.includes("menu-up") ? menuDown : menuUp
     })
 
     const file_form = document.getElementById("file-form")
-    const file_upload_image = file_form.querySelector("svg")
     const file_input = file_form.querySelector("input")
-    file_upload_image.addEventListener('click', () => {
+    file_form.addEventListener('click', () => {
         file_input.click()
     })
 
@@ -171,11 +190,8 @@
         }
     })
 
-    // todo: make it consistently use "New Folder" as the name for file making
-    // todo: figure out proper name making cycle, since there will be edit, so by default no name
     const folder_form = document.getElementById("folder-form")
-    const folder_upload_image = folder_form.querySelector("svg")
-    folder_upload_image.addEventListener('click', () => {
+    folder_form.addEventListener('click', () => {
         folder_form.submit()
     })
 </script>

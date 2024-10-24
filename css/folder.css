@@ -23,23 +23,28 @@ div#path {
     gap: 10px;
 }
 
-div#username {
+div#profile {
+    position: relative;
+}
+
+div#profile-header {
     display: flex;
 }
 
-div#username svg{
+div#profile-header svg{
     width: 20px;
 }
 
-div#menu {
+div.menu {
     position: absolute;
     display: none;
     flex-direction: column;
     border: solid black;
-    right: 20px;
+    right: 0;
+    width: 65px;
 }
 
-div#menu button {
+div.menu button {
     border: none;
     background-color: white;
     padding: 5px;
@@ -47,10 +52,34 @@ div#menu button {
 
 div#actions {
     display: flex;
+    position: relative;
+}
+
+div#actions-header {
+    display: flex;
+    align-content: center;
 }
 
 div#actions svg{
     width: 30px;
+}
+
+div#actions-header svg{
+    width: 20px;
+}
+
+div#actions .menu {
+    position: absolute;
+    left: 0;
+    top: 20px;
+    width: 150px;
+}
+
+div#actions .menu form{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 form#file-form input{
