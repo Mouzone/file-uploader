@@ -13,6 +13,10 @@ body {
     padding: 20px;
 }
 
+svg {
+    width: 80px;
+}
+
 div#navbar {
     display: flex;
     justify-content: space-between;
@@ -23,86 +27,29 @@ div#path {
     gap: 10px;
 }
 
+div#items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
 div#profile {
-    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 div#profile-header {
     display: flex;
 }
 
-div#profile-header svg{
+.toggle-icon svg {
     width: 20px;
-}
-
-div.menu {
-    position: absolute;
-    background-color: white;
-    display: none;
-    flex-direction: column;
-    border: solid black;
-    right: 0;
-    align-items: center;
-}
-
-div.menu button {
-    border: none;
-    background-color: white;
-    padding: 5px;
-}
-
-div#actions {
-    display: flex;
-    position: relative;
 }
 
 div#actions-header {
     display: flex;
-    align-content: center;
 }
 
-div#actions svg{
-    width: 30px;
-}
-
-div#actions-header svg{
-    width: 20px;
-}
-
-div#actions .menu {
-    left: 0;
-    top: 20px;
-    width: 150px;
-}
-
-form#file-form,
-div#folder-form {
-    padding: 10px;
+div#actions {
     display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-form#file-form input{
-    display: none;
-}
-
-div#items {
-    display: flex;
-    gap: 30px;
-    padding: 10px;
-    flex-wrap: wrap;
-}
-
-svg {
-    width: 80px;
-    margin: auto;
-}
-
-a.folder,
-a.file {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    justify-content: center;
 }
