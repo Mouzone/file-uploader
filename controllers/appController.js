@@ -99,6 +99,6 @@ module.exports.createFolderPost = async (req, res) => {
 }
 
 module.exports.foldersGet = async (req, res) => {
-    const folders = await Folder.getAllFoldersByAccountId(account_id)
+    const folders = await Folder.getAllFoldersByAccountId(parseInt(req.session.passport.user))
     res.send(folders)
 }
