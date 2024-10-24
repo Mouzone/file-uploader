@@ -53,3 +53,23 @@ div#actions-header {
 div#actions {
     display: flex;
 }
+
+div.menu {
+    display: none;
+    flex-direction: column;
+}
+
+div#actions div.menu svg {
+    width: 30px;
+}
+
+form#file-form input {
+    display: none;
+}
+
+form#file-form,
+div#folder-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
