@@ -7,13 +7,23 @@
     <link rel="stylesheet" href="/folder.css">
 </head>
 <body>
-    <% if (prev_folder) { %>
-        <a href="/folder/<%= prev_folder.id %>"><%= prev_folder.name %></a>
-    <% } %>
-    <h1><%= name %></h1>
-    <form action="/log-out" method="POST">
-        <button type="submit"> Log Out </button>
-    </form>
+    <div id="navbar">
+        <div id="path">
+            <% if (prev_folder) { %>
+                <a href="/folder/<%= prev_folder.id %>"><%= prev_folder.name %></a>
+                <p> > </p>
+            <% } %>
+            <p><%= name %></p>
+        </div>
+        <div>
+            <%= account.username %>
+            <form action="/log-out" method="POST">
+                <button type="submit"> Log Out </button>
+            </form>
+        </div>
+
+    </div>
+
     <form action="/folder/<%= folder_id %>/upload" method="POST" enctype="multipart/form-data">
         <input type="file" id="file" name="file" required>
         <button type="submit"> Submit </button>

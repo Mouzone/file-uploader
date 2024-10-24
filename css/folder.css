@@ -4,8 +4,23 @@
     box-sizing: border-box;
 }
 
-svg {
-    width: 50px;
+a {
+    text-decoration: none;
+    color: black;
+}
+
+body {
+    padding: 20px;
+}
+
+div#navbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+div#path {
+    display: flex;
+    gap: 10px;
 }
 
 div#items {
@@ -14,11 +29,13 @@ div#items {
     padding: 10px;
 }
 
+svg {
+    width: 50px;
+}
+
 a.folder,
 a.file {
     display: flex;
     flex-direction: column;
     text-align: center;
-    text-decoration: none;
-    color: black;
 }

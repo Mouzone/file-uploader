@@ -36,3 +36,11 @@ module.exports.getId = async (username) => {
         }
     })
 }
+
+module.exports.getUsername = async (account_id) =>{
+    return prisma.account.findUnique({
+        where: {
+            id: account_id,
+        }
+    })
+}

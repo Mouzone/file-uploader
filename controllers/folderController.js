@@ -1,7 +1,6 @@
 const Folder = require("../queries/folderQueries")
 const File = require("../queries/fileQueries")
-const {getFoldersByParent} = require("../queries/folderQueries");
-const {getFilesByFolderId} = require("../queries/fileQueries");
+const Account = require("../queries/accountQueries")
 const path = require("node:path");
 const fs = require("fs");
 
@@ -18,7 +17,8 @@ module.exports.folderGet = async (req, res) => {
     const prev_folder = outer_folder
         ? await Folder.getFolderById(outer_folder)
         : null
-    res.render("folder", { items, folder_id, prev_folder, name })
+    const account = await Account.getUsername(req.session.passport.user)
+    res.render("folder", { items, folder_id, prev_folder, name, account })
 }
 
 module.exports.folderUploadPost = async (req, res) => {
