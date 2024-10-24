@@ -1,6 +1,6 @@
 const folders = document.querySelectorAll(".folder")
 const files = document.querySelectorAll(".file")
-const curr_folder = "<%= folder_id %>"
+const curr_folder = parseInt(document.getElementById("path").querySelector("p").dataset.currFolder)
 let dragged
 
 folders.forEach(folder => {
@@ -97,7 +97,7 @@ file_input.addEventListener('change', () => {
 
 const folder_form = document.getElementById("folder-form")
 folder_form.addEventListener('click', () => {
-    fetch("/folder/<%= folder_id %>/create-folder", {
+    fetch(`/folder/${curr_folder}/create-folder`, {
         method: 'POST',
         body: JSON.stringify({
             name: "New Folder"
