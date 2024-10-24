@@ -97,3 +97,8 @@ module.exports.createFolderPost = async (req, res) => {
     await Folder.createFolder(req.session.passport.user, name)
     res.redirect("/")
 }
+
+module.exports.foldersGet = async (req, res) => {
+    const folders = await Folder.getAllFoldersByAccountId(account_id)
+    res.send(folders)
+}

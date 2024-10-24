@@ -84,3 +84,11 @@ module.exports.changeFolderParent = async (folder_id, new_outer_folder) => {
         }
     })
 }
+
+module.exports.getAllFoldersByAccountId = async (account_id) => {
+    await prisma.folder.findMany({
+        where: {
+            account_id,
+        }
+    })
+}
