@@ -5,6 +5,7 @@ const session = require('./config/session')
 const passport = require('./config/passport')
 const path = require("node:path");
 
+app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.set("views", path.join(__dirname, "/views"))
 app.set("view engine", "ejs")
