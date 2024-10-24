@@ -63,3 +63,14 @@ module.exports.getFileByName = async (file_name, folder_id) => {
         }
     })
 }
+
+module.exports.changeFileFolder = async (file_id, new_folder_id) => {
+    await prisma.file.update({
+        where: {
+            id: file_id,
+        },
+        data: {
+            folder_id: new_folder_id
+        }
+    })
+}

@@ -73,3 +73,14 @@ module.exports.getHomeFolder = async (account_id) => {
         }
     })
 }
+
+module.exports.changeFolderParent = async (folder_id, new_outer_folder) => {
+    await prisma.folder.update({
+        where: {
+            id: folder_id
+        },
+        data: {
+            outer_folder: new_outer_folder
+        }
+    })
+}

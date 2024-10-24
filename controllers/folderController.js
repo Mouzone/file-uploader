@@ -117,3 +117,14 @@ module.exports.folderDeletePost = async (req, res) => {
         ? res.redirect(`/folder/${folder_to_delete.outer_folder}`)
         : res.redirect(`/`)
 }
+
+module.exports.folderMovePost = async (req, res) => {
+    const { dragged, dropped } = req.body
+    if (dragged.type === "file") {
+        await File.changeFileFolder(parseInt(dragged.id), parseInt(dropped.id))
+    } else {
+        await Folder.changeFolderParent(parseInt(dragged.id), parseInt(dropped.id))
+    }
+
+    res.redirect(`/folder/${req.params.folder_id}`)
+}
