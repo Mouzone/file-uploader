@@ -42,7 +42,7 @@ div.menu {
     flex-direction: column;
     border: solid black;
     right: 0;
-    width: 65px;
+    align-items: center;
 }
 
 div.menu button {
@@ -75,7 +75,7 @@ div#actions .menu {
     width: 150px;
 }
 
-div#actions .menu form,
+form#file-form,
 div#folder-form {
     padding: 10px;
     display: flex;
