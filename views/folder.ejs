@@ -81,6 +81,13 @@
                     'Content-Type': 'application/json'
                 }
             })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload(); // Reload the page to fetch updated data
+                } else {
+                    console.error('Error updating folder:', response.statusText);
+                }
+            })
         })
     })
 
