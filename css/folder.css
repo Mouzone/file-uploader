@@ -37,6 +37,7 @@ div#profile-header svg{
 
 div.menu {
     position: absolute;
+    background-color: white;
     display: none;
     flex-direction: column;
     border: solid black;
@@ -69,7 +70,6 @@ div#actions-header svg{
 }
 
 div#actions .menu {
-    position: absolute;
     left: 0;
     top: 20px;
     width: 150px;
