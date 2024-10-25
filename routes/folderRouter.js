@@ -1,5 +1,5 @@
 const multer = require('multer')
-const { storage } = require('../config/multer')
+const { storage, computeUploadPath } = require('../config/multer')
 const upload = multer({ storage })
 const { isAuthenticated } = require('../utility/authentication')
 
@@ -9,7 +9,7 @@ const folderRouter = Router()
 
 folderRouter.use(isAuthenticated)
 folderRouter.get("/:folder_id", folderController.folderGet)
-folderRouter.post("/:folder_id/upload", upload.single('file'), folderController.folderUploadPost)
+folderRouter.post("/:folder_id/upload", computeUploadPath, upload.single('file'), folderController.folderUploadPost)
 folderRouter.post("/:folder_id/create-folder", folderController.folderCreateFolderPost)
 folderRouter.post("/:folder_id/delete", folderController.folderDeletePost)
 folderRouter.post("/:folder_id/move", folderController.folderMovePost)
