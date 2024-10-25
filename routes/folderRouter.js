@@ -1,5 +1,6 @@
 const multer = require('multer')
-const upload = multer(({ dest: './public/data/uploads' }))
+const { storage } = require('../config/multer')
+const upload = multer({ storage })
 const { isAuthenticated } = require('../utility/authentication')
 
 const { Router } = require('express')
