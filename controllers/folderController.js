@@ -110,10 +110,14 @@ module.exports.folderDeletePost = async (req, res) => {
 
     let curr_folder_id = parseInt(req.params.folder_id)
     let path = ""
+    let parent_folder = null
     while (curr_folder_id) {
         const curr_folder = await Folder.getFolderById(curr_folder_id)
         path = "/" + curr_folder.name + path
         curr_folder_id = curr_folder.outer_folder
+        if (!parent_folder) {
+            parent_folder = curr_folder.outer_folder
+        }
     }
 
     const all_child_folders = [[path, folder_id]]
@@ -147,9 +151,9 @@ module.exports.folderDeletePost = async (req, res) => {
         }
     }
 
-    // folder_to_delete.outer_folder
-    //     ? res.redirect(`/folder/${folder_to_delete.outer_folder}`)
-    //     : res.redirect(`/`)
+    parent_folder
+        ? res.redirect(`/folder/${parent_folder}`)
+        : res.redirect(`/`)
 }
 
 module.exports.folderMovePost = async (req, res) => {
