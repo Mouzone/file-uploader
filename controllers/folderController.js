@@ -82,6 +82,19 @@ module.exports.folderCreateFolderPost = async (req, res) => {
         name,
         parseInt(req.params.folder_id)
     )
+
+    let curr_folder_id = parseInt(req.params.folder_id)
+    let path = ""
+    while (curr_folder_id) {
+        const curr_folder = await Folder.getFolderById(curr_folder_id)
+        path = "/" + curr_folder.name
+        curr_folder_id = curr_folder.outer_folder
+    }
+
+    // create folder in the directory
+
+
+
     res.redirect(`/folder/${req.params.folder_id}`)
 }
 
