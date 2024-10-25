@@ -2,6 +2,8 @@ const {body, validationResult} = require("express-validator");
 const Account = require("../queries/accountQueries");
 const Folder = require("../queries/folderQueries")
 const bcrypt = require("bcryptjs");
+const fs = require('fs')
+const path = require('path')
 
 module.exports.signUpGet = (req, res) => {
     res.render("sign-up", { errors: [] })
@@ -44,7 +46,13 @@ module.exports.signUpPost = [
                 }
             })
             const { id } = await Account.getId(username)
-            await Folder.createFolder(id, "Home")
+            await Folder.createFolder(id, `${id}`)
+            const folder_path = path.join(__dirname, `../public/data/uploads/${id}`)
+            fs.mkdir(folder_path, (err) => {
+                if (err) {
+                    console.error("Error creating folder", error)
+                }
+            })
             req.session.passport = { user: id }
 
             res.redirect("/")
