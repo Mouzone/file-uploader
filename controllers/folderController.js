@@ -27,13 +27,14 @@ module.exports.folderGet = async (req, res) => {
 
 module.exports.folderUploadPost = async (req, res) => {
     const { filename, size } = req.file
-
+    const folder = await Folder.getFolderById(parseInt(req.params.folder_id))
     await File.createFile(
         filename,
         size,
         new Date(),
         req.session.passport.user,
-        parseInt(req.params.folder_id)
+        parseInt(req.params.folder_id),
+        `${folder.relative_route}/${filename}`
     )
     res.redirect(`/folder/${req.params.folder_id}`)
 }
@@ -57,9 +58,11 @@ module.exports.folderCreateFolderPost = async (req, res) => {
         curr_suffix++
     } while (result.length > 0)
 
+    const outer_folder = await Folder.getFolderById(parseInt(req.params.folder_id))
     await Folder.createFolder(
         req.session.passport.user,
         name,
+        `${outer_folder.relative_route}/${name}`,
         parseInt(req.params.folder_id)
     )
 

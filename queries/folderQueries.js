@@ -1,12 +1,13 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
-module.exports.createFolder = async (account_id, name, outer_folder=null) => {
+module.exports.createFolder = async (account_id, name, relative_route, outer_folder=null) => {
     return prisma.folder.create({
         data: {
             name,
             account_id,
-            outer_folder
+            outer_folder,
+            relative_route
         }
     })
 }

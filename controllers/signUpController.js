@@ -46,7 +46,7 @@ module.exports.signUpPost = [
                 }
             })
             const { id } = await Account.getId(username)
-            await Folder.createFolder(id, `${id}`)
+            await Folder.createFolder(id, `${id}`, `/${id}`)
             const folder_path = path.join(__dirname, `../public/data/uploads/${id}`)
             fs.mkdir(folder_path, (err) => {
                 if (err) {
