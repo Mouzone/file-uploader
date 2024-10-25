@@ -89,6 +89,7 @@ div#folder-form {
 }
 
 div#profile div.menu {
+    z-index: 10;
     width: 75px;
     right: 10px;
 }
