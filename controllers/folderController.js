@@ -82,26 +82,17 @@ module.exports.folderDeletePost = async (req, res) => {
     const rootPath = `./public/data/uploads`
     const folder_id = parseInt(req.params.folder_id)
 
-    let curr_folder_id = parseInt(req.params.folder_id)
-    let path = ""
-    let parent_folder = null
-    while (curr_folder_id) {
-        const curr_folder = await Folder.getFolderById(curr_folder_id)
-        path = "/" + curr_folder.name + path
-        curr_folder_id = curr_folder.outer_folder
-        if (!parent_folder) {
-            parent_folder = curr_folder.outer_folder
-        }
-    }
+    // iterate through all folders getting the whole network
+    // then iterate from last to first folder deleting files then deleting the folder it covers the file
 
     const all_child_folders = [[path, folder_id]]
-    const to_see = [[path, folder_id]]
+    const to_see = [ await Folder.getFolderById(folder_id) ]
     while (to_see.length) {
-        const [curr_path, curr_folder_id] = to_see.shift()
+        const curr_folder_id = to_see.shift()
         const child_folders = await Folder.getFoldersByParent(curr_folder_id)
         child_folders.forEach(folder => {
-            all_child_folders.push([curr_path + "/" + folder.name, folder.id])
-            to_see.push([curr_path + "/" + folder.name, folder.id])
+            all_child_folders.push([folder.relative_route, folder.id])
+            to_see.push(folder.id)
         })
     }
 
