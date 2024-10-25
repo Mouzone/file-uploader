@@ -83,16 +83,22 @@ module.exports.folderCreateFolderPost = async (req, res) => {
         parseInt(req.params.folder_id)
     )
 
-    let curr_folder_id = parseInt(req.params.folder_id)
+    let new_folder = await Folder.getFolderByName(name, parseInt(req.params.folder_id))
+    let curr_folder_id = new_folder[0].id
+    const rootPath = `./public/data/uploads`
     let path = ""
     while (curr_folder_id) {
         const curr_folder = await Folder.getFolderById(curr_folder_id)
-        path = "/" + curr_folder.name
+        path = "/" + curr_folder.name + path
         curr_folder_id = curr_folder.outer_folder
     }
-
+    
     // create folder in the directory
-
+    fs.mkdir(rootPath + path, (error) => {
+        if (error) {
+            console.error("Error creating directory:", error)
+        }
+    })
 
 
     res.redirect(`/folder/${req.params.folder_id}`)
