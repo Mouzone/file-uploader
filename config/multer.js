@@ -7,8 +7,12 @@ module.exports.storage = multer.diskStorage({
         const rootPath = `./public/data/uploads/`
         cb(null, rootPath + req.uploadPath)
     },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname)
+    }
 })
 
+// todo: figure out the name for the file here and save it to be used later in folderController
 module.exports.computeUploadPath = async (req, res, next) => {
     let currFolderId = parseInt(req.params.folder_id);
     let uploadPath = '';

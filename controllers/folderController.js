@@ -26,21 +26,21 @@ module.exports.folderGet = async (req, res) => {
 }
 
 module.exports.folderUploadPost = async (req, res) => {
-    const { originalname, filename, size } = req.file
+    const { originalname, size } = req.file
 
-    let new_original_name = originalname
+    let new_name = originalname
     let curr_suffix = 0
     let result
 
     // have user, have folder we are creating it in
     do {
         if (curr_suffix > 0) {
-            new_original_name = originalname.split("_")[0]
-            new_original_name += `_${curr_suffix}`
+            new_name = new_name.split("_")[0]
+            new_name += `_${curr_suffix}`
         }
 
         result = await File.getFileByName(
-            new_original_name,
+            new_name,
             parseInt(req.params.folder_id)
         )
 
@@ -48,8 +48,7 @@ module.exports.folderUploadPost = async (req, res) => {
     } while (result.length > 0)
 
     await File.createFile(
-        new_original_name,
-        filename,
+        new_name,
         size,
         new Date(),
         req.session.passport.user,
