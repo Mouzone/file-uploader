@@ -10,7 +10,10 @@
     <div id="navbar">
         <div id="path">
             <% for (let i = 0; i < file_path.length; i++) {%>
-                <% const [ name, folder_id ] = file_path[i] %>
+                <% let [ name, folder_id ] = file_path[i] %>
+                <% if (i === 0) { %>
+                    <% name = "Home"%>
+                <% } %>
                 <% if ( i !== file_path.length - 1) { %>
                     <a href="/folder/<%= folder_id %>"><%= name %></a>
                     <p> > </p>
