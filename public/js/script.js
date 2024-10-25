@@ -1,6 +1,7 @@
 const folders = document.querySelectorAll(".folder")
 const files = document.querySelectorAll(".file")
-const curr_folder = parseInt(document.getElementById("path").querySelector("p").dataset.currFolder)
+const paragraphs = document.getElementById("path").querySelectorAll("p")
+const curr_folder = parseInt(paragraphs[paragraphs.length - 1].dataset.currFolder)
 let dragged
 
 folders.forEach(folder => {
@@ -69,7 +70,7 @@ const menuDown = `
             </svg>
         `
 
-const profile_menu = document.querySelector("div#profile > div.menu")
+const profile_menu = document.querySelector("div#profile div.menu")
 const profile_header = document.getElementById("profile-header")
 const profile_toggle_icon = profile_header.querySelector(".toggle-icon")
 profile_header.addEventListener("click", (event) => {
@@ -77,7 +78,7 @@ profile_header.addEventListener("click", (event) => {
     profile_toggle_icon.innerHTML = profile_toggle_icon.innerHTML.includes("menu-up") ? menuDown : menuUp
 })
 
-const action_menu = document.querySelector("div#actions > div.menu")
+const action_menu = document.querySelector("div#actions div.menu")
 const action_header = document.getElementById("actions-header")
 const action_toggle_icon = action_header.querySelector(".toggle-icon")
 action_header.addEventListener("click", (event) => {
