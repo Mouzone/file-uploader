@@ -92,7 +92,7 @@ module.exports.folderCreateFolderPost = async (req, res) => {
         path = "/" + curr_folder.name + path
         curr_folder_id = curr_folder.outer_folder
     }
-    
+
     // create folder in the directory
     fs.mkdir(rootPath + path, (error) => {
         if (error) {
@@ -105,40 +105,51 @@ module.exports.folderCreateFolderPost = async (req, res) => {
 }
 
 module.exports.folderDeletePost = async (req, res) => {
+    const rootPath = `./public/data/uploads`
     const folder_id = parseInt(req.params.folder_id)
-    const folder_to_delete = await Folder.getFolderById(folder_id)
 
-    const folder_ids = []
-    const files = []
-    const to_see = [ folder_to_delete ]
-    while (to_see.length > 0) {
-        const curr_folder = to_see.shift()
-        const files_to_add = await File.getFilesByFolderId(curr_folder.id)
-        const folders_to_add = await Folder.getFoldersByParent(curr_folder.id)
-
-        folder_ids.push(curr_folder.id)
-        files.push(...files_to_add)
-        to_see.push(...folders_to_add)
+    let curr_folder_id = parseInt(req.params.folder_id)
+    let path = ""
+    while (curr_folder_id) {
+        const curr_folder = await Folder.getFolderById(curr_folder_id)
+        path = "/" + curr_folder.name + path
+        curr_folder_id = curr_folder.outer_folder
     }
 
-    await Promise.all(folder_ids.map(async (folder_id) => {
-        return Folder.deleteFolder(folder_id)
-    }))
-
-    await Promise.all(files.map(async (file) => {
-        const filePath = path.join(__dirname, "../public/data/uploads", file.name)
-        fs.unlink(filePath, (error) => {
-            if (error) {
-                console.error("Error deleting the file:", error)
-            }
+    const all_child_folders = [[path, folder_id]]
+    const to_see = [[path, folder_id]]
+    while (to_see.length) {
+        const [curr_path, curr_folder_id] = to_see.shift()
+        const child_folders = await Folder.getFoldersByParent(curr_folder_id)
+        child_folders.forEach(folder => {
+            all_child_folders.push([curr_path + "/" + folder.name, folder.id])
+            to_see.push([curr_path + "/" + folder.name, folder.id])
         })
+    }
 
-        return File.deleteFile(file.id)
-    }))
 
-    folder_to_delete.outer_folder
-        ? res.redirect(`/folder/${folder_to_delete.outer_folder}`)
-        : res.redirect(`/`)
+    for (const [folder_path, folder_id] of [...all_child_folders].reverse()) {
+        try {
+            // Get all files in current folder
+            const curr_files = await File.getFilesByFolderId(folder_id)
+
+            // Delete files one by one
+            for (const file of curr_files) {
+                await File.deleteFile(file.id)
+                await fs.promises.unlink(rootPath + folder_path + "/" + file.name)
+            }
+
+            // After all files are deleted, delete the folder
+            await Folder.deleteFolder(folder_id)
+            await fs.promises.rmdir(rootPath + folder_path)
+        } catch (error) {
+            console.error("Error during deletion:", error);
+        }
+    }
+
+    // folder_to_delete.outer_folder
+    //     ? res.redirect(`/folder/${folder_to_delete.outer_folder}`)
+    //     : res.redirect(`/`)
 }
 
 module.exports.folderMovePost = async (req, res) => {
