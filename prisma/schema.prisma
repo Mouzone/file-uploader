@@ -26,6 +26,7 @@ model File {
   name        String
   size        Int
   upload_time DateTime
+  relative_route String @unique
   account     Account   @relation(fields: [account_id], references: [id])
   account_id  Int
   folder      Folder?   @relation(fields: [folder_id], references: [id])
@@ -37,6 +38,7 @@ model Folder {
   name  String
   files File[]
   outer_folder Int? @default(0)
+  relative_route String @unique
   parent Folder? @relation("ParentChild", fields: [outer_folder], references: [id])
   children Folder[] @relation("ParentChild")
 
