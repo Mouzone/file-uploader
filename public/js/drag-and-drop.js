@@ -18,11 +18,11 @@ export function addFolderFunctionality(curr_folder) {
             fetch(`/folder/${curr_folder}/move`, {
                 method: 'POST',
                 body: JSON.stringify({
-                    dragged: {
+                    drag_target: {
                         type: dragged.className,
                         id: dragged.dataset.id
                     },
-                    dropped: {
+                    drop_target: {
                         id: dropped.dataset.id
                     },
                 }),

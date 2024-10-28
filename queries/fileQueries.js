@@ -74,3 +74,14 @@ module.exports.changeFileFolder = async (file_id, new_folder_id) => {
         }
     })
 }
+
+module.exports.changeFileRoute = async (file_id, new_relative_route) => {
+    await prisma.file.update({
+        where: {
+            id: file_id,
+        },
+        data: {
+            relative_route: new_relative_route
+        }
+    })
+}

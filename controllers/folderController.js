@@ -3,6 +3,8 @@ const File = require("../queries/fileQueries")
 const Account = require("../queries/accountQueries")
 const path = require("node:path");
 const fs = require("fs");
+const {getFolderById} = require("../queries/folderQueries");
+const {getFileById} = require("../queries/fileQueries");
 
 module.exports.folderGet = async (req, res) => {
     if (!req.session.passport?.user) {
@@ -117,11 +119,31 @@ module.exports.folderDeletePost = async (req, res) => {
 }
 
 module.exports.folderMovePost = async (req, res) => {
-    const { dragged, dropped } = req.body
-    if (dragged.type === "file") {
-        await File.changeFileFolder(parseInt(dragged.id), parseInt(dropped.id))
+    const { drag_target, drop_target } = req.body
+    if (drag_target.type === "file") {
+        const rootPath = `./public/data/uploads/`
+        const new_folder_id = parseInt(drop_target.id)
+        const curr_file_id = parseInt(drag_target.id)
+
+        const new_folder = await getFolderById(new_folder_id)
+        const curr_file = await getFileById(curr_file_id)
+
+        const old_route = curr_file.relative_route
+        const new_route = new_folder.relative_route + "/" + curr_file.name
+
+        await File.changeFileFolder(curr_file_id, new_folder_id)
+        await File.changeFileRoute(curr_file_id, new_route)
+        await fs.rename(rootPath + old_route, rootPath + new_route, (error) => {
+            if (error) {
+                console.error("Error moving file", error)
+            }
+        })
+
     } else {
-        await Folder.changeFolderParent(parseInt(dragged.id), parseInt(dropped.id))
+        // check if folder inside drop_target folder already exists with same name
+        // if same rename
+        // change route for folder and all child folders as well
+        await Folder.changeFolderParent(parseInt(drag_target.id), parseInt(drop_target.id))
     }
 
     res.redirect(`/folder/${req.params.folder_id}`)
