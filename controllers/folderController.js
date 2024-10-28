@@ -82,42 +82,37 @@ module.exports.folderDeletePost = async (req, res) => {
     const rootPath = `./public/data/uploads`
     const folder_id = parseInt(req.params.folder_id)
 
-    // iterate through all folders getting the whole network
-    // then iterate from last to first folder deleting files then deleting the folder it covers the file
 
-    const all_child_folders = [[path, folder_id]]
-    const to_see = [ await Folder.getFolderById(folder_id) ]
+    const folder_to_delete = await Folder.getFolderById(folder_id)
+    const all_child_folders = [ folder_to_delete ]
+    const to_see = [ folder_to_delete ]
     while (to_see.length) {
-        const curr_folder_id = to_see.shift()
-        const child_folders = await Folder.getFoldersByParent(curr_folder_id)
-        child_folders.forEach(folder => {
-            all_child_folders.push([folder.relative_route, folder.id])
-            to_see.push(folder.id)
+        const curr_folder = to_see.shift()
+        const child_folders = await Folder.getFoldersByParent(curr_folder.id)
+
+        child_folders.forEach(child_folder => {
+            all_child_folders.push(child_folder)
+            to_see.push(child_folder)
         })
     }
 
-
-    for (const [folder_path, folder_id] of [...all_child_folders].reverse()) {
+    for (const folder of [...all_child_folders].reverse()) {
         try {
-            // Get all files in current folder
-            const curr_files = await File.getFilesByFolderId(folder_id)
-
-            // Delete files one by one
+            const curr_files = await File.getFilesByFolderId(folder.id)
             for (const file of curr_files) {
                 await File.deleteFile(file.id)
-                await fs.promises.unlink(rootPath + folder_path + "/" + file.name)
+                await fs.promises.unlink(rootPath + file.relative_route)
             }
 
-            // After all files are deleted, delete the folder
-            await Folder.deleteFolder(folder_id)
-            await fs.promises.rmdir(rootPath + folder_path)
+            await Folder.deleteFolder(folder.id)
+            await fs.promises.rmdir(rootPath + folder.relative_route)
         } catch (error) {
             console.error("Error during deletion:", error);
         }
     }
 
-    parent_folder
-        ? res.redirect(`/folder/${parent_folder}`)
+    folder_to_delete.outer_folder
+        ? res.redirect(`/folder/${folder_to_delete.outer_folder}`)
         : res.redirect(`/`)
 }
 
