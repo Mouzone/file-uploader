@@ -104,3 +104,14 @@ module.exports.changeFolderRoute = async (folder_id, new_relative_route) => {
         }
     })
 }
+
+module.exports.changeFolderName = async (folder_id, new_name) => {
+    return prisma.folder.update({
+        where: {
+            id: folder_id,
+        },
+        data: {
+            name: new_name,
+        }
+    })
+}

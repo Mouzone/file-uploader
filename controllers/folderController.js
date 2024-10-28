@@ -109,7 +109,7 @@ module.exports.folderMovePost = async (req, res) => {
     const rootPath = `./public/data/uploads`
     const new_folder_id = parseInt(drop_target.id)
     const new_folder = await getFolderById(new_folder_id)
-    // todo: fix file name collisions for the file or the folder being moved
+
     if (drag_target.type === "file") {
         const curr_file_id = parseInt(drag_target.id)
         const curr_file = await getFileById(curr_file_id)
@@ -131,8 +131,11 @@ module.exports.folderMovePost = async (req, res) => {
         const curr_folder = await getFolderById(curr_folder_id)
 
         const old_route = curr_folder.relative_route
-        const new_route =  new_folder.relative_route + "/" + curr_folder.name
-
+        const new_name = await getValidName(curr_folder.name, new_folder_id, "folder")
+        const new_route =  new_folder.relative_route + "/" + new_name
+        console.log(curr_folder)
+        console.log(new_folder)
+        await Folder.changeFolderName(curr_folder_id, new_name)
         await Folder.changeFolderParent(curr_folder_id, new_folder.id)
         await Folder.changeFolderRoute(curr_folder_id, new_route)
 
