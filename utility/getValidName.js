@@ -1,13 +1,12 @@
 const Folder = require("../queries/folderQueries");
 const File = require("../queries/fileQueries");
+
 module.exports.getValidName = async (name, folder_id, type) => {
-    let curr_suffix = 0
     let result
 
     do {
-        if (curr_suffix > 0) {
-            name = name.split("_")[0]
-            name += `_${curr_suffix}`
+        if (result) {
+            name += " (1)"
         }
 
         result = type === "Folder"
@@ -20,7 +19,6 @@ module.exports.getValidName = async (name, folder_id, type) => {
                 folder_id
             )
 
-        curr_suffix++
     } while (result.length > 0)
 
     return name
