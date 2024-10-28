@@ -93,3 +93,14 @@ module.exports.getAllFoldersByAccountId = async (account_id) => {
         }
     })
 }
+
+module.exports.changeFolderRoute = async (folder_id, new_relative_route) => {
+    return prisma.folder.update({
+        where: {
+            id: folder_id,
+        },
+        data: {
+            relative_route: new_relative_route,
+        }
+    })
+}
