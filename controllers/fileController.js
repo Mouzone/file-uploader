@@ -24,20 +24,13 @@ module.exports.fileDownload = async (req, res) => {
 
 module.exports.fileDelete = async (req, res) => {
     const file_id = parseInt(req.params.file_id)
-    const { name, folder_id } = await File.getFileById(file_id)
+    const { folder_id, relative_route } = await File.getFileById(file_id)
     await File.deleteFile(file_id)
 
-    let curr_folder_id = folder_id
     const rootPath = `./public/data/uploads`
-    let path = `/${name}`
-    while (curr_folder_id) {
-        const curr_folder = await Folder.getFolderById(curr_folder_id)
-        path = "/" + curr_folder.name + path
-        curr_folder_id = curr_folder.outer_folder
-    }
 
 
-    fs.unlink(rootPath + path, (error) => {
+    fs.unlink(rootPath + relative_route, (error) => {
         if (error) {
             console.error("Error deleting the file:", error)
         }
