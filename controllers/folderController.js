@@ -112,12 +112,13 @@ module.exports.folderMovePost = async (req, res) => {
     // todo: fix file name collisions for the file or the folder being moved
     if (drag_target.type === "file") {
         const curr_file_id = parseInt(drag_target.id)
-
         const curr_file = await getFileById(curr_file_id)
 
         const old_route = curr_file.relative_route
-        const new_route = new_folder.relative_route + "/" + curr_file.name
+        const new_name = await getValidName(curr_file.name, new_folder_id, "file")
+        const new_route = new_folder.relative_route + "/" + new_name
 
+        await File.changeFileName(curr_file_id, new_name)
         await File.changeFileFolder(curr_file_id, new_folder_id)
         await File.changeFileRoute(curr_file_id, new_route)
         await fs.rename(rootPath + old_route, rootPath + new_route, (error) => {

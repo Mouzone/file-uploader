@@ -85,3 +85,14 @@ module.exports.changeFileRoute = async (file_id, new_relative_route) => {
         }
     })
 }
+
+module.exports.changeFileName = async (file_id, new_name) => {
+    await prisma.file.update({
+        where: {
+            id: file_id,
+        },
+        data: {
+            name: new_name,
+        }
+    })
+}
