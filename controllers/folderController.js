@@ -5,6 +5,7 @@ const path = require("node:path");
 const fs = require("fs");
 const {getFolderById} = require("../queries/folderQueries");
 const {getFileById} = require("../queries/fileQueries");
+const {getValidName} = require("../utility/getValidName")
 
 module.exports.folderGet = async (req, res) => {
     if (!req.session.passport?.user) {
@@ -43,30 +44,15 @@ module.exports.folderUploadPost = async (req, res) => {
 
 module.exports.folderCreateFolderPost = async (req, res) => {
     const root_path = "./public/data/uploads"
-    let name = req.body.name
-    let curr_suffix = 0
-    let result
+    const folder_id = parseInt(req.params.folder_id)
+    const name = await getValidName(req.body.name, folder_id, "Folder")
 
-    do {
-        if (curr_suffix > 0) {
-            name = name.split("_")[0]
-            name += `_${curr_suffix}`
-        }
-
-        result = await Folder.getFolderByName(
-            name,
-            parseInt(req.params.folder_id)
-        )
-
-        curr_suffix++
-    } while (result.length > 0)
-
-    const outer_folder = await Folder.getFolderById(parseInt(req.params.folder_id))
+    const outer_folder = await Folder.getFolderById(folder_id)
     await Folder.createFolder(
         req.session.passport.user,
         name,
         `${outer_folder.relative_route}/${name}`,
-        parseInt(req.params.folder_id)
+        folder_id
     )
 
     // create folder in the directory
@@ -77,7 +63,7 @@ module.exports.folderCreateFolderPost = async (req, res) => {
     })
 
 
-    res.redirect(`/folder/${req.params.folder_id}`)
+    res.redirect(`/folder/${folder_id}`)
 }
 
 module.exports.folderDeletePost = async (req, res) => {
