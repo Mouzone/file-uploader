@@ -149,7 +149,7 @@ module.exports.folderMovePost = async (req, res) => {
         await Folder.changeFolderRoute(curr_folder_id, new_route)
 
         // iterate through all children files and folders
-        // each one changing its route to its parent route plus its name
+        // change all records
         const to_see = [ await getFolderById(curr_folder_id) ]
         while (to_see.length) {
             const curr_folder = to_see.shift()
@@ -158,7 +158,6 @@ module.exports.folderMovePost = async (req, res) => {
             child_folders.forEach(async child_folder => {
                 const new_route =  curr_folder.relative_route + "/" + child_folder.name
 
-                console.log(child_folder.id, curr_folder.id)
                 await Folder.changeFolderParent(child_folder.id, curr_folder.id)
                 await Folder.changeFolderRoute(child_folder.id, new_route)
 
@@ -168,13 +167,13 @@ module.exports.folderMovePost = async (req, res) => {
             child_files.forEach(async child_file => {
                 const new_route =  curr_folder.relative_route + "/" + child_file.name
 
-                await Folder.changeFolderParent(child_file.id, curr_folder.id)
-                await Folder.changeFolderRoute(child_file.id, new_route)
+                await File.changeFileFolder(child_file.id, curr_folder.id)
+                await File.changeFileRoute(child_file.id, new_route)
             })
         }
 
-        // change all records
         // then in separate iteration change all actual file paths
+        // move actual files and folders
     }
 
     res.redirect(`/folder/${req.params.folder_id}`)
