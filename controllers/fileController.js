@@ -5,7 +5,7 @@ module.exports.fileGet = async (req, res) => {
     if (!req.session.passport?.user) {
         return res.redirect("/")
     }
-    const file = await File.getFileById(parseInt(req.params.fileId))
+    const file = await File.getFile(parseInt(req.params.fileId))
     res.render("file", { file })
 }
 
