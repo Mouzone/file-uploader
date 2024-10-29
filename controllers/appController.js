@@ -7,8 +7,7 @@ module.exports.indexGet = async (req, res) => {
     }
 
     const result = await Folder.getHomeFolder(parseInt(req.session.passport.user))
-    const folderId = result[0].id
-    res.redirect(`/folder/${folderId}`)
+    res.redirect(`/folder/${result[0].id}`)
 }
 
 module.exports.logInPost = (req, res, next) => {
