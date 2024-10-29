@@ -25,8 +25,10 @@ model File {
   id          Int      @id @default(autoincrement())
   name        String
   size        Int
-  upload_time DateTime
-  relative_route String @unique
+
+  upload_time    DateTime
+  relative_route String    @unique
+
   account     Account   @relation(fields: [account_id], references: [id])
   account_id  Int
   folder      Folder?   @relation(fields: [folder_id], references: [id])
@@ -37,9 +39,11 @@ model Folder {
   id    Int     @id @default(autoincrement())
   name  String
   files File[]
-  outer_folder Int? @default(0)
+
+  outer_folder   Int? @default(0)
   relative_route String @unique
-  parent Folder? @relation("ParentChild", fields: [outer_folder], references: [id])
+
+  parent   Folder?  @relation("ParentChild", fields: [outer_folder], references: [id])
   children Folder[] @relation("ParentChild")
 
   account    Account @relation(fields: [account_id], references: [id])
@@ -50,5 +54,6 @@ model Session {
   id        String   @id
   sid       String   @unique
   data      String
+
   expiresAt   DateTime
 }
