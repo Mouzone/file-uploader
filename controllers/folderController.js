@@ -2,8 +2,6 @@ const Folder = require("../queries/folderQueries")
 const File = require("../queries/fileQueries")
 const Account = require("../queries/accountQueries")
 const fs = require("fs");
-const {getFolderById} = require("../queries/folderQueries");
-const {getFileById} = require("../queries/fileQueries");
 const {getValidName} = require("../utility/getValidName")
 
 module.exports.folderGet = async (req, res) => {
@@ -104,11 +102,11 @@ module.exports.folderDeletePost = async (req, res) => {
 module.exports.folderMovePost = async (req, res) => {
     const { dragTarget, dropTarget } = req.body
     const newFolderId = parseInt(dropTarget.id)
-    const newFolder = await getFolderById(newFolderId)
+    const newFolder = await Folder.getFolder(newFolderId)
 
     if (dragTarget.type === "file") {
         const currFileId = parseInt(dragTarget.id)
-        const currFile = await getFileById(currFileId)
+        const currFile = await File.getFile(currFileId)
 
         const oldRoute = currFile.relativeRoute
         const newName = await getValidName(currFile.name, newFolderId, "file")
@@ -124,7 +122,7 @@ module.exports.folderMovePost = async (req, res) => {
         })
     } else {
         const currFolderId = parseInt(dragTarget.id)
-        const currFolder = await getFolderById(currFolderId)
+        const currFolder = await Folder.getFolder(currFolderId)
 
         const oldRoute = currFolder.relativeRoute
         const newName = await getValidName(currFolder.name, newFolderId, "folder")
@@ -134,7 +132,7 @@ module.exports.folderMovePost = async (req, res) => {
         await Folder.changeOuterFolder(currFolderId, newFolder.id)
         await Folder.changeRoute(currFolderId, newRoute)
 
-        const toSee = [ await getFolderById(currFolderId) ]
+        const toSee = [ await Folder.getFolder(currFolderId) ]
         const foldersToDelete = [ oldRoute ]
         while (toSee.length) {
             const currFolder = toSee.shift()
