@@ -67,7 +67,6 @@ module.exports.folderCreateFolderPost = async (req, res) => {
 module.exports.folderDeletePost = async (req, res) => {
     const folderId = parseInt(req.params.folderId)
 
-
     const folderToDelete = await Folder.getFolder(folderId)
     const allChildFolders = [ folderToDelete ]
     const toSee = [ folderToDelete ]
@@ -81,7 +80,8 @@ module.exports.folderDeletePost = async (req, res) => {
         })
     }
 
-    for (const folder of [...allChildFolders].reverse()) {
+    allChildFolders.reverse()
+    for (const folder of allChildFolders) {
         try {
             const currFiles = await File.getFiles(folder.id)
             for (const file of currFiles) {
@@ -96,9 +96,7 @@ module.exports.folderDeletePost = async (req, res) => {
         }
     }
 
-    folderToDelete.outerFolder
-        ? res.redirect(`/folder/${folderToDelete.outerFolder}`)
-        : res.redirect(`/`)
+    res.redirect(`/folder/${folderToDelete.outerFolder}`)
 }
 
 module.exports.folderMovePost = async (req, res) => {
