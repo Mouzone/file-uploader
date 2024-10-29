@@ -26,13 +26,13 @@ model File {
   name        String
   size        Int
 
-  upload_time    DateTime
-  relative_route String    @unique
+  uploadTime    DateTime
+  relativeRoute String    @unique
 
   account     Account   @relation(fields: [account_id], references: [id])
-  account_id  Int
+  accountId  Int
   folder      Folder?   @relation(fields: [folder_id], references: [id])
-  folder_id   Int?
+  folderId   Int?
 }
 
 model Folder {
@@ -40,14 +40,14 @@ model Folder {
   name  String
   files File[]
 
-  outer_folder   Int? @default(0)
-  relative_route String @unique
+  outerFolder   Int? @default(0)
+  relativeRoute String @unique
 
-  parent   Folder?  @relation("ParentChild", fields: [outer_folder], references: [id])
+  parent   Folder?  @relation("ParentChild", fields: [outerFolder], references: [id])
   children Folder[] @relation("ParentChild")
 
-  account    Account @relation(fields: [account_id], references: [id])
-  account_id Int
+  account    Account @relation(fields: [accountId], references: [id])
+  accountId Int
 }
 
 model Session {
