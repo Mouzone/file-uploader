@@ -30,17 +30,6 @@ module.exports.getFile = async (id) => {
     })
 }
 
-module.exports.getName = async (id) => {
-    return prisma.file.findUnique({
-        where: {
-            id,
-        },
-        select: {
-            name: true,
-        }
-    })
-}
-
 module.exports.deleteFile = async (id) => {
     await prisma.file.delete({
         where: {

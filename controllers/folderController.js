@@ -10,7 +10,7 @@ module.exports.folderGet = async (req, res) => {
     }
     const folderId = parseInt(req.params.folderId)
     const items = {
-        folders: await Folder.getFoldersByParent(folderId),
+        folders: await Folder.getFolders(folderId),
         files: await File.getFiles(folderId)
     }
     const filePath = []
@@ -71,7 +71,7 @@ module.exports.folderDeletePost = async (req, res) => {
     const toSee = [ folderToDelete ]
     while (toSee.length) {
         const currFolder = toSee.shift()
-        const childFolders = await Folder.getFoldersByParent(currFolder.id)
+        const childFolders = await Folder.getFolders(currFolder.id)
 
         childFolders.forEach(childFolder => {
             allChildFolders.push(childFolder)
@@ -157,7 +157,7 @@ module.exports.folderMovePost = async (req, res) => {
                 })
             }
 
-            const childFolders = await Folder.getFoldersByParent(currFolder.id)
+            const childFolders = await Folder.getFolders(currFolder.id)
             for (const childFolder of childFolders) {
                 const oldRoute = childFolder.relativeRoute
                 const newRoute =  currFolder.relativeRoute + "/" + childFolder.name

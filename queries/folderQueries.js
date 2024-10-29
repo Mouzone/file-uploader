@@ -32,7 +32,7 @@ module.exports.getFolder= async (accountId, name) => {
     })
 }
 
-module.exports.getFoldersByParent = async (outerFolder) => {
+module.exports.getFolders = async (outerFolder) => {
     return prisma.folder.findMany({
         where: {
             outerFolder,
