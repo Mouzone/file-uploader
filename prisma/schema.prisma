@@ -22,38 +22,38 @@ model Account {
 }
 
 model File {
-  id          Int      @id @default(autoincrement())
-  name        String
-  size        Int
+  id   Int    @id @default(autoincrement())
+  name String
+  size Int
 
   uploadTime    DateTime
-  relativeRoute String    @unique
+  relativeRoute String   @unique
 
-  account     Account   @relation(fields: [account_id], references: [id])
-  accountId  Int
-  folder      Folder?   @relation(fields: [folder_id], references: [id])
-  folderId   Int?
+  account   Account @relation(fields: [accountId], references: [id])
+  accountId Int
+  folder    Folder? @relation(fields: [folderId], references: [id])
+  folderId  Int?
 }
 
 model Folder {
-  id    Int     @id @default(autoincrement())
+  id    Int    @id @default(autoincrement())
   name  String
   files File[]
 
-  outerFolder   Int? @default(0)
+  outerFolder   Int?   @default(0)
   relativeRoute String @unique
 
   parent   Folder?  @relation("ParentChild", fields: [outerFolder], references: [id])
   children Folder[] @relation("ParentChild")
 
-  account    Account @relation(fields: [accountId], references: [id])
+  account   Account @relation(fields: [accountId], references: [id])
   accountId Int
 }
 
 model Session {
-  id        String   @id
-  sid       String   @unique
-  data      String
+  id   String   @id
+  sid  String   @unique
+  data String
 
-  expiresAt   DateTime
+  expiresAt DateTime
 }
