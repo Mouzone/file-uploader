@@ -9,18 +9,18 @@ module.exports.storage = multer.diskStorage({
         cb(null, rootPath + req.uploadPath)
     },
     filename: async (req, file, cb) => {
-        const new_name = await getValidName(file.originalname, parseInt(req.params.folder_id), "file")
+        const newName = await getValidName(file.originalname, parseInt(req.params.folderId), "file")
 
-        cb(null, new_name)
+        cb(null, newName)
     }
 })
 
 module.exports.computeUploadPath = async (req, res, next) => {
-    let currFolderId = parseInt(req.params.folder_id);
+    let currFolderId = parseInt(req.params.folderId);
 
     try {
         const currFolder = await Folder.getFolderById(currFolderId)
-        req.uploadPath = currFolder.relative_route
+        req.uploadPath = currFolder.relativeRoute
         next()
 
     } catch (error) {
