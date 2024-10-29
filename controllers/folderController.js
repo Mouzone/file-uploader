@@ -6,8 +6,9 @@ const {getValidName} = require("../utility/getValidName")
 
 module.exports.folderGet = async (req, res) => {
     if (!req.session.passport?.user) {
-        res.render("log-in", { errorMessage: ""})
+        return res.render("log-in", { errorMessage: ""})
     }
+
     const folderId = parseInt(req.params.folderId)
     const items = {
         folders: await Folder.getFolders(folderId),
@@ -17,47 +18,48 @@ module.exports.folderGet = async (req, res) => {
     let currFolder = folderId
     while (currFolder) {
         const { name, outerFolder } = await Folder.getFolder(currFolder)
-        filePath.push([name, currFolder])
+        filePath.unshift([name, currFolder])
         currFolder = outerFolder
     }
 
     const account = await Account.getUsername(req.session.passport.user)
-    res.render("folder", { items, folderId, filePath: filePath.reverse(), account })
+    res.render("folder", { items, folderId, account, filePath })
 }
 
 module.exports.folderUploadPost = async (req, res) => {
     const { filename, size } = req.file
-    const folder = await Folder.getFolder(parseInt(req.params.folderId))
+    const folderId = parseInt(req.params.folderId)
+    const { relativeRoute } = await Folder.getFolder(folderId)
     await File.createFile(
         filename,
         size,
         new Date(),
         req.session.passport.user,
-        parseInt(req.params.folderId),
-        `${folder.relativeRoute}/${filename}`
+        folderId,
+        `${relativeRoute}/${filename}`
     )
-    res.redirect(`/folder/${req.params.folderId}`)
+    res.redirect(`/folder/${folderId}`)
 }
 
 module.exports.folderCreateFolderPost = async (req, res) => {
     const folderId = parseInt(req.params.folderId)
     const name = await getValidName(req.body.name, folderId, "folder")
 
-    const outerFolder = await Folder.getFolder(folderId)
+    // new route is just outer folder route + current name
+    const { relativeRoute } = await Folder.getFolder(folderId)
     await Folder.createFolder(
         req.session.passport.user,
         name,
-        `${outerFolder.relativeRoute}/${name}`,
+        `${relativeRoute}/${name}`,
         folderId
     )
 
     // create folder in the directory
-    fs.mkdir(`${process.env.UPLOAD_ROOT_PATH}${outerFolder.relativeRoute}/${name}`, (error) => {
+    fs.mkdir(`${process.env.UPLOAD_ROOT_PATH}${relativeRoute}/${name}`, (error) => {
         if (error) {
             console.error("Error creating directory:", error)
         }
     })
-
 
     res.redirect(`/folder/${folderId}`)
 }
