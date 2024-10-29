@@ -63,7 +63,7 @@ module.exports.folderCreateFolderPost = async (req, res) => {
 module.exports.folderDeletePost = async (req, res) => {
     const folderId = parseInt(req.params.folderId)
 
-    // get every folder that is nested in folderToDelete
+    // get every folder that is nested in folderToDelete from parent to leaf
     const folderToDelete = await Folder.getFolder(folderId)
     const childFolders = await getChildFolders(folderToDelete)
     childFolders.reverse()
