@@ -17,9 +17,4 @@ appRouter.get("/", appController.indexGet)
 appRouter.post("/log-in", appController.logInPost)
 appRouter.post("/log-out", appController.logOutPost)
 
-appRouter.use(isAuthenticated)
-appRouter.get("/folders", appController.foldersGet)
-appRouter.post("/upload", upload.single('file'), appController.uploadPost)
-appRouter.post("/create-folder", appController.createFolderPost)
-
 module.exports = appRouter
