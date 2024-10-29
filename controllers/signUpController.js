@@ -20,7 +20,7 @@ const validateUser = [
             return true
         }),
     body('password'),
-    body('confirm_password')
+    body('confirmPassword')
         .custom((value, { req }) => {
             if (value !== req.body.password) {
                 throw new Error("Passwords do not match")
@@ -47,8 +47,8 @@ module.exports.signUpPost = [
             })
             const { id } = await Account.getId(username)
             await Folder.createFolder(id, `${id}`, `/${id}`)
-            const folder_path = path.join(__dirname, `../public/data/uploads/${id}`)
-            fs.mkdir(folder_path, (err) => {
+            const folderPath = path.join(__dirname, `../public/data/uploads/${id}`)
+            fs.mkdir(folderPath, (err) => {
                 if (err) {
                     console.error("Error creating folder", error)
                 }

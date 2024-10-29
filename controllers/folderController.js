@@ -1,7 +1,6 @@
 const Folder = require("../queries/folderQueries")
 const File = require("../queries/fileQueries")
 const Account = require("../queries/accountQueries")
-const path = require("node:path");
 const fs = require("fs");
 const {getFolderById} = require("../queries/folderQueries");
 const {getFileById} = require("../queries/fileQueries");
@@ -11,174 +10,174 @@ module.exports.folderGet = async (req, res) => {
     if (!req.session.passport?.user) {
         res.render("log-in", { errorMessage: ""})
     }
-    const folder_id = parseInt(req.params.folder_id)
+    const folderId = parseInt(req.params.folderId)
     const items = {
-        folders: await Folder.getFoldersByParent(folder_id),
-        files: await File.getFilesByFolderId(folder_id)
+        folders: await Folder.getFoldersByParent(folderId),
+        files: await File.getFilesByFolderId(folderId)
     }
-    const file_path = []
-    let curr_folder = folder_id
-    while (curr_folder) {
-        const { name, outer_folder } = await Folder.getFolderById(curr_folder)
-        file_path.push([name, curr_folder])
-        curr_folder = outer_folder
+    const filePath = []
+    let currFolder = folderId
+    while (currFolder) {
+        const { name, outerFolder } = await Folder.getFolderById(currFolder)
+        filePath.push([name, currFolder])
+        currFolder = outerFolder
     }
 
     const account = await Account.getUsername(req.session.passport.user)
-    res.render("folder", { items, folder_id, file_path: file_path.reverse(), account })
+    res.render("folder", { items, folderId, filePath: filePath.reverse(), account })
 }
 
 module.exports.folderUploadPost = async (req, res) => {
     const { filename, size } = req.file
-    const folder = await Folder.getFolderById(parseInt(req.params.folder_id))
+    const folder = await Folder.getFolderById(parseInt(req.params.folderId))
     await File.createFile(
         filename,
         size,
         new Date(),
         req.session.passport.user,
-        parseInt(req.params.folder_id),
-        `${folder.relative_route}/${filename}`
+        parseInt(req.params.folderId),
+        `${folder.relativeRoute}/${filename}`
     )
-    res.redirect(`/folder/${req.params.folder_id}`)
+    res.redirect(`/folder/${req.params.folderId}`)
 }
 
 module.exports.folderCreateFolderPost = async (req, res) => {
-    const root_path = "./public/data/uploads"
-    const folder_id = parseInt(req.params.folder_id)
-    const name = await getValidName(req.body.name, folder_id, "folder")
+    const rootPath = "./public/data/uploads"
+    const folderId = parseInt(req.params.folderId)
+    const name = await getValidName(req.body.name, folderId, "folder")
 
-    const outer_folder = await Folder.getFolderById(folder_id)
+    const outerFolder = await Folder.getFolderById(folderId)
     await Folder.createFolder(
         req.session.passport.user,
         name,
-        `${outer_folder.relative_route}/${name}`,
-        folder_id
+        `${outerFolder.relativeRoute}/${name}`,
+        folderId
     )
 
     // create folder in the directory
-    fs.mkdir(`${root_path}${outer_folder.relative_route}/${name}`, (error) => {
+    fs.mkdir(`${rootPath}${outerFolder.relativeRoute}/${name}`, (error) => {
         if (error) {
             console.error("Error creating directory:", error)
         }
     })
 
 
-    res.redirect(`/folder/${folder_id}`)
+    res.redirect(`/folder/${folderId}`)
 }
 
 module.exports.folderDeletePost = async (req, res) => {
     const rootPath = `./public/data/uploads`
-    const folder_id = parseInt(req.params.folder_id)
+    const folderId = parseInt(req.params.folderId)
 
 
-    const folder_to_delete = await Folder.getFolderById(folder_id)
-    const all_child_folders = [ folder_to_delete ]
-    const to_see = [ folder_to_delete ]
-    while (to_see.length) {
-        const curr_folder = to_see.shift()
-        const child_folders = await Folder.getFoldersByParent(curr_folder.id)
+    const folderToDelete = await Folder.getFolderById(folderId)
+    const allChildFolders = [ folderToDelete ]
+    const toSee = [ folderToDelete ]
+    while (toSee.length) {
+        const currFolder = toSee.shift()
+        const childFolders = await Folder.getFoldersByParent(currFolder.id)
 
-        child_folders.forEach(child_folder => {
-            all_child_folders.push(child_folder)
-            to_see.push(child_folder)
+        childFolders.forEach(childFolder => {
+            allChildFolders.push(childFolder)
+            toSee.push(childFolder)
         })
     }
 
-    for (const folder of [...all_child_folders].reverse()) {
+    for (const folder of [...allChildFolders].reverse()) {
         try {
-            const curr_files = await File.getFilesByFolderId(folder.id)
-            for (const file of curr_files) {
+            const currFiles = await File.getFilesByFolderId(folder.id)
+            for (const file of currFiles) {
                 await File.deleteFile(file.id)
-                await fs.promises.unlink(rootPath + file.relative_route)
+                await fs.promises.unlink(rootPath + file.relativeRoute)
             }
 
             await Folder.deleteFolder(folder.id)
-            await fs.promises.rmdir(rootPath + folder.relative_route)
+            await fs.promises.rmdir(rootPath + folder.relativeRoute)
         } catch (error) {
             console.error("Error during deletion:", error);
         }
     }
 
-    folder_to_delete.outer_folder
-        ? res.redirect(`/folder/${folder_to_delete.outer_folder}`)
+    folderToDelete.outerFolder
+        ? res.redirect(`/folder/${folderToDelete.outerFolder}`)
         : res.redirect(`/`)
 }
 
 module.exports.folderMovePost = async (req, res) => {
-    const { drag_target, drop_target } = req.body
+    const { dragTarget, dropTarget } = req.body
     const rootPath = `./public/data/uploads`
-    const new_folder_id = parseInt(drop_target.id)
-    const new_folder = await getFolderById(new_folder_id)
+    const newFolderId = parseInt(dropTarget.id)
+    const newFolder = await getFolderById(newFolderId)
 
-    if (drag_target.type === "file") {
-        const curr_file_id = parseInt(drag_target.id)
-        const curr_file = await getFileById(curr_file_id)
+    if (dragTarget.type === "file") {
+        const currFileId = parseInt(dragTarget.id)
+        const currFile = await getFileById(currFileId)
 
-        const old_route = curr_file.relative_route
-        const new_name = await getValidName(curr_file.name, new_folder_id, "file")
-        const new_route = new_folder.relative_route + "/" + new_name
+        const oldRoute = currFile.relativeRoute
+        const newName = await getValidName(currFile.name, newFolderId, "file")
+        const newRoute = newFolder.relativeRoute + "/" + newName
 
-        await File.changeFileName(curr_file_id, new_name)
-        await File.changeFileFolder(curr_file_id, new_folder_id)
-        await File.changeFileRoute(curr_file_id, new_route)
-        await fs.rename(rootPath + old_route, rootPath + new_route, (error) => {
+        await File.changeFileName(currFileId, newName)
+        await File.changeFileFolder(currFileId, newFolderId)
+        await File.changeFileRoute(currFileId, newRoute)
+        await fs.rename(rootPath + oldRoute, rootPath + newRoute, (error) => {
             if (error) {
                 console.error("Error moving file", error)
             }
         })
     } else {
-        const curr_folder_id = parseInt(drag_target.id)
-        const curr_folder = await getFolderById(curr_folder_id)
+        const currFolderId = parseInt(dragTarget.id)
+        const currFolder = await getFolderById(currFolderId)
 
-        const old_route = curr_folder.relative_route
-        const new_name = await getValidName(curr_folder.name, new_folder_id, "folder")
-        const new_route =  new_folder.relative_route + "/" + new_name
+        const oldRoute = currFolder.relativeRoute
+        const newName = await getValidName(currFolder.name, newFolderId, "folder")
+        const newRoute =  newFolder.relativeRoute + "/" + newName
 
-        await Folder.changeFolderName(curr_folder_id, new_name)
-        await Folder.changeFolderParent(curr_folder_id, new_folder.id)
-        await Folder.changeFolderRoute(curr_folder_id, new_route)
+        await Folder.changeFolderName(currFolderId, newName)
+        await Folder.changeFolderParent(currFolderId, newFolder.id)
+        await Folder.changeFolderRoute(currFolderId, newRoute)
 
-        const to_see = [ await getFolderById(curr_folder_id) ]
-        const folders_to_delete = [ old_route ]
-        while (to_see.length) {
-            const curr_folder = to_see.shift()
+        const toSee = [ await getFolderById(currFolderId) ]
+        const foldersToDelete = [ oldRoute ]
+        while (toSee.length) {
+            const currFolder = toSee.shift()
 
-            fs.mkdir(rootPath + curr_folder.relative_route, (error) => {
+            fs.mkdir(rootPath + currFolder.relativeRoute, (error) => {
                 if (error) {
                     console.error("Error making directory", error)
                 }
             })
 
-            const child_files = await File.getFilesByFolderId(curr_folder.id)
-            for (const child_file of child_files) {
-                const old_route = child_file.relative_route
-                const new_route =  curr_folder.relative_route + "/" + child_file.name
+            const childFiles = await File.getFilesByFolderId(currFolder.id)
+            for (const childFile of childFiles) {
+                const oldRoute = childFile.relativeRoute
+                const newRoute =  currFolder.relativeRoute + "/" + childFile.name
 
-                await File.changeFileFolder(child_file.id, curr_folder.id)
-                await File.changeFileRoute(child_file.id, new_route)
-                fs.rename(rootPath + old_route, rootPath + new_route, (error) => {
+                await File.changeFileFolder(childFile.id, currFolder.id)
+                await File.changeFileRoute(childFile.id, newRoute)
+                fs.rename(rootPath + oldRoute, rootPath + newRoute, (error) => {
                     if (error) {
                         console.error("Error moving file", error)
                     }
                 })
             }
 
-            const child_folders = await Folder.getFoldersByParent(curr_folder.id)
-            for (const child_folder of child_folders) {
-                const old_route = child_folder.relative_route
-                const new_route =  curr_folder.relative_route + "/" + child_folder.name
+            const childFolders = await Folder.getFoldersByParent(currFolder.id)
+            for (const childFolder of childFolders) {
+                const oldRoute = childFolder.relativeRoute
+                const newRoute =  currFolder.relativeRoute + "/" + childFolder.name
 
-                await Folder.changeFolderParent(child_folder.id, curr_folder.id)
-                await Folder.changeFolderRoute(child_folder.id, new_route)
+                await Folder.changeFolderParent(childFolder.id, currFolder.id)
+                await Folder.changeFolderRoute(childFolder.id, newRoute)
 
-                folders_to_delete.push(old_route)
-                to_see.push({...child_folder, relative_route: new_route})
+                foldersToDelete.push(oldRoute)
+                toSee.push({...childFolder, relativeRoute: newRoute})
             }
 
         }
 
-        folders_to_delete.reverse()
-        for (const folderPath of folders_to_delete) {
+        foldersToDelete.reverse()
+        for (const folderPath of foldersToDelete) {
             await fs.rmdir(rootPath + folderPath, (error) => {
                 if (error) {
                     console.error("Error removing directory", error)
@@ -187,5 +186,5 @@ module.exports.folderMovePost = async (req, res) => {
         }
     }
 
-    res.redirect(`/folder/${req.params.folder_id}`)
+    res.redirect(`/folder/${req.params.folderId}`)
 }

@@ -1,7 +1,6 @@
 const path = require("node:path");
 const File = require('../queries/fileQueries')
 const fs = require('fs')
-const Folder = require("../queries/folderQueries");
 
 module.exports.fileGet = async (req, res) => {
     if (!req.session.passport?.user) {
