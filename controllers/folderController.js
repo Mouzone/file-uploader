@@ -4,6 +4,7 @@ const Account = require("../queries/accountQueries")
 const fs = require("fs");
 const {getValidName} = require("../utility/getValidName")
 const {getItems, getFolderPath} = require("../utility/folderGet.utility");
+const {getChildFolders, deleteFolder} = require("../utility/folderDelete.utility")
 
 module.exports.folderGet = async (req, res) => {
     if (!req.session.passport?.user) {
@@ -19,9 +20,11 @@ module.exports.folderGet = async (req, res) => {
 }
 
 module.exports.folderUploadPost = async (req, res) => {
-    const { filename, size } = req.file
     const folderId = parseInt(req.params.folderId)
+
+    const { filename, size } = req.file
     const { relativeRoute } = await Folder.getFolder(folderId)
+
     await File.createFile(
         filename,
         size,
@@ -47,7 +50,8 @@ module.exports.folderCreateFolderPost = async (req, res) => {
     )
 
     // create folder in the directory
-    fs.mkdir(`${process.env.UPLOAD_ROOT_PATH}${relativeRoute}/${name}`, (error) => {
+    const newDirectoryPath = `${process.env.UPLOAD_ROOT_PATH}${relativeRoute}/${name}`
+    fs.mkdir(newDirectoryPath, (error) => {
         if (error) {
             console.error("Error creating directory:", error)
         }
@@ -59,30 +63,15 @@ module.exports.folderCreateFolderPost = async (req, res) => {
 module.exports.folderDeletePost = async (req, res) => {
     const folderId = parseInt(req.params.folderId)
 
+    // get every folder that is nested in folderToDelete
     const folderToDelete = await Folder.getFolder(folderId)
-    const allChildFolders = [ folderToDelete ]
-    const toSee = [ folderToDelete ]
-    while (toSee.length) {
-        const currFolder = toSee.shift()
-        const childFolders = await Folder.getFolders(currFolder.id)
+    const childFolders = await getChildFolders(folderToDelete)
+    childFolders.reverse()
 
-        childFolders.forEach(childFolder => {
-            allChildFolders.push(childFolder)
-            toSee.push(childFolder)
-        })
-    }
-
-    allChildFolders.reverse()
-    for (const folder of allChildFolders) {
+    // delete every nested folder, in order from leaf to parent
+    for (const folder of childFolders) {
         try {
-            const currFiles = await File.getFiles(folder.id)
-            for (const file of currFiles) {
-                await File.deleteFile(file.id)
-                await fs.promises.unlink(process.env.UPLOAD_ROOT_PATH + file.relativeRoute)
-            }
-
-            await Folder.deleteFolder(folder.id)
-            await fs.promises.rmdir(process.env.UPLOAD_ROOT_PATH + folder.relativeRoute)
+            await deleteFolder(folder.id, folder.relativeRoute)
         } catch (error) {
             console.error("Error during deletion:", error);
         }
