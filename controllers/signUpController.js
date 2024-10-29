@@ -40,19 +40,22 @@ module.exports.signUpPost = [
         try {
             const hashedPassword = await bcrypt.hash(password, 10)
             await Account.createUser(username, hashedPassword)
+
             req.session.regenerate( async (err) => {
                 if (err) {
                     return res.status(500).send("Error regenerating session")
                 }
             })
-            const { id } = await Account.getId(username)
+
+            const { id } = await Account.getIdByUsername(username)
             await Folder.createFolder(id, `${id}`, `/${id}`)
             const folderPath = path.join(__dirname, `../public/data/uploads/${id}`)
-            fs.mkdir(folderPath, (err) => {
-                if (err) {
+            fs.mkdir(folderPath, (error) => {
+                if (error) {
                     console.error("Error creating folder", error)
                 }
             })
+
             req.session.passport = { user: id }
 
             res.redirect("/")
