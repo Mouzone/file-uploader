@@ -61,7 +61,7 @@ module.exports.getHomeFolder = async (accountId) => {
     return prisma.folder.findMany({
         where: {
             accountId,
-            outer_folder: null
+            outerFolder: null
         }
     })
 }

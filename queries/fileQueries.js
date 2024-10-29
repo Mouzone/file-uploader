@@ -14,10 +14,10 @@ module.exports.createFile = async (name, size, uploadTime, accountId, folderId, 
     })
 }
 
-module.exports.getFiles = async (folder_id) => {
+module.exports.getFiles = async (folderId) => {
     return prisma.file.findMany({
         where: {
-            folder_id,
+            folderId,
         }
     })
 }
