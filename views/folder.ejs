@@ -72,22 +72,24 @@
 
     <div id="items">
         <% items.folders.forEach( folder => { %>
-            <a class="folder" href="/folder/<%= folder.id %>" data-id="<%= folder.id %>">
+            <% const { id, name } = folder %>
+            <a class="folder" href="/folder/<%= id %>" data-id="<%= id %>">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <title>folder</title>
                     <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" />
                 </svg>
-                <p><%= folder.name %></p>
+                <p><%= name %></p>
             </a>
-
         <% }) %>
+
         <% items.files.forEach( file => { %>
-            <a class="file" href="/file/<%= file.id %>" data-id="<%= file.id %>">
+            <% const { id, name } = file %>
+            <a class="file" href="/file/<%= id %>" data-id="<%= id %>">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <title>file</title>
                     <path d="M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6Z" />
                 </svg>
-                <p><%= file.name %></p>
+                <p><%= name %></p>
             </a>
         <% }) %>
     </div>
