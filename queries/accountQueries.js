@@ -4,8 +4,8 @@ const prisma = new PrismaClient()
 module.exports.createUser = async (username, password) => {
     await prisma.account.create({
         data: {
-            username: username,
-            password: password,
+            username,
+            password,
         }
     })
 }
@@ -13,7 +13,7 @@ module.exports.createUser = async (username, password) => {
 module.exports.findByUsername = async (username) => {
     return prisma.account.findUnique({
         where: {
-            username: username,
+            username,
         }
     })
 }
@@ -21,7 +21,7 @@ module.exports.findByUsername = async (username) => {
 module.exports.findById = async (id) => {
     return prisma.account.findUnique({
         where: {
-            id: id,
+            id,
         }
     })
 }
@@ -29,7 +29,7 @@ module.exports.findById = async (id) => {
 module.exports.getId = async (username) => {
     return prisma.account.findUnique({
         where: {
-            username: username
+            username
         },
         select: {
             id: true,
@@ -37,10 +37,10 @@ module.exports.getId = async (username) => {
     })
 }
 
-module.exports.getUsername = async (account_id) =>{
+module.exports.getUsername = async (id) =>{
     return prisma.account.findUnique({
         where: {
-            id: account_id,
+            id,
         }
     })
 }

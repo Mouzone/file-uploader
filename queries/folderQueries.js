@@ -1,21 +1,21 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
-module.exports.createFolder = async (account_id, name, relative_route, outer_folder=null) => {
+module.exports.createFolder = async (accountId, name, relativeRoute, outerFolder=null) => {
     return prisma.folder.create({
         data: {
             name,
-            account_id,
-            outer_folder,
-            relative_route
+            accountId,
+            outerFolder,
+            relativeRoute
         }
     })
 }
 
-module.exports.deleteFolder = async (folder_id) => {
+module.exports.deleteFolder = async (id) => {
     await prisma.folder.delete({
         where: {
-            id: folder_id
+            id,
         }
     })
 }
@@ -49,10 +49,10 @@ module.exports.getFoldersByParent = async (outer_folder) => {
     })
 }
 
-module.exports.getFolderById = async (folder_id) =>{
+module.exports.getFolderById = async (id) =>{
     return prisma.folder.findUnique({
         where: {
-            id: folder_id
+            id,
         }
     })
 }
@@ -69,19 +69,19 @@ module.exports.getFolderByName = async (name, outer_folder) => {
 module.exports.getHomeFolder = async (account_id) => {
     return prisma.folder.findMany({
         where: {
-            account_id: account_id,
+            account_id,
             outer_folder: null
         }
     })
 }
 
-module.exports.changeFolderParent = async (folder_id, new_outer_folder) => {
+module.exports.changeFolderParent = async (id, outer_folder) => {
     await prisma.folder.update({
         where: {
-            id: folder_id
+            id,
         },
         data: {
-            outer_folder: new_outer_folder
+            outer_folder,
         }
     })
 }
@@ -94,24 +94,24 @@ module.exports.getAllFoldersByAccountId = async (account_id) => {
     })
 }
 
-module.exports.changeFolderRoute = async (folder_id, new_relative_route) => {
+module.exports.changeFolderRoute = async (id, relative_route) => {
     return prisma.folder.update({
         where: {
-            id: folder_id,
+            id,
         },
         data: {
-            relative_route: new_relative_route,
+            relative_route,
         }
     })
 }
 
-module.exports.changeFolderName = async (folder_id, new_name) => {
+module.exports.changeFolderName = async (id, name) => {
     return prisma.folder.update({
         where: {
-            id: folder_id,
+            id,
         },
         data: {
-            name: new_name,
+            name,
         }
     })
 }
