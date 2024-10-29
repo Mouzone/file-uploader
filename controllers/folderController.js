@@ -5,6 +5,7 @@ const fs = require("fs");
 const {getValidName} = require("../utility/getValidName")
 const {getItems, getFolderPath} = require("../utility/folderGet.utility");
 const {getChildFolders, deleteFolder} = require("../utility/folderDelete.utility")
+const {moveFileInDB, moveFolderInDB, moveFileInFS, deleteFolders, createNewFolders} = require("../utility/folderMove.utility")
 
 module.exports.folderGet = async (req, res) => {
     if (!req.session.passport?.user) {
@@ -85,81 +86,27 @@ module.exports.folderMovePost = async (req, res) => {
     const newFolderId = parseInt(dropTarget.id)
     const newFolder = await Folder.getFolder(newFolderId)
 
+    const currItemId = parseInt(dragTarget.id)
+    const currItem = dragTarget.type === "file"
+                                                            ? await File.getFile(currItemId)
+                                                            : await Folder.getFolder(currItemId)
+
+    const oldRoute = currItem.relativeRoute
+    const newName = await getValidName(currItem.name, newFolderId, dragTarget.type)
+    const newRoute =  newFolder.relativeRoute + "/" + newName
+
     if (dragTarget.type === "file") {
-        const currFileId = parseInt(dragTarget.id)
-        const currFile = await File.getFile(currFileId)
-
-        const oldRoute = currFile.relativeRoute
-        const newName = await getValidName(currFile.name, newFolderId, "file")
-        const newRoute = newFolder.relativeRoute + "/" + newName
-
-        await File.changeName(currFileId, newName)
-        await File.changeFolder(currFileId, newFolderId)
-        await File.changeRoute(currFileId, newRoute)
-        await fs.rename(process.env.UPLOAD_ROOT_PATH + oldRoute, process.env.UPLOAD_ROOT_PATH + newRoute, (error) => {
-            if (error) {
-                console.error("Error moving file", error)
-            }
-        })
+        await File.changeName(currItemId, newName)
+        await moveFileInDB(currItemId, newFolderId, newRoute)
+        await moveFileInFS(oldRoute, newRoute)
     } else {
-        const currFolderId = parseInt(dragTarget.id)
-        const currFolder = await Folder.getFolder(currFolderId)
+        await Folder.changeName(currItemId, newName)
+        await moveFolderInDB(currItemId, newFolderId, newRoute)
 
-        const oldRoute = currFolder.relativeRoute
-        const newName = await getValidName(currFolder.name, newFolderId, "folder")
-        const newRoute =  newFolder.relativeRoute + "/" + newName
-
-        await Folder.changeName(currFolderId, newName)
-        await Folder.changeOuterFolder(currFolderId, newFolder.id)
-        await Folder.changeRoute(currFolderId, newRoute)
-
-        const toSee = [ await Folder.getFolder(currFolderId) ]
-        const foldersToDelete = [ oldRoute ]
-        while (toSee.length) {
-            const currFolder = toSee.shift()
-
-            fs.mkdir(process.env.UPLOAD_ROOT_PATH + currFolder.relativeRoute, (error) => {
-                if (error) {
-                    console.error("Error making directory", error)
-                }
-            })
-
-            const childFiles = await File.getFiles(currFolder.id)
-            for (const childFile of childFiles) {
-                const oldRoute = childFile.relativeRoute
-                const newRoute =  currFolder.relativeRoute + "/" + childFile.name
-
-                await File.changeFolder(childFile.id, currFolder.id)
-                await File.changeRoute(childFile.id, newRoute)
-                fs.rename(process.env.UPLOAD_ROOT_PATH + oldRoute, process.env.UPLOAD_ROOT_PATH + newRoute, (error) => {
-                    if (error) {
-                        console.error("Error moving file", error)
-                    }
-                })
-            }
-
-            const childFolders = await Folder.getFolders(currFolder.id)
-            for (const childFolder of childFolders) {
-                const oldRoute = childFolder.relativeRoute
-                const newRoute =  currFolder.relativeRoute + "/" + childFolder.name
-
-                await Folder.changeOuterFolder(childFolder.id, currFolder.id)
-                await Folder.changeRoute(childFolder.id, newRoute)
-
-                foldersToDelete.push(oldRoute)
-                toSee.push({...childFolder, relativeRoute: newRoute})
-            }
-
-        }
+        const foldersToDelete = await createNewFolders(currItemId, oldRoute)
 
         foldersToDelete.reverse()
-        for (const folderPath of foldersToDelete) {
-            await fs.rmdir(process.env.UPLOAD_ROOT_PATH + folderPath, (error) => {
-                if (error) {
-                    console.error("Error removing directory", error)
-                }
-            })
-        }
+        await deleteFolders(foldersToDelete)
     }
 
     res.redirect(`/folder/${req.params.folderId}`)
