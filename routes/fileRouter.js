@@ -5,8 +5,8 @@ const fileRouter = Router()
 const { isAuthenticated } = require('../utility/authentication')
 
 fileRouter.use(isAuthenticated)
-fileRouter.get("/:file_id", fileController.fileGet)
-fileRouter.post("/:file_id/download", fileController.fileDownload)
-fileRouter.post("/:file_id/delete", fileController.fileDelete)
+fileRouter.get("/:fileId", fileController.fileGet)
+fileRouter.post("/:fileId/download", fileController.fileDownload)
+fileRouter.post("/:fileId/delete", fileController.fileDelete)
 
 module.exports = fileRouter

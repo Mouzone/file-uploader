@@ -1,13 +1,9 @@
-const multer = require('multer')
-const upload = multer(({ dest: './public/data/uploads' }))
-
 const { Router } = require('express')
 const appRouter = Router()
 const signUpRouter = require('./signUpRouter')
 const fileRouter = require('./fileRouter')
 const folderRouter = require('./folderRouter')
 const appController = require('../controllers/appController')
-const { isAuthenticated } = require('../utility/authentication')
 
 appRouter.use("/sign-up", signUpRouter)
 appRouter.use("/file", fileRouter)
