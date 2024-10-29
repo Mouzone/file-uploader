@@ -8,7 +8,10 @@ module.exports.moveFileInDB = async (currFileId, newFolderId, newRoute) => {
 }
 
 module.exports.moveFileInFS = async (oldRoute, newRoute) => {
-    await fs.rename(process.env.UPLOAD_ROOT_PATH + oldRoute, process.env.UPLOAD_ROOT_PATH + newRoute, (error) => {
+    const oldPath = process.env.UPLOAD_ROOT_PATH + oldRoute
+    const newPath = process.env.UPLOAD_ROOT_PATH + newRoute
+    await fs.rename(oldPath, newPath, (error) => {
+        console.log("File moved", newPath)
         if (error) {
             console.error("Error moving file", error)
         }
@@ -22,7 +25,8 @@ module.exports.moveFolderInDB = async (currFolderId, newFolderId, newRoute) => {
 
 module.exports.deleteFolders = async (foldersToDelete) => {
     for (const folderPath of foldersToDelete) {
-        await fs.rmdir(process.env.UPLOAD_ROOT_PATH + folderPath, (error) => {
+        const path = process.env.UPLOAD_ROOT_PATH + folderPath
+        await fs.rmdir(path, (error) => {
             if (error) {
                 console.error("Error removing directory", error)
             }
@@ -62,7 +66,8 @@ module.exports.createNewFolders = async (currFolderId, oldRoute) => {
     while (toSee.length) {
         const currFolder = toSee.shift()
 
-        fs.mkdir(process.env.UPLOAD_ROOT_PATH + currFolder.relativeRoute, (error) => {
+        const path = process.env.UPLOAD_ROOT_PATH + currFolder.relativeRoute
+        fs.mkdir(path, (error) => {
             if (error) {
                 console.error("Error making directory", error)
             }
