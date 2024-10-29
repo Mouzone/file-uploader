@@ -18,7 +18,7 @@ module.exports.findByUsername = async (username) => {
     })
 }
 
-module.exports.findById = async (id) => {
+module.exports.getAccount = async (id) => {
     return prisma.account.findUnique({
         where: {
             id,
@@ -26,7 +26,7 @@ module.exports.findById = async (id) => {
     })
 }
 
-module.exports.getId = async (username) => {
+module.exports.getIdByUsername = async (username) => {
     return prisma.account.findUnique({
         where: {
             username
@@ -41,6 +41,9 @@ module.exports.getUsername = async (id) =>{
     return prisma.account.findUnique({
         where: {
             id,
+        },
+        select: {
+            username: true,
         }
     })
 }

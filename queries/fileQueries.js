@@ -14,16 +14,7 @@ module.exports.createFile = async (name, size, uploadTime, accountId, folderId, 
     })
 }
 
-module.exports.getFilesNotInFolders = async (account_id) => {
-    return prisma.file.findMany({
-        where: {
-            account_id,
-            folder_id: null,
-        }
-    })
-}
-
-module.exports.getFilesByFolderId = async (folder_id) => {
+module.exports.getFiles = async (folder_id) => {
     return prisma.file.findMany({
         where: {
             folder_id,
@@ -31,7 +22,7 @@ module.exports.getFilesByFolderId = async (folder_id) => {
     })
 }
 
-module.exports.getFileById = async (id) => {
+module.exports.getFile = async (id) => {
     return prisma.file.findUnique({
         where: {
             id,
@@ -39,10 +30,13 @@ module.exports.getFileById = async (id) => {
     })
 }
 
-module.exports.getFileNameById = async (id) => {
+module.exports.getName = async (id) => {
     return prisma.file.findUnique({
         where: {
             id,
+        },
+        select: {
+            name: true,
         }
     })
 }
@@ -55,38 +49,38 @@ module.exports.deleteFile = async (id) => {
     })
 }
 
-module.exports.getFileByName = async (name, folder_id) => {
+module.exports.getFileByName = async (name, folderId) => {
     return prisma.file.findMany({
         where: {
-            file_name,
-            folder_id
+            name,
+            folderId
         }
     })
 }
 
-module.exports.changeFileFolder = async (id, folder_id) => {
+module.exports.changeFolder = async (id, folderId) => {
     await prisma.file.update({
         where: {
             id,
         },
         data: {
-            folder_id,
+            folderId,
         }
     })
 }
 
-module.exports.changeFileRoute = async (id, relative_route) => {
+module.exports.changeRoute = async (id, relativeRoute) => {
     await prisma.file.update({
         where: {
             id,
         },
         data: {
-            relative_route,
+            relativeRoute,
         }
     })
 }
 
-module.exports.changeFileName = async (id, name) => {
+module.exports.changeName = async (id, name) => {
     await prisma.file.update({
         where: {
             id,
