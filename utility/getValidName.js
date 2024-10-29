@@ -9,7 +9,7 @@ module.exports.getValidName = async (name, folder_id, type) => {
             name += " (1)"
         }
 
-        result = type === "Folder"
+        result = type === "folder"
             ? await Folder.getFolderByName(
                 name,
                 folder_id

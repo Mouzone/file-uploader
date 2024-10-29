@@ -45,7 +45,7 @@ module.exports.folderUploadPost = async (req, res) => {
 module.exports.folderCreateFolderPost = async (req, res) => {
     const root_path = "./public/data/uploads"
     const folder_id = parseInt(req.params.folder_id)
-    const name = await getValidName(req.body.name, folder_id, "Folder")
+    const name = await getValidName(req.body.name, folder_id, "folder")
 
     const outer_folder = await Folder.getFolderById(folder_id)
     await Folder.createFolder(
@@ -133,8 +133,7 @@ module.exports.folderMovePost = async (req, res) => {
         const old_route = curr_folder.relative_route
         const new_name = await getValidName(curr_folder.name, new_folder_id, "folder")
         const new_route =  new_folder.relative_route + "/" + new_name
-        console.log(curr_folder)
-        console.log(new_folder)
+
         await Folder.changeFolderName(curr_folder_id, new_name)
         await Folder.changeFolderParent(curr_folder_id, new_folder.id)
         await Folder.changeFolderRoute(curr_folder_id, new_route)
@@ -146,26 +145,14 @@ module.exports.folderMovePost = async (req, res) => {
         while (to_see.length) {
             const curr_folder = to_see.shift()
             // create folder with the new route
+            // todo: figure out if each file and folder is modified properly that is getting moved to the new folder
             fs.mkdir(rootPath + curr_folder.relative_route, (error) => {
                 if (error) {
                     console.error("Error making directory", error)
                 }
             })
 
-            const child_folders = await Folder.getFoldersByParent(curr_folder.id)
             const child_files = await File.getFilesByFolderId(curr_folder.id)
-            child_folders.forEach(async child_folder => {
-                const old_route = child_folder.relative_route
-                const new_route =  curr_folder.relative_route + "/" + child_folder.name
-
-                await Folder.changeFolderParent(child_folder.id, curr_folder.id)
-                await Folder.changeFolderRoute(child_folder.id, new_route)
-
-                const results = await Folder.getFoldersByParent(child_folder.id)
-                to_see.push([...results])
-                folders_to_delete.push(old_route)
-            })
-
             child_files.forEach(async child_file => {
                 const old_route = child_file.relative_route
                 const new_route =  curr_folder.relative_route + "/" + child_file.name
@@ -178,10 +165,22 @@ module.exports.folderMovePost = async (req, res) => {
                     }
                 })
             })
+
+            const child_folders = await Folder.getFoldersByParent(curr_folder.id)
+            child_folders.forEach(async child_folder => {
+                const old_route = child_folder.relative_route
+                const new_route =  curr_folder.relative_route + "/" + child_folder.name
+
+                await Folder.changeFolderParent(child_folder.id, curr_folder.id)
+                await Folder.changeFolderRoute(child_folder.id, new_route)
+
+                folders_to_delete.push(old_route)
+            })
+            to_see.push(...child_folders)
         }
 
-        folders_to_delete.forEach(folderPath => {
-            fs.rmdir(rootPath + folderPath, (error) => {
+        folders_to_delete.reverse().forEach(async folderPath => {
+            await fs.rmdir(rootPath + folderPath, (error) => {
                 if (error) {
                     console.error("Error removing directory", error)
                 }
