@@ -3,6 +3,7 @@ const File = require("../queries/fileQueries")
 const Account = require("../queries/accountQueries")
 const fs = require("fs");
 const {getValidName} = require("../utility/getValidName")
+const {getItems, getFolderPath} = require("../utility/folderGet.utility");
 
 module.exports.folderGet = async (req, res) => {
     if (!req.session.passport?.user) {
@@ -10,20 +11,11 @@ module.exports.folderGet = async (req, res) => {
     }
 
     const folderId = parseInt(req.params.folderId)
-    const items = {
-        folders: await Folder.getFolders(folderId),
-        files: await File.getFiles(folderId)
-    }
-    const filePath = []
-    let currFolder = folderId
-    while (currFolder) {
-        const { name, outerFolder } = await Folder.getFolder(currFolder)
-        filePath.unshift([name, currFolder])
-        currFolder = outerFolder
-    }
+    const { username } = await Account.getUsername(req.session.passport.user)
+    const filePath = await getFolderPath(folderId)
+    const items = await getItems(folderId)
 
-    const account = await Account.getUsername(req.session.passport.user)
-    res.render("folder", { items, folderId, account, filePath })
+    res.render("folder", { folderId, username, filePath, items })
 }
 
 module.exports.folderUploadPost = async (req, res) => {
