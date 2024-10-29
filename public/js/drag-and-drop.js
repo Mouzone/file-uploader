@@ -1,6 +1,6 @@
 let dragged
 
-export function addFolderFunctionality(curr_folder) {
+export function addFolderFunctionality(currFolder) {
     const folders = document.querySelectorAll(".folder")
 
     folders.forEach(folder => {
@@ -15,14 +15,14 @@ export function addFolderFunctionality(curr_folder) {
         folder.addEventListener("drop", (event) => {
             event.preventDefault()
             const dropped = event.target.closest('a')
-            fetch(`/folder/${curr_folder}/move`, {
+            fetch(`/folder/${currFolder}/move`, {
                 method: 'POST',
                 body: JSON.stringify({
-                    drag_target: {
+                    dragTarget: {
                         type: dragged.className,
                         id: dragged.dataset.id
                     },
-                    drop_target: {
+                    dropTarget: {
                         id: dropped.dataset.id
                     },
                 }),

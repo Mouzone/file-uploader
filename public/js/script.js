@@ -3,7 +3,7 @@ import { toggleMenuIcon } from "./toggle-menu-icon.js";
 import {addFileFunctionality, addFolderFunctionality} from "./drag-and-drop.js";
 
 const paragraphs = document.getElementById("path").querySelectorAll("p")
-const curr_folder = parseInt(paragraphs[paragraphs.length - 1].dataset.currFolder)
+const currFolder = parseInt(paragraphs[paragraphs.length - 1].dataset.currFolder)
 
 fetch(`/folders/`, {
     method: 'GET',
@@ -16,8 +16,8 @@ fetch(`/folders/`, {
 
 document.addEventListener('DOMContentLoaded', () => {
     addFileFormLogic()
-    addFolderFormLogic(curr_folder)
+    addFolderFormLogic(currFolder)
     toggleMenuIcon()
-    addFolderFunctionality(curr_folder)
+    addFolderFunctionality(currFolder)
     addFileFunctionality()
 })
