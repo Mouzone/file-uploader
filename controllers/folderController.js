@@ -157,7 +157,6 @@ module.exports.folderMovePost = async (req, res) => {
                 await File.changeFileFolder(child_file.id, curr_folder.id)
                 await File.changeFileRoute(child_file.id, new_route)
                 fs.rename(rootPath + old_route, rootPath + new_route, (error) => {
-                    console.log("- Removing File", new_route)
                     if (error) {
                         console.error("Error moving file", error)
                     }
@@ -173,11 +172,12 @@ module.exports.folderMovePost = async (req, res) => {
                 await Folder.changeFolderRoute(child_folder.id, new_route)
 
                 folders_to_delete.push(old_route)
+                to_see.push({...child_folder, relative_route: new_route})
             }
 
-            to_see.push(...child_folders)
         }
 
+        folders_to_delete.reverse()
         for (const folderPath of folders_to_delete) {
             await fs.rmdir(rootPath + folderPath, (error) => {
                 if (error) {
