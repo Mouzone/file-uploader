@@ -1,7 +1,7 @@
 const Folder = require("../queries/folderQueries");
 const File = require("../queries/fileQueries");
 
-module.exports.getValidName = async (name, folder_id, type) => {
+module.exports.getValidName = async (name, folderId, type) => {
     let result
 
     do {
@@ -12,11 +12,11 @@ module.exports.getValidName = async (name, folder_id, type) => {
         result = type === "folder"
             ? await Folder.getFolderByName(
                 name,
-                folder_id
+                folderId
             )
             : await File.getFileByName(
                 name,
-                folder_id
+                folderId
             )
 
     } while (result.length > 0)
