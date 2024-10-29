@@ -9,9 +9,9 @@
     <body>
         <div>
             <div id="info">
-                <p> <%= file.original_name %> </p>
+                <p> <%= file.originalName %> </p>
                 <p> <%= file.size %> </p>
-                <p> <%= file.upload_time %> </p>
+                <p> <%= file.uploadTime %> </p>
             </div>
             <form action="/file/<%= file.id %>/download" method="POST">
                 <button type="submit"> Download </button>

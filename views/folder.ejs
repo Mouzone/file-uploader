@@ -9,16 +9,16 @@
 <body>
     <div id="navbar">
         <div id="path">
-            <% for (let i = 0; i < file_path.length; i++) {%>
-                <% let [ name, folder_id ] = file_path[i] %>
+            <% for (let i = 0; i < filePath.length; i++) {%>
+                <% let [ name, folderId ] = filePath[i] %>
                 <% if (i === 0) { %>
                     <% name = "Home"%>
                 <% } %>
-                <% if ( i !== file_path.length - 1) { %>
-                    <a href="/folder/<%= folder_id %>"><%= name %></a>
+                <% if ( i !== filePath.length - 1) { %>
+                    <a href="/folder/<%= folderId %>"><%= name %></a>
                     <p> > </p>
                 <% } else { %>
-                    <p data-curr-folder="<%= folder_id %>"><%= name %></p>
+                    <p data-curr-folder="<%= folderId %>"><%= name %></p>
                 <% } %>
             <% }%>
         </div>
@@ -51,7 +51,7 @@
             </div>
         </div>
         <div class="menu">
-            <form id="file-form" action="/folder/<%= folder_id %>/upload" method="POST" enctype="multipart/form-data">
+            <form id="file-form" action="/folder/<%= folderId %>/upload" method="POST" enctype="multipart/form-data">
                 <input type="file" id="file" name="file" required>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <title>file-upload</title>
@@ -91,8 +91,8 @@
             </a>
         <% }) %>
     </div>
-    <% if (file_path.length >= 2) { %>
-        <form action="/folder/<%= folder_id %>/delete" method="POST">
+    <% if (filePath.length >= 2) { %>
+        <form action="/folder/<%= folderId %>/delete" method="POST">
             <button type="submit"> Delete </button>
         </form>
     <% } %>
