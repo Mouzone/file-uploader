@@ -2,7 +2,7 @@ const Folder = require("../queries/folderQueries")
 const File = require("../queries/fileQueries")
 const fs = require("fs");
 const {getValidName} = require("../utility/getValidName")
-const {getItems, getFolderPath} = require("../utility/folderGet.utility");
+const {getFolderPath} = require("../utility/folderGet.utility");
 const {getChildFolders, deleteFilesFromDB} = require("../utility/folderDelete.utility")
 const {moveFolderInDB, moveFolderInFS, moveItems} = require("../utility/folderMove.utility")
 
