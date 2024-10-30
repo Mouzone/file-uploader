@@ -23,10 +23,9 @@ module.exports.deleteFolder = async ( folderId, folderRelativeRoute ) => {
     const currFiles = await File.getFiles(folderId)
     for (const file of currFiles) {
         await File.deleteFile(file.id)
-        await fs.promises.unlink(process.env.UPLOAD_ROOT_PATH + file.relativeRoute)
     }
 
     // once folder is empty delete folder
     await Folder.deleteFolder(folderId)
-    await fs.promises.rmdir(process.env.UPLOAD_ROOT_PATH + folderRelativeRoute)
+    await fs.promises.rm(process.env.UPLOAD_ROOT_PATH + folderRelativeRoute, {recursive: true})
 }
