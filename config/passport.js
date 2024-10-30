@@ -3,6 +3,7 @@ const LocalStrategy = require('passport-local').Strategy
 const bcrypt = require('bcryptjs')
 const Account = require('../queries/accountQueries')
 
+// authenticate on login attempt, and if successful pass it along to serializeUser
 passport.use(new LocalStrategy(
     async (username, password, done) => {
         try {
@@ -22,8 +23,9 @@ passport.use(new LocalStrategy(
         }
     }
 ))
-
+// store user.id into the session information once authenticated
 passport.serializeUser((user, done) => done(null, user.id))
+// given the session turn the id into the full Account record from database for complex operations on subsequent requests
 passport.deserializeUser( async (id, done) => {
     try {
         const user = await Account.getAccount(id)
