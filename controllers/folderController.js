@@ -4,7 +4,7 @@ const Account = require("../queries/accountQueries")
 const fs = require("fs");
 const {getValidName} = require("../utility/getValidName")
 const {getItems, getFolderPath} = require("../utility/folderGet.utility");
-const {getChildFolders, deleteFolder} = require("../utility/folderDelete.utility")
+const {getChildFolders, deleteFilesFromFolder} = require("../utility/folderDelete.utility")
 const {moveFileInDB, moveFolderInDB, moveFileInFS, deleteFolders, createNewFolders} = require("../utility/folderMove.utility")
 
 module.exports.folderGet = async (req, res) => {
@@ -69,14 +69,19 @@ module.exports.folderDeletePost = async (req, res) => {
     const childFolders = await getChildFolders(folderToDelete)
     childFolders.reverse()
 
-    // delete every nested folder, in order from leaf to parent
+    // delete every nested folder, in order from leaf to parent from the record
     for (const folder of childFolders) {
         try {
-            await deleteFolder(folder.id, folder.relativeRoute)
+            await deleteFilesFromFolder(folder.id)
+            await Folder.deleteFolder(folder.id)
         } catch (error) {
             console.error("Error during deletion:", error);
         }
     }
+
+    // now delete the directory and all nested elements
+    const path = process.env.UPLOAD_ROOT_PATH + folderToDelete.relativeRoute
+    await fs.promises.rm(path, {recursive: true})
 
     res.redirect(`/folder/${folderToDelete.outerFolder}`)
 }

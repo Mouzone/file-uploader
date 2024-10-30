@@ -18,14 +18,9 @@ module.exports.getChildFolders = async ( folderToDelete ) => {
     return childFolders
 }
 
-module.exports.deleteFolder = async ( folderId, folderRelativeRoute ) => {
-    // remove all files in current folder
+module.exports.deleteFilesFromFolder = async ( folderId ) => {
     const currFiles = await File.getFiles(folderId)
     for (const file of currFiles) {
         await File.deleteFile(file.id)
     }
-
-    // once folder is empty delete folder
-    await Folder.deleteFolder(folderId)
-    await fs.promises.rm(process.env.UPLOAD_ROOT_PATH + folderRelativeRoute, {recursive: true})
 }
