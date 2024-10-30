@@ -7,7 +7,7 @@ const Account = require('../queries/accountQueries')
 passport.use(new LocalStrategy(
     async (username, password, done) => {
         try {
-            const user = await Account.findByUsername(username)
+            const user = await Account.getAccountByUsername(username)
 
             // return errors to be rendered on login page if something does not work
             if (!user) {
