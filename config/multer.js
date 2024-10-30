@@ -10,6 +10,7 @@ module.exports.storage = multer.diskStorage({
     filename: async (req, file, cb) => {
         // calculate filename to prevent collisions in the file being uploaded
         // store filename in req for more operations later
+        file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf8')
         const newName = await getValidName(file.originalname, parseInt(req.params.folderId), "file")
 
         cb(null, newName)
