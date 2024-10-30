@@ -5,7 +5,7 @@ const fs = require("fs");
 const {getValidName} = require("../utility/getValidName")
 const {getItems, getFolderPath} = require("../utility/folderGet.utility");
 const {getChildFolders, deleteFilesFromFolder} = require("../utility/folderDelete.utility")
-const {moveFileInDB, moveFolderInDB, moveFileInFS, deleteFolders, createNewFolders} = require("../utility/folderMove.utility")
+const {moveFileInDB, moveFolderInDB, moveFileInFS, moveFolderInFS, moveItems} = require("../utility/folderMove.utility")
 
 module.exports.folderGet = async (req, res) => {
     if (!req.session.passport?.user) {
@@ -106,34 +106,10 @@ module.exports.folderMovePost = async (req, res) => {
         await moveFileInFS(oldRoute, newRoute)
     } else {
         await Folder.changeName(currItemId, newName)
-        const oldRoute = currItem.relativeRoute
-        const newRoute = newFolder.relativeRoute + "/" + newName
-        await Folder.changeRoute(currItemId, newRoute)
-        await Folder.changeOuterFolder(currItemId, newFolderId)
-        fs.rename(process.env.UPLOAD_ROOT_PATH + oldRoute, process.env.UPLOAD_ROOT_PATH + newRoute, (error) => {
-            if (error) {
-                console.error("Error moving directory", error)
-            }
-        })
+        await moveFolderInDB(currItemId, newFolderId, newRoute)
+        await moveFolderInFS(oldRoute, newRoute)
 
-        const toSee = [ currItemId ]
-        while (toSee.length) {
-            const currFolderId = toSee.shift()
-            const currFolder = await Folder.getFolder(currFolderId)
-
-            const childFolders = await Folder.getFolders(currFolder.id)
-            for (const childFolder of childFolders) {
-                const newRoute = currFolder.relativeRoute + "/" + childFolder.name
-                await Folder.changeRoute(childFolder.id, newRoute)
-                toSee.push(childFolder.id)
-            }
-
-            const childFiles = await File.getFiles(currFolder.id)
-            for (const childFile of childFiles) {
-                const newRoute = currFolder.relativeRoute + "/" + childFile.name
-                await File.changeRoute(childFile.id, newRoute)
-            }
-        }
+        await moveItems([ currItemId ])
     }
 
     res.redirect(`/folder/${req.params.folderId}`)
