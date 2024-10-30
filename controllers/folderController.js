@@ -3,7 +3,7 @@ const File = require("../queries/fileQueries")
 const fs = require("fs");
 const {getValidName} = require("../utility/getValidName")
 const {getItems, getFolderPath} = require("../utility/folderGet.utility");
-const {getChildFolders, deleteFilesFromFolder} = require("../utility/folderDelete.utility")
+const {getChildFolders, deleteFilesFromDB} = require("../utility/folderDelete.utility")
 const {moveFolderInDB, moveFolderInFS, moveItems} = require("../utility/folderMove.utility")
 
 // get folders and files nested inside folder user is trying to retrieve
@@ -16,7 +16,10 @@ module.exports.folderGet = async (req, res) => {
     const folderId = parseInt(req.params.folderId)
     const username = req.user.username
     const folderPath = await getFolderPath(folderId)
-    const items = await getItems(folderId)
+    const items = {
+                                    folders: await Folder.getFolders(folderId),
+                                    files: await File.getFiles(folderId)
+                                }
 
     // folderId for routes to access it and call other routes on the page using the current folder
     // username to be rendered
@@ -86,7 +89,7 @@ module.exports.folderDeletePost = async (req, res) => {
     // delete every nested folder, in order from leaf to parent from the record
     for (const folder of childFolders) {
         try {
-            await deleteFilesFromFolder(folder.id)
+            await deleteFilesFromDB(folder.id)
             await Folder.deleteFolder(folder.id)
         } catch (error) {
             console.error("Error during deletion:", error);
@@ -125,7 +128,8 @@ module.exports.folderMovePost = async (req, res) => {
     await moveFolderInFS(oldRoute, newRoute)
 
     // for each item that is nested inside currFolder update their route
-    await moveItems([ currFolderId ])
+    currFolder.relativeRoute = newRoute
+    await moveItems([ currFolder ])
 
     res.redirect(`/folder/${req.params.folderId}`)
 }

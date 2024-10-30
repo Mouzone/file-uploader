@@ -1,13 +1,8 @@
 const Folder = require("../queries/folderQueries");
 const File = require("../queries/fileQueries");
 
-module.exports.getItems = async (folderId) => {
-    return {
-        folders: await Folder.getFolders(folderId),
-        files: await File.getFiles(folderId)
-    }
-}
-
+// iterate from given folder to its parent folder until there are no more parents
+// returns a list of the name and ids of each folder
 module.exports.getFolderPath = async (folderId) => {
     const filePath = []
     let currFolder = folderId
