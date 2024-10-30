@@ -22,7 +22,6 @@ module.exports.fileGet = async (req, res) => {
     file.size = formatFileSize(file.size)
     file.uploadTime = formatDate(file.uploadTime)
 
-
     res.render("file", { file, filePath })
 }
 
