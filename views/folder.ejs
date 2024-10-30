@@ -9,12 +9,12 @@
 <body>
     <div id="navbar">
         <div id="path">
-            <% for (let i = 0; i < filePath.length; i++) {%>
-                <% let [ name, folderId ] = filePath[i] %>
+            <% for (let i = 0; i < folderPath.length; i++) {%>
+                <% let [ name, folderId ] = folderPath[i] %>
                 <% if (i === 0) { %>
                     <% name = "Home"%>
                 <% } %>
-                <% if ( i !== filePath.length - 1) { %>
+                <% if ( i !== folderPath.length - 1) { %>
                     <a href="/folder/<%= folderId %>"><%= name %></a>
                     <p> > </p>
                 <% } else { %>
@@ -93,7 +93,7 @@
             </a>
         <% }) %>
     </div>
-    <% if (filePath.length >= 2) { %>
+    <% if (folderPath.length >= 2) { %>
         <form action="/folder/<%= folderId %>/delete" method="POST">
             <button type="submit"> Delete </button>
         </form>
