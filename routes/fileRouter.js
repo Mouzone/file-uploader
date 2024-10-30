@@ -4,6 +4,7 @@ const fileRouter = Router()
 
 const { isAuthenticated } = require('../utility/authentication')
 
+// use isAuthenticated middleware to prevent access from people that aren't the user
 fileRouter.use(isAuthenticated)
 fileRouter.get("/:fileId", fileController.fileGet)
 fileRouter.post("/:fileId/download", fileController.fileDownloadPost)
