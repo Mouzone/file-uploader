@@ -12,7 +12,8 @@ module.exports.fileGet = async (req, res) => {
 module.exports.fileDownload = async (req, res) => {
     const { name, relativeRoute } = await File.getFile(parseInt(req.params.fileId))
 
-    res.download(process.env.UPLOAD_ROOT_PATH + relativeRoute, name, err => {
+    const path = process.env.UPLOAD_ROOT_PATH + relativeRoute
+    res.download(path , name, err => {
         if (err) {
             res.status(400).send("File Not Found")
         }
@@ -24,11 +25,8 @@ module.exports.fileDelete = async (req, res) => {
     const { folderId, relativeRoute } = await File.getFile(fileId)
     await File.deleteFile(fileId)
 
-    fs.unlink(process.env.UPLOAD_ROOT_PATH + relativeRoute, (error) => {
-        if (error) {
-            console.error("Error deleting the file:", error)
-        }
-    })
+    const path = process.env.UPLOAD_ROOT_PATH + relativeRoute
+    await fs.promises.rm(path)
 
     res.redirect(`/folder/${folderId}`)
 }
