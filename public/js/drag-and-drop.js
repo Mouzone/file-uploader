@@ -15,11 +15,10 @@ export function addFolderFunctionality(currFolder) {
         folder.addEventListener("drop", (event) => {
             event.preventDefault()
             const dropped = event.target.closest('a')
-            fetch(`/folder/${currFolder}/move`, {
+            fetch(`/${dragged.className}/${currFolder}/move`, {
                 method: 'POST',
                 body: JSON.stringify({
                     dragTarget: {
-                        type: dragged.className,
                         id: dragged.dataset.id
                     },
                     dropTarget: {
