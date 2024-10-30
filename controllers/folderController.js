@@ -4,7 +4,7 @@ const fs = require("fs");
 const {getValidName} = require("../utility/getValidName")
 const {getItems, getFolderPath} = require("../utility/folderGet.utility");
 const {getChildFolders, deleteFilesFromFolder} = require("../utility/folderDelete.utility")
-const {moveFileInDB, moveFolderInDB, moveFileInFS, moveFolderInFS, moveItems} = require("../utility/folderMove.utility")
+const {moveFolderInDB, moveFolderInFS, moveItems} = require("../utility/folderMove.utility")
 
 // get folders and files nested inside folder user is trying to retrieve
 module.exports.folderGet = async (req, res) => {
@@ -97,34 +97,36 @@ module.exports.folderDeletePost = async (req, res) => {
     const path = process.env.UPLOAD_ROOT_PATH + folderToDelete.relativeRoute
     await fs.promises.rm(path, {recursive: true})
 
+    // redirect to the deleted folder's outer directory
     res.redirect(`/folder/${folderToDelete.outerFolder}`)
 }
 
+// logic for moving folders into another folder
 module.exports.folderMovePost = async (req, res) => {
     const { dragTarget, dropTarget } = req.body
+    // get the folder that the user is trying to move the move folder into
     const newFolderId = parseInt(dropTarget.id)
     const newFolder = await Folder.getFolder(newFolderId)
 
-    const currItemId = parseInt(dragTarget.id)
-    const currItem = dragTarget.type === "file"
-                                                            ? await File.getFile(currItemId)
-                                                            : await Folder.getFolder(currItemId)
+    // get the folder that that user is trying to move
+    const currFolderId = parseInt(dragTarget.id)
+    const currFolder = await Folder.getFolder(currFolderId)
 
-    const oldRoute = currItem.relativeRoute
-    const newName = await getValidName(currItem.name, newFolderId, dragTarget.type)
+    // compute the oldRoute and newRoute to move in file system
+    const oldRoute = currFolder.relativeRoute
+    const newName = await getValidName(currFolder.name, newFolderId, dragTarget.type)
     const newRoute =  newFolder.relativeRoute + "/" + newName
 
-    if (dragTarget.type === "file") {
-        await File.changeName(currItemId, newName)
-        await moveFileInDB(currItemId, newFolderId, newRoute)
-        await moveFileInFS(oldRoute, newRoute)
-    } else {
-        await Folder.changeName(currItemId, newName)
-        await moveFolderInDB(currItemId, newFolderId, newRoute)
-        await moveFolderInFS(oldRoute, newRoute)
+    // rename the folder if there is a name collision
+    await Folder.changeName(currFolderId, newName)
 
-        await moveItems([ currItemId ])
-    }
+    // modify folder's route and new parent folder
+    await moveFolderInDB(currFolderId, newFolderId, newRoute)
+    // move folder in file system
+    await moveFolderInFS(oldRoute, newRoute)
+
+    // for each item that is nested inside currFolder update their route
+    await moveItems([ currFolderId ])
 
     res.redirect(`/folder/${req.params.folderId}`)
 }

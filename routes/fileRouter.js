@@ -8,6 +8,6 @@ fileRouter.use(isAuthenticated)
 fileRouter.get("/:fileId", fileController.fileGet)
 fileRouter.post("/:fileId/download", fileController.fileDownloadPost)
 fileRouter.post("/:fileId/delete", fileController.fileDeletePost)
-fileRouter.post("/:fileId/upload", fileController.fileUploadPost)
+fileRouter.post("/:folderId/move", fileController.fileUploadPost)
 
 module.exports = fileRouter
