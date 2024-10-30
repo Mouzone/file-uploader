@@ -114,12 +114,11 @@ module.exports.folderMovePost = async (req, res) => {
 
     // compute the oldRoute and newRoute to move in file system
     const oldRoute = currFolder.relativeRoute
-    const newName = await getValidName(currFolder.name, newFolderId, dragTarget.type)
+    const newName = await getValidName(currFolder.name, newFolderId, "folder")
     const newRoute =  newFolder.relativeRoute + "/" + newName
 
     // rename the folder if there is a name collision
     await Folder.changeName(currFolderId, newName)
-
     // modify folder's route and new parent folder
     await moveFolderInDB(currFolderId, newFolderId, newRoute)
     // move folder in file system

@@ -55,12 +55,11 @@ module.exports.fileUploadPost = async (req, res) => {
 
     // compute the oldRoute and newRoute to move in file system
     const oldRoute = currFile.relativeRoute
-    const newName = await getValidName(currFile.name, newFolderId, dragTarget.type)
+    const newName = await getValidName(currFile.name, newFolderId, "file")
     const newRoute =  newFolder.relativeRoute + "/" + newName
 
     // rename the folder if there is a name collision
     await File.changeName(currFileId, newName)
-
     // modify folder's route and new parent folder
     await moveFileInDB(currFileId, newFolderId, newRoute)
     // move folder in file system
