@@ -14,13 +14,6 @@ module.exports.createFile = async (name, size, uploadTime, accountId, folderId, 
     })
 }
 
-module.exports.getFiles = async (folderId) => {
-    return prisma.file.findMany({
-        where: {
-            folderId,
-        }
-    })
-}
 
 module.exports.getFile = async (id) => {
     return prisma.file.findUnique({
@@ -30,10 +23,10 @@ module.exports.getFile = async (id) => {
     })
 }
 
-module.exports.deleteFile = async (id) => {
-    await prisma.file.delete({
+module.exports.getFiles = async (folderId) => {
+    return prisma.file.findMany({
         where: {
-            id,
+            folderId,
         }
     })
 }
@@ -43,6 +36,14 @@ module.exports.getFileByName = async (name, folderId) => {
         where: {
             name,
             folderId
+        }
+    })
+}
+
+module.exports.deleteFile = async (id) => {
+    await prisma.file.delete({
+        where: {
+            id,
         }
     })
 }
