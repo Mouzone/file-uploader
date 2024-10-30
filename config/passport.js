@@ -9,6 +9,7 @@ passport.use(new LocalStrategy(
         try {
             const user = await Account.findByUsername(username)
 
+            // return errors to be rendered on login page if something does not work
             if (!user) {
                 return done(null, false, { message: "Incorrect Username" })
             }
