@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="/index.css">
 </head>
 <body>
+<!-- display errorMessage -->
     <%= errorMessage %>
+<!-- provide log in form and submit it to /log-in route -->
     <form action="/log-in" method="POST">
         <label for="username"> Username: </label>
         <input type="text" id="username" name="username">

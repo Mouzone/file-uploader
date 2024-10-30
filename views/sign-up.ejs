@@ -6,9 +6,11 @@
         <title>Sign Up</title>
     </head>
     <body>
+<!--    display error messages -->
         <% errors.forEach(error => { %>
             <%= error.msg %>
         <% }) %>
+<!--    provide form to sign up that routes to /sign-up-->
         <form action="/sign-up" method="POST">
             <label for="username"> Username: </label>
             <input type="text" id="username" name="username" required>
