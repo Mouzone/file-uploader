@@ -4,6 +4,7 @@ const {moveFileInDB, moveFileInFS} = require("../utility/fileMove.utility");
 const Folder = require("../queries/folderQueries");
 const {getValidName} = require("../utility/getValidName");
 const {getFolderPath} = require("../utility/folderGet.utility");
+const {formatFileSize, formatDate} = require("../utility/format")
 
 // get file metadata
 module.exports.fileGet = async (req, res) => {
@@ -17,6 +18,10 @@ module.exports.fileGet = async (req, res) => {
     const file = await File.getFile(fileId)
     const filePath = await getFolderPath(file.folderId)
     filePath.push([file.name, file.id])
+
+    file.size = formatFileSize(file.size)
+    file.uploadTime = formatDate(file.uploadTime)
+
 
     res.render("file", { file, filePath })
 }
