@@ -8,12 +8,12 @@ const {getChildFolders, deleteFilesFromFolder} = require("../utility/folderDelet
 const {moveFileInDB, moveFolderInDB, moveFileInFS, moveFolderInFS, moveItems} = require("../utility/folderMove.utility")
 
 module.exports.folderGet = async (req, res) => {
-    if (!req.session.passport?.user) {
+    if (!req?.user) {
         return res.render("log-in", { errorMessage: ""})
     }
 
     const folderId = parseInt(req.params.folderId)
-    const { username } = await Account.getUsername(req.session.passport.user)
+    const username = req.user.username
     const filePath = await getFolderPath(folderId)
     const items = await getItems(folderId)
 
@@ -30,7 +30,7 @@ module.exports.folderUploadPost = async (req, res) => {
         filename,
         size,
         new Date(),
-        req.session.passport.user,
+        req.user.id,
         folderId,
         `${relativeRoute}/${filename}`
     )
@@ -44,7 +44,7 @@ module.exports.folderCreateFolderPost = async (req, res) => {
     // new route is just outer folder route + current name
     const { relativeRoute } = await Folder.getFolder(folderId)
     await Folder.createFolder(
-        req.session.passport.user,
+        req.user.id,
         name,
         `${relativeRoute}/${name}`,
         folderId
