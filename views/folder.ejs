@@ -22,7 +22,10 @@
                         <a href="/folder/<%= folderId %>"><%= name %></a>
                         <p> > </p>
                     <% } else { %>
-                        <p data-curr-folder="<%= folderId %>"><%= name %></p>
+                        <form action="/folder/<%= folderId %>/rename" method="POST" id="rename-form">
+                            <label for="name"></label>
+                            <input type="text" id="name" name="name" placeholder="<%= name %>"  disabled>
+                        </form>
                     <% } %>
                 <% }%>
             </div>
@@ -105,7 +108,7 @@
             <form action="/folder/<%= folderId %>/delete" method="POST">
                 <button type="submit"> Delete </button>
             </form>
-            <button type="button"> Rename </button>
+            <button type="button" id="rename-button"> Rename </button>
         <% } %>
     </body>
     <script type="module" src="/js/script.js"> </script>
