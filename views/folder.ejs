@@ -60,7 +60,7 @@
                 <form id="file-form" action="/folder/<%= folderId %>/upload" method="POST" enctype="multipart/form-data">
                     <input type="file" id="file" name="file" required>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <title>file-upload</title>
+                        <title> Upload File </title>
                         <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M13.5,16V19H10.5V16H8L12,12L16,16H13.5M13,9V3.5L18.5,9H13Z" />
                     </svg>
                     <p> File </p>
@@ -68,7 +68,7 @@
 
                 <div id="folder-form">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <title>folder-plus</title>
+                        <title> Create Folder</title>
                         <path d="M13 19C13 19.34 13.04 19.67 13.09 20H4C2.9 20 2 19.11 2 18V6C2 4.89 2.89 4 4 4H10L12 6H20C21.1 6 22 6.89 22 8V13.81C21.12 13.3 20.1 13 19 13C15.69 13 13 15.69 13 19M20 18V15H18V18H15V20H18V23H20V20H23V18H20Z" />
                     </svg>
                     <p> Folder </p>
@@ -82,10 +82,10 @@
                 <% const { id, name } = folder %>
                 <a class="folder" href="/folder/<%= id %>" data-id="<%= id %>">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <title>folder</title>
+                        <title><%= name %></title>
                         <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" />
                     </svg>
-                    <p><%= name %></p>
+                    <p class="item-name"><%= name %></p>
                 </a>
             <% }) %>
 
@@ -93,10 +93,10 @@
                 <% const { id, name } = file %>
                 <a class="file" href="/file/<%= id %>" data-id="<%= id %>">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <title>file</title>
+                        <title><%= name %>></title>
                         <path d="M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6Z" />
                     </svg>
-                    <p><%= name %></p>
+                    <p class="item-name"><%= name %></p>
                 </a>
             <% }) %>
         </div>
