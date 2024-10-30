@@ -24,7 +24,7 @@ module.exports.moveFolderInFS = async (oldRoute, newRoute) => {
 module.exports.moveItems = async (toSee) => {
     while (toSee.length) {
         // get the current folder and its new data that we are looking at
-        const currFolderId = toSee.shift()
+        const currFolder = toSee.shift()
 
         // for each childFolder modify their route and queue them
         const childFolders = await Folder.getFolders(currFolder.id)
