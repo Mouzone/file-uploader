@@ -28,26 +28,6 @@ module.exports.folderGet = async (req, res) => {
     res.render("folder", { folderId, username, folderPath, items })
 }
 
-// controls what occurs when user uploads file to the folder
-module.exports.folderUploadPost = async (req, res) => {
-    const folderId = parseInt(req.params.folderId)
-
-    // get metadata for the file from multer upload and relativeRoute from folder where file is being created
-    const { filename, size } = req.file
-    const { relativeRoute } = await Folder.getFolder(folderId)
-
-    // create file and refresh the current folder to show the newly created file
-    await File.createFile(
-        filename,
-        size,
-        new Date(),
-        req.user.id,
-        folderId,
-        `${relativeRoute}/${filename}`
-    )
-    res.redirect(`/folder/${folderId}`)
-}
-
 // controls what occurs when user creates a new folder
 module.exports.folderCreateFolderPost = async (req, res) => {
     const folderId = parseInt(req.params.folderId)

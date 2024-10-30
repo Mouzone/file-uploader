@@ -25,6 +25,26 @@ module.exports.fileGet = async (req, res) => {
     res.render("file", { file, filePath })
 }
 
+// controls what occurs when user uploads file to the folder
+module.exports.fileUploadPost = async (req, res) => {
+    const folderId = parseInt(req.params.folderId)
+
+    // get metadata for the file from multer upload and relativeRoute from folder where file is being created
+    const { filename, size } = req.file
+    const { relativeRoute } = await Folder.getFolder(folderId)
+
+    // create file and refresh the current folder to show the newly created file
+    await File.createFile(
+        filename,
+        size,
+        new Date(),
+        req.user.id,
+        folderId,
+        `${relativeRoute}/${filename}`
+    )
+    res.redirect(`/folder/${folderId}`)
+}
+
 // send file for user to download
 module.exports.fileDownloadPost = async (req, res) => {
     const { name, relativeRoute } = await File.getFile(parseInt(req.params.fileId))
@@ -51,7 +71,7 @@ module.exports.fileDeletePost = async (req, res) => {
 }
 
 // logic for moving folders into another folder
-module.exports.fileUploadPost = async (req, res) => {
+module.exports.fileMovePost = async (req, res) => {
     const { dragTarget, dropTarget } = req.body
 
     // get the folder that the user is trying to move the move folder into
