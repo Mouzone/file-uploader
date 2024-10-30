@@ -2,11 +2,11 @@ const Folder = require('../queries/folderQueries')
 const passport = require("../config/passport");
 
 module.exports.indexGet = async (req, res) => {
-    if (!req.session.passport?.user) {
+    if (!req?.user) {
         return res.render("log-in", { errorMessage: "" })
     }
 
-    const result = await Folder.getHomeFolder(parseInt(req.session.passport.user))
+    const result = await Folder.getHomeFolder(req.user.id)
     res.redirect(`/folder/${result[0].id}`)
 }
 
