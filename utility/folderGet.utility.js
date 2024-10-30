@@ -1,5 +1,4 @@
 const Folder = require("../queries/folderQueries");
-const File = require("../queries/fileQueries");
 
 // iterate from given folder to its parent folder until there are no more parents
 // returns a list of the name and ids of each folder

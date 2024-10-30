@@ -3,6 +3,7 @@ const fs = require('fs')
 const {moveFileInDB, moveFileInFS} = require("../utility/fileMove.utility");
 const Folder = require("../queries/folderQueries");
 const {getValidName} = require("../utility/getValidName");
+const {getFolderPath} = require("../utility/folderGet.utility");
 
 // get file metadata
 module.exports.fileGet = async (req, res) => {
@@ -11,9 +12,13 @@ module.exports.fileGet = async (req, res) => {
         return res.redirect("/")
     }
 
+    const fileId = parseInt(req.params.fileId)
     // get file metadata and render it
-    const file = await File.getFile(parseInt(req.params.fileId))
-    res.render("file", { file })
+    const file = await File.getFile(fileId)
+    const filePath = await getFolderPath(file.folderId)
+    filePath.push([file.name, file.id])
+
+    res.render("file", { file, filePath })
 }
 
 // send file for user to download
