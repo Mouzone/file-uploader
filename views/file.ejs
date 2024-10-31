@@ -26,7 +26,7 @@
                         <!--                    folderId for filePath is actually fileId-->
                         <form data-curr-folder="<%= folderId %>" id="rename-form" action="/file/<%= folderId %>/rename" method="POST">
                             <label for="name"></label>
-                            <input type="text" id="name" name="name" placeholder="<%= name %>"  disabled>
+                            <input type="text" id="name" name="name" value="<%= name %>"  disabled>
                         </form>
                     <% } %>
                 <% }%>
@@ -45,5 +45,5 @@
             <button type="button" id="rename-button"> Rename </button>
         </div>
     </body>
-    <script type="module" src="/js/rename.js"></script>
+    <script type="module" src="/js/fileScript.js"></script>
 </html>

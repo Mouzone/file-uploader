@@ -17,7 +17,9 @@ const currFolder = parseInt(nameForm.dataset.currFolder)
 //     .then(data => console.log(data))
 
 document.addEventListener('DOMContentLoaded', () => {
+    // add logic for renaming functionality
     addRenameLogic()
+
     // add form submission logic to file upload form and folder creation form
     addFileFormLogic()
     addFolderFormLogic(currFolder)

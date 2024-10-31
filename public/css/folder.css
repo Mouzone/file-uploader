@@ -40,7 +40,6 @@ div#path {
 input:disabled {
     /* Remove default styling */
     all: unset;
-    color: black;
 
     /* Add desired styling */
     box-sizing: border-box; /* Ensures padding doesn’t affect width */
