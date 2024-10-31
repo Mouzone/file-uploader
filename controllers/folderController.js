@@ -5,6 +5,7 @@ const {getValidName} = require("../utility/getValidName")
 const {getFolderPath} = require("../utility/folderGet.utility");
 const {getChildFolders, deleteFilesFromDB} = require("../utility/folderDelete.utility")
 const {moveFolderInDB, moveFolderInFS, moveItems} = require("../utility/folderMove.utility")
+const {getNewRoute} = require("../utility/folderRename.utility");
 
 // get folders and files nested inside folder user is trying to retrieve
 module.exports.folderGet = async (req, res) => {
@@ -28,9 +29,22 @@ module.exports.folderGet = async (req, res) => {
     res.render("folder", { folderId, username, folderPath, items })
 }
 
+// logic for renaming folders
 module.exports.folderRenamePost = async (req, res) => {
     const folderId = parseInt(req.params.folderId)
-    await Folder.changeName(folderId, req.body.name)
+    const { relativeRoute, outerFolder } = await Folder.getFolder(folderId)
+
+    // get valid name free of collision in parent folder and rename in records
+    const name = await getValidName(req.body.name, outerFolder, "folder")
+    await Folder.changeName(folderId, name)
+
+    // using old route, change the folder name in the route and update the record
+    const newRelativeRoute = getNewRoute(relativeRoute, name)
+    await Folder.changeRoute(folderId, newRelativeRoute)
+
+    // update the folder name in the filesystem
+    await moveFolderInFS(relativeRoute, newRelativeRoute)
+
     res.redirect(`/folder/${folderId}`)
 }
 
