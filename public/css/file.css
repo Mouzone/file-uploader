@@ -24,3 +24,16 @@ div#info {
     display: flex;
     flex-direction: column;
 }
+
+input:disabled {
+    /* Remove default styling */
+    all: unset;
+    color: black;
+
+    /* Add desired styling */
+    box-sizing: border-box; /* Ensures padding doesn’t affect width */
+    outline: none; /* Removes focus outline */
+    background: none; /* Removes default background color */
+    border: none; /* Removes border */
+
+}
