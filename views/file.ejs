@@ -15,9 +15,6 @@
     <!--            make any segment that isn't the current segment the user is on to be clickable and to redirect-->
                 <% for (let i = 0; i < filePath.length; i++) {%>
                     <% let [ name, folderId ] = filePath[i] %>
-                    <% if (i === 0) { %>
-                        <% name = "Home" %>
-                    <% } %>
 
                     <% if ( i !== filePath.length - 1) { %>
                         <a href="/folder/<%= folderId %>"><%= name %></a>
