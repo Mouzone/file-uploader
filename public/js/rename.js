@@ -1,10 +1,11 @@
 const renameForm = document.getElementById("rename-form")
 const nameInput = renameForm.querySelector("input")
 const renameButton = document.getElementById("rename-button")
-
+const originalValue = nameInput.value
 function handleClickOutside(event) {
     // Check if the clicked target is not the input
     if (event.target !== nameInput) {
+        nameInput.value = originalValue
         nameInput.disabled = true; // Disable the input
         // Remove the event listener to prevent future triggers
         document.removeEventListener('click', handleClickOutside);
@@ -14,7 +15,9 @@ function handleClickOutside(event) {
 export function addRenameLogic() {
 //     probably easiest to make the last element a form with input and make it disabled
 //     on button press enable it
+
     renameButton?.addEventListener("click", (event) => {
+        event.stopPropagation()
         nameInput.disabled = false
         nameInput.focus()
 
