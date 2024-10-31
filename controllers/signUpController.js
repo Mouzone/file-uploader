@@ -49,7 +49,7 @@ module.exports.signUpPost = [
             // get id from the new created user
             const user = await Account.getIdByUsername(username)
             // create folder in the Folder table
-            await Folder.createFolder(user.id, `${user.id}`, `/${user.id}`)
+            await Folder.createFolder(user.id, "Home", `/${user.id}`)
             // create folder in the file systems
             const folderPath = path.join(__dirname, `../public/data/uploads/${user.id}`)
             fs.mkdir(folderPath, (error) => {
