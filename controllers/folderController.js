@@ -44,10 +44,12 @@ module.exports.folderRenamePost = async (req, res) => {
     const newRelativeRoute = getNewRoute(relativeRoute, name)
     await Folder.changeRoute(folderId, newRelativeRoute)
 
-    // todo: rename all routes of children due to the new updated route
+    // rename all routes of children due to the new updated route
+    // avoid fetching the folder record again, instead update the object
     currFolder.name = name
     currFolder.relativeRoute = newRelativeRoute
     await moveItems(currFolder)
+
     // update the folder name in the filesystem
     await moveInFS(relativeRoute, newRelativeRoute)
 
@@ -113,6 +115,12 @@ module.exports.folderDeletePost = async (req, res) => {
 // logic for moving folders into another folder
 module.exports.folderMovePost = async (req, res) => {
     const { dragTarget, dropTarget } = req.body
+
+    // do not allow moving if the folder is being dropped into itself
+    if (dropTarget.id === dragTarget.id) {
+        return
+    }
+
     // get the folder that the user is trying to move the move folder into
     const newFolderId = parseInt(dropTarget.id)
     const newFolder = await Folder.getFolder(newFolderId)
