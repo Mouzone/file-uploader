@@ -151,9 +151,8 @@ module.exports.folderMovePost = async (req, res) => {
 
 module.exports.folderAllGet = async (req, res) => {
     // uses findMany so is an object inside a list
-    const results = await Folder.getHomeFolder(req.user.id)
-    const toSee = await Folder.getFolders(results[0].id)
-    const fileStructure = {}
+    const toSee = await Folder.getHomeFolder(req.user.id)
+    const fileStructure = { home:toSee[0].id }
 
     while (toSee.length) {
         const {id, name} = toSee.shift()
@@ -164,6 +163,7 @@ module.exports.folderAllGet = async (req, res) => {
         const childFolders = await Folder.getFolders(id)
         childFolders.forEach(childFolder => {
             fileStructure[id]["folders"].push(childFolder.id)
+            toSee.push(childFolder)
         })
     }
     res.json(fileStructure)
