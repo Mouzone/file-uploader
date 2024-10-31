@@ -10,7 +10,8 @@ module.exports.moveFolderInDB = async (currFolderId, newFolderId, newRoute) => {
 
 // for each file and folder descending from current folder, change their routes to the new routes
 // no need to check for name collisions since all nested files and folders are not introduced to any new items
-module.exports.moveItems = async (toSee) => {
+module.exports.moveItems = async (currFolder) => {
+    const toSee = [ currFolder ]
     while (toSee.length) {
         // get the current folder and its new data that we are looking at
         const currFolder = toSee.shift()

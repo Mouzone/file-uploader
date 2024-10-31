@@ -33,7 +33,8 @@ module.exports.folderGet = async (req, res) => {
 // logic for renaming folders
 module.exports.folderRenamePost = async (req, res) => {
     const folderId = parseInt(req.params.folderId)
-    const { relativeRoute, outerFolder } = await Folder.getFolder(folderId)
+    const currFolder = await Folder.getFolder(folderId)
+    const { relativeRoute, outerFolder } = currFolder
 
     // get valid name free of collision in parent folder and rename in records
     const name = await getValidName(req.body.name, outerFolder, "folder")
@@ -43,6 +44,10 @@ module.exports.folderRenamePost = async (req, res) => {
     const newRelativeRoute = getNewRoute(relativeRoute, name)
     await Folder.changeRoute(folderId, newRelativeRoute)
 
+    // todo: rename all routes of children due to the new updated route
+    currFolder.name = name
+    currFolder.relativeRoute = newRelativeRoute
+    await moveItems(currFolder)
     // update the folder name in the filesystem
     await moveInFS(relativeRoute, newRelativeRoute)
 
@@ -130,7 +135,7 @@ module.exports.folderMovePost = async (req, res) => {
 
     // for each item that is nested inside currFolder update their route
     currFolder.relativeRoute = newRoute
-    await moveItems([ currFolder ])
+    await moveItems(currFolder)
 
     res.redirect(`/folder/${req.params.folderId}`)
 }
