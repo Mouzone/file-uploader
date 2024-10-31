@@ -5,6 +5,7 @@ const Folder = require("../queries/folderQueries");
 const {getValidName} = require("../utility/getValidName");
 const {getFolderPath} = require("../utility/folderGet.utility");
 const {formatFileSize, formatDate} = require("../utility/format")
+const {getNewRoute} = require("../utility/getNewRoute");
 
 // get file metadata
 module.exports.fileGet = async (req, res) => {
@@ -27,8 +28,15 @@ module.exports.fileGet = async (req, res) => {
 
 module.exports.fileRenamePost = async (req, res) => {
     const fileId = parseInt(req.params.fileId)
-    await File.changeName(fileId, req.body.name)
+    const { relativeRoute, folderId} = await File.getFile(fileId)
 
+    const name = await getValidName(req.body.name, folderId, "file")
+    await File.changeName(fileId, name)
+    
+    const newRelativeRoute = getNewRoute(relativeRoute, name)
+    await File.changeRoute(fileId, newRelativeRoute)
+
+    await moveFileInFS(relativeRoute, newRelativeRoute)
     res.redirect(`/file/${fileId}`)
 }
 
