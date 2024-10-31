@@ -7,6 +7,7 @@ const {getChildFolders, deleteFilesFromDB} = require("../utility/folderDelete.ut
 const {moveFolderInDB, moveItems} = require("../utility/folderMove.utility")
 const {getNewRoute} = require("../utility/getNewRoute");
 const {moveInFS} = require("../utility/moveInFS")
+const {getHomeFolder} = require("../queries/folderQueries");
 
 // get folders and files nested inside folder user is trying to retrieve
 module.exports.folderGet = async (req, res) => {
@@ -146,4 +147,24 @@ module.exports.folderMovePost = async (req, res) => {
     await moveItems(currFolder)
 
     res.redirect(`/folder/${req.params.folderId}`)
+}
+
+module.exports.folderAllGet = async (req, res) => {
+    // uses findMany so is an object inside a list
+    const results = await Folder.getHomeFolder(req.user.id)
+    const toSee = await Folder.getFolders(results[0].id)
+    const fileStructure = {}
+
+    while (toSee.length) {
+        const {id, name} = toSee.shift()
+        fileStructure[id] = {}
+        fileStructure[id]["name"] = name
+        fileStructure[id]["folders"] = []
+
+        const childFolders = await Folder.getFolders(id)
+        childFolders.forEach(childFolder => {
+            fileStructure[id]["folders"].push(childFolder.id)
+        })
+    }
+    res.json(fileStructure)
 }

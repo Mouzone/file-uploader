@@ -6,6 +6,7 @@ const { isAuthenticated } = require('../utility/authentication')
 
 // use isAuthenticated middleware to prevent access from people that aren't the user
 folderRouter.use(isAuthenticated)
+folderRouter.get("/all", folderController.folderAllGet)
 folderRouter.get("/:folderId", folderController.folderGet)
 folderRouter.post("/:folderId/rename", folderController.folderRenamePost)
 folderRouter.post("/:folderId/create-folder", folderController.folderCreateFolderPost)

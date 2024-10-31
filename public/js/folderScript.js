@@ -7,14 +7,14 @@ import { addRenameLogic } from "./rename.js"
 const nameForm = document.getElementById("rename-form")
 const currFolder = parseInt(nameForm.dataset.currFolder)
 
-// fetch(`/folders/`, {
-//     method: 'GET',
-//     headers: {
-//         'Content-Type': 'application/json'
-//     }
-// })
-//     .then(response => response.json())
-//     .then(data => console.log(data))
+fetch(`/folder/all`, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+})
+    .then(response => response.json())
+    .then(data => console.log(data))
 
 document.addEventListener('DOMContentLoaded', () => {
     // add logic for renaming functionality
