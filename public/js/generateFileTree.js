@@ -20,9 +20,10 @@ export function generateFileTree(fileStructure) {
         const currId = toSee.shift()
         const { name, folders } = fileStructure[currId]
 
-        const currDiv = document.createElement("div")
-        currDiv.textContent = name
-        idToElements[currId] = currDiv
+        const currLink = document.createElement("a")
+        currLink.href = `/folder/${currId}`
+        currLink.textContent = name
+        idToElements[currId] = currLink
 
         toSee.push(...folders)
         nextToSee.unshift(...folders)
@@ -31,14 +32,13 @@ export function generateFileTree(fileStructure) {
     while (nextToSee.length) {
         const currId = nextToSee.shift()
         const { folders } = fileStructure[currId]
-        const currDiv = idToElements[currId]
+        const currLink = idToElements[currId]
         folders.forEach(folder => {
-            currDiv.appendChild(idToElements[folder])
+            currLink.appendChild(idToElements[folder])
         })
-        idToElements[currId] = currDiv
+        idToElements[currId] = currLink
     }
 
-    console.log(idToElements[fileStructure.home])
     container.appendChild(idToElements[fileStructure.home])
 //     iterate from leaf nodes and add
 }
