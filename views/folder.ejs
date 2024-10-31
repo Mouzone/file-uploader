@@ -22,7 +22,7 @@
                         <a href="/folder/<%= folderId %>"><%= name %></a>
                         <p> > </p>
                     <% } else { %>
-                        <form action="/folder/<%= folderId %>/rename" method="POST" id="rename-form">
+                        <form data-curr-folder="<%= folderId %>" id="rename-form" action="/folder/<%= folderId %>/rename" method="POST">
                             <label for="name"></label>
                             <input type="text" id="name" name="name" placeholder="<%= name %>"  disabled>
                         </form>

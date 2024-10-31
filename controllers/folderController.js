@@ -28,6 +28,12 @@ module.exports.folderGet = async (req, res) => {
     res.render("folder", { folderId, username, folderPath, items })
 }
 
+module.exports.folderRenamePost = async (req, res) => {
+    const folderId = parseInt(req.params.folderId)
+    await Folder.changeName(folderId, req.body.name)
+    res.redirect(`/folder/${folderId}`)
+}
+
 // controls what occurs when user creates a new folder
 module.exports.folderCreateFolderPost = async (req, res) => {
     const folderId = parseInt(req.params.folderId)
