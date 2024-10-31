@@ -1,6 +1,6 @@
 const File = require('../queries/fileQueries')
 const fs = require('fs')
-const {moveFileInFS} = require("../utility/moveFileInFs")
+const {moveInFS} = require("../utility/moveInFS")
 const {moveFileInDB} = require("../utility/fileMove.utility");
 const Folder = require("../queries/folderQueries");
 const {getValidName} = require("../utility/getValidName");
@@ -37,7 +37,7 @@ module.exports.fileRenamePost = async (req, res) => {
     const newRelativeRoute = getNewRoute(relativeRoute, name)
     await File.changeRoute(fileId, newRelativeRoute)
 
-    await moveFileInFS(relativeRoute, newRelativeRoute)
+    await moveInFS(relativeRoute, newRelativeRoute)
     res.redirect(`/file/${fileId}`)
 }
 
@@ -108,7 +108,7 @@ module.exports.fileMovePost = async (req, res) => {
     // modify folder's route and new parent folder
     await moveFileInDB(currFileId, newFolderId, newRoute)
     // move folder in file system
-    await moveFileInFS(oldRoute, newRoute)
+    await moveInFS(oldRoute, newRoute)
 
     res.redirect(`/folder/${req.params.folderId}`)
 }

@@ -6,7 +6,7 @@ const {getFolderPath} = require("../utility/folderGet.utility");
 const {getChildFolders, deleteFilesFromDB} = require("../utility/folderDelete.utility")
 const {moveFolderInDB, moveItems} = require("../utility/folderMove.utility")
 const {getNewRoute} = require("../utility/getNewRoute");
-const {moveFolderInFS} = require("../utility/moveFolderInFS")
+const {moveInFS} = require("../utility/moveInFS")
 
 // get folders and files nested inside folder user is trying to retrieve
 module.exports.folderGet = async (req, res) => {
@@ -44,7 +44,7 @@ module.exports.folderRenamePost = async (req, res) => {
     await Folder.changeRoute(folderId, newRelativeRoute)
 
     // update the folder name in the filesystem
-    await moveFolderInFS(relativeRoute, newRelativeRoute)
+    await moveInFS(relativeRoute, newRelativeRoute)
 
     res.redirect(`/folder/${folderId}`)
 }
@@ -126,7 +126,7 @@ module.exports.folderMovePost = async (req, res) => {
     // modify folder's route and new parent folder
     await moveFolderInDB(currFolderId, newFolderId, newRoute)
     // move folder in file system
-    await moveFolderInFS(oldRoute, newRoute)
+    await moveInFS(oldRoute, newRoute)
 
     // for each item that is nested inside currFolder update their route
     currFolder.relativeRoute = newRoute

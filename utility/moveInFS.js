@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 // move the file in the filesystem
-module.exports.moveFileInFS = async (oldRoute, newRoute) => {
+module.exports.moveInFS = async (oldRoute, newRoute) => {
     const oldPath = process.env.UPLOAD_ROOT_PATH + oldRoute
     const newPath = process.env.UPLOAD_ROOT_PATH + newRoute
     await fs.rename(oldPath, newPath, (error) => {
