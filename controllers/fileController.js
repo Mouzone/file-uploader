@@ -25,6 +25,13 @@ module.exports.fileGet = async (req, res) => {
     res.render("file", { file, filePath })
 }
 
+module.exports.fileRenamePost = async (req, res) => {
+    const fileId = parseInt(req.params.fileId)
+    await File.changeName(fileId, req.body.name)
+
+    res.redirect(`/file/${fileId}`)
+}
+
 // controls what occurs when user uploads file to the folder
 module.exports.fileUploadPost = async (req, res) => {
     const folderId = parseInt(req.params.folderId)

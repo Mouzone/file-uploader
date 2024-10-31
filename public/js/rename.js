@@ -10,3 +10,5 @@ export function addRenameLogic() {
     //     when click outside or do anything else, disable it back to original
     })
 }
+
+addRenameLogic()
