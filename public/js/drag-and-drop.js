@@ -3,7 +3,7 @@ let dragged
 export function addFolderFunctionality(currFolder) {
     const folders = document.querySelectorAll(".folder")
 
-    folders.forEach(folder => {
+    folders?.forEach(folder => {
         // set dragged to the item getting dragged
         folder.addEventListener("dragstart", (event) => {
             dragged = event.target
@@ -47,7 +47,7 @@ export function addFolderFunctionality(currFolder) {
 export function addFileFunctionality() {
     const files = document.querySelectorAll(".file")
 
-    files.forEach(file => {
+    files?.forEach(file => {
         // only need to define dragstart, since request is only sent if the user drops an item into a folder
         file.addEventListener("dragstart", (event) => {
             dragged = event.target

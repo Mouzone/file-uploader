@@ -4,7 +4,7 @@ export function addRenameLogic() {
     const renameForm = document.getElementById("rename-form")
     const nameInput = renameForm.querySelector("input")
     const renameButton = document.getElementById("rename-button")
-    renameButton.addEventListener("click", (event) => {
+    renameButton?.addEventListener("click", (event) => {
         nameInput.disabled = false
         nameInput.focus()
     //     when click outside or do anything else, disable it back to original
