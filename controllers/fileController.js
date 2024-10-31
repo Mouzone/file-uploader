@@ -1,6 +1,7 @@
 const File = require('../queries/fileQueries')
 const fs = require('fs')
-const {moveFileInDB, moveFileInFS} = require("../utility/fileMove.utility");
+const {moveFileInFS} = require("../utility/moveFileInFs")
+const {moveFileInDB} = require("../utility/fileMove.utility");
 const Folder = require("../queries/folderQueries");
 const {getValidName} = require("../utility/getValidName");
 const {getFolderPath} = require("../utility/folderGet.utility");
@@ -32,7 +33,7 @@ module.exports.fileRenamePost = async (req, res) => {
 
     const name = await getValidName(req.body.name, folderId, "file")
     await File.changeName(fileId, name)
-    
+
     const newRelativeRoute = getNewRoute(relativeRoute, name)
     await File.changeRoute(fileId, newRelativeRoute)
 

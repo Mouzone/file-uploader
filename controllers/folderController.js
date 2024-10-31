@@ -4,8 +4,9 @@ const fs = require("fs");
 const {getValidName} = require("../utility/getValidName")
 const {getFolderPath} = require("../utility/folderGet.utility");
 const {getChildFolders, deleteFilesFromDB} = require("../utility/folderDelete.utility")
-const {moveFolderInDB, moveFolderInFS, moveItems} = require("../utility/folderMove.utility")
-const {getNewRoute} = require("../utility/folderRename.utility");
+const {moveFolderInDB, moveItems} = require("../utility/folderMove.utility")
+const {getNewRoute} = require("../utility/getNewRoute");
+const {moveFolderInFS} = require("../utility/moveFolderInFS")
 
 // get folders and files nested inside folder user is trying to retrieve
 module.exports.folderGet = async (req, res) => {

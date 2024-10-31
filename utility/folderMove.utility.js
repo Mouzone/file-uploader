@@ -8,17 +8,6 @@ module.exports.moveFolderInDB = async (currFolderId, newFolderId, newRoute) => {
     await Folder.changeOuterFolder(currFolderId, newFolderId)
 }
 
-// move the folder in the filesystem which moves all descendant items as well
-module.exports.moveFolderInFS = async (oldRoute, newRoute) => {
-    const oldPath = process.env.UPLOAD_ROOT_PATH + oldRoute
-    const newPath = process.env.UPLOAD_ROOT_PATH + newRoute
-    fs.rename(oldPath, newPath, (error) => {
-        if (error) {
-            console.error("Error moving directory", error)
-        }
-    })
-}
-
 // for each file and folder descending from current folder, change their routes to the new routes
 // no need to check for name collisions since all nested files and folders are not introduced to any new items
 module.exports.moveItems = async (toSee) => {
