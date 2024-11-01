@@ -20,11 +20,11 @@ a p {
 }
 
 a.link {
-    flex: none;
-    width: 90%;
+    width: 85%;
 }
 
 a.link p {
+    width: 100px;
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
@@ -53,13 +53,13 @@ div#content {
 }
 
 div#file-structure {
-    width: 20%;
+    width: 25%;
 }
 
 div.bar {
     width: 100%;
     display: flex;
-    gap: 20px;
+    align-items: center;
 }
 
 div#display {
