@@ -1,6 +1,6 @@
 import { addFileFormLogic, addFolderFormLogic } from "./form-submit-logic.js";
 import { toggleMenuIcon } from "./toggle-menu-icon.js";
-import { addFileFunctionality, addFolderFunctionality } from "./drag-and-drop.js";
+import {addFileFunctionality, addFileStructureDragFunctionality, addFolderFunctionality} from "./drag-and-drop.js";
 import { addRenameLogic } from "./rename.js"
 import { generateFileTree, getFileStructure } from "./generateFileTree.js";
 
@@ -11,6 +11,7 @@ const currFolder = parseInt(nameForm.dataset.currFolder)
 const fileStructure = await getFileStructure()
 
 generateFileTree(fileStructure)
+addFileStructureDragFunctionality()
 
 addRenameLogic()
 

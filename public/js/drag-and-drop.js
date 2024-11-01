@@ -44,6 +44,43 @@ export function addFolderFunctionality(currFolder) {
     })
 }
 
+export function addFileStructureDragFunctionality() {
+    const links = document.querySelectorAll("a.link")
+    links.forEach(link => {
+        link.addEventListener("dragover", (event) => {
+            event.preventDefault()
+        })
+
+        link.addEventListener("drop", (event) => {
+            event.preventDefault()
+            const dropped = event.target.closest('a')
+            fetch(`/${dragged.className}/${dropped.dataset.id}/move`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    dragTarget: {
+                        id: dragged.dataset.id
+                    },
+                    dropTarget: {
+                        id: dropped.dataset.id
+                    },
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    // reload page due to being cached
+                    if (response.ok) {
+                        window.location.reload()
+                    } else {
+                        console.error('Error updating folder:', response.statusText)
+                    }
+                })
+        })
+    })
+
+}
+
 export function addFileFunctionality() {
     const files = document.querySelectorAll(".file")
 
