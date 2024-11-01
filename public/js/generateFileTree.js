@@ -21,6 +21,7 @@ export function generateFileTree(fileStructure) {
         const { name, folders } = fileStructure[currId]
 
         const currLink = document.createElement("a")
+        currLink.classList.add("file-tree-link")
         currLink.href = `/folder/${currId}`
         currLink.textContent = name
         idToElements[currId] = currLink
