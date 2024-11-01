@@ -29,7 +29,7 @@ export function generateFileTree(fileStructure) {
         text.classList.add("text")
         link.classList.add("link")
         link.dataset.id = currId
-        popup.classList.add("popup")
+        popup.classList.add("file-tree-popup")
 
         link.href = `/folder/${currId}`
         text.textContent = name

@@ -74,6 +74,7 @@
                                 <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" />
                             </svg>
                             <p class="item-name"><%= name %></p>
+                            <p class="item-popup"><%= name %></p>
                         </a>
                     <% }) %>
 
@@ -85,8 +86,9 @@
                                 <path d="M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6Z" />
                             </svg>
                             <p class="item-name"><%= name %></p>
+                            <p class="item-popup"><%= name %></p>
                         </a>
-                    <% }) %>
+                        <% }) %>
                 </div>
                 <!--    display the delete button if length is not 1 due to it being home folder and it not being psosible to delete it -->
                 <% if (folderPath.length !== 1) { %>

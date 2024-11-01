@@ -23,7 +23,8 @@ a.link {
     width: 85%;
 }
 
-a.link p.text {
+a.link p.text,
+p.item-name {
     width: 100px;
     text-align: left;
     white-space: nowrap;
@@ -31,17 +32,33 @@ a.link p.text {
     text-overflow: ellipsis;
 }
 
-.popup {
+p.item-name {
+    text-align: center;
+}
+
+.file-tree-popup {
     display: none;
     position: absolute;
     background-color: lightgoldenrodyellow;
     border-radius: 8px;
     padding: 5px;
     transform: translate(15px, 15px);
+    font-size: 10px;
+}
+
+.item-popup {
+    display: none;
+    position: absolute;
+    background-color: lightgoldenrodyellow;
+    border-radius: 8px;
+    padding: 5px;
+    transform: translate(20px, 90px);
+    font-size: 10px;
 }
 
 /* Show the additional content when hovering over the link */
-.bar:hover + .popup {
+div.bar:hover + .file-tree-popup,
+p.item-name:hover + .item-popup {
     display: block;
 }
 
