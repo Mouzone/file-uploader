@@ -37,29 +37,31 @@ p.item-name {
 }
 
 .file-tree-popup {
-    display: none;
-    position: absolute;
-    background-color: lightgoldenrodyellow;
-    border-radius: 8px;
-    padding: 5px;
     transform: translate(15px, 15px);
-    font-size: 10px;
 }
 
 .item-popup {
-    display: none;
+    transform: translate(20px, 90px);
+}
+
+.file-tree-popup,
+.item-popup {
     position: absolute;
     background-color: lightgoldenrodyellow;
     border-radius: 8px;
     padding: 5px;
-    transform: translate(20px, 90px);
     font-size: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease; /* Transition for fade effect */
 }
 
 /* Show the additional content when hovering over the link */
 div.bar:hover + .file-tree-popup,
 p.item-name:hover + .item-popup {
-    display: block;
+    opacity: 1;
+    visibility: visible; /* Make the popup visible */
+    transition-delay: .5s; /* Delay before the popup appears */
 }
 
 div.file-tree-link {
