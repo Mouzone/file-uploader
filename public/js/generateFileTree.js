@@ -10,7 +10,6 @@ export function getFileStructure() {
 
 // todo: redesign layout, and put a element to generate the divs
 export function generateFileTree(fileStructure) {
-    console.log(fileStructure)
     const container = document.getElementById("file-structure")
     const toSee = [ fileStructure.home ]
     const nextToSee = [ fileStructure.home ]
@@ -20,11 +19,30 @@ export function generateFileTree(fileStructure) {
         const currId = toSee.shift()
         const { name, folders } = fileStructure[currId]
 
-        const currLink = document.createElement("a")
-        currLink.classList.add("file-tree-link")
-        currLink.href = `/folder/${currId}`
-        currLink.textContent = name
-        idToElements[currId] = currLink
+        const container = document.createElement("div")
+        const bar = document.createElement("div")
+        const link = document.createElement("a")
+        const text = document.createElement("p")
+
+        container.classList.add("file-tree-link")
+        bar.classList.add("bar")
+        link.classList.add("link")
+
+        link.href = `/folder/${currId}`
+        text.textContent = name
+
+        link.appendChild(text)
+
+        bar.appendChild(link)
+        bar.insertAdjacentHTML("beforeend", `<div class="toggle-icon">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                                    <title>menu-up</title>
+                                                                    <path d="M7,15L12,10L17,15H7Z" />
+                                                                </svg>
+                                                            </div>`)
+
+        container.appendChild(bar)
+        idToElements[currId] = container
 
         toSee.push(...folders)
         nextToSee.unshift(...folders)

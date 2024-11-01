@@ -19,11 +19,19 @@ a p {
     text-align: center;
 }
 
-a.file-tree-link {
+a.link {
+    flex: none;
+    width: 100%;
+}
+
+a.link p {
+    text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 100%;
+}
+
+div.file-tree-link {
     margin-left: 15px;
 }
 
@@ -32,16 +40,21 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    gap: 20%;
 }
 
 div#content {
     display: flex;
     width: 100vw;
+    gap: 2%;
 }
 
 div#file-structure {
-    width: 15%;
+    width: 20%;
+}
+
+div.bar {
+    width: 100%;
+    display: flex;
 }
 
 div#display {
