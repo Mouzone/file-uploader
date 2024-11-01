@@ -116,7 +116,6 @@ module.exports.folderDeletePost = async (req, res) => {
 // logic for moving folders into another folder
 module.exports.folderMovePost = async (req, res) => {
     const { dragTarget, dropTarget } = req.body
-    console.log(dragTarget, dropTarget)
 
     // do not allow moving if the folder is being dropped into itself
     if (dropTarget.id === dragTarget.id) {
