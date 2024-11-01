@@ -22,14 +22,18 @@ export function generateFileTree(fileStructure) {
         const bar = document.createElement("div")
         const link = document.createElement("a")
         const text = document.createElement("p")
+        const popup = document.createElement("p")
 
         container.classList.add("file-tree-link")
         bar.classList.add("bar")
+        text.classList.add("text")
         link.classList.add("link")
         link.dataset.id = currId
+        popup.classList.add("popup")
 
         link.href = `/folder/${currId}`
         text.textContent = name
+        popup.textContent = name
 
         link.appendChild(text)
 
@@ -44,6 +48,7 @@ export function generateFileTree(fileStructure) {
         }
 
         container.appendChild(bar)
+        container.appendChild(popup)
         idToElements[currId] = container
 
         toSee.push(...folders)

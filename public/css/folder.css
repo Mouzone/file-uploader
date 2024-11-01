@@ -23,12 +23,26 @@ a.link {
     width: 85%;
 }
 
-a.link p {
+a.link p.text {
     width: 100px;
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.popup {
+    display: none;
+    position: absolute;
+    background-color: lightgoldenrodyellow;
+    border-radius: 8px;
+    padding: 5px;
+    transform: translate(15px, 15px);
+}
+
+/* Show the additional content when hovering over the link */
+.bar:hover + .popup {
+    display: block;
 }
 
 div.file-tree-link {
