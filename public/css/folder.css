@@ -56,7 +56,7 @@ p.item-name {
 }
 
 /* Show the additional content when hovering over the link */
-div.bar:hover + .file-tree-popup,
+p.text:hover + .file-tree-popup,
 p.item-name:hover + .item-popup {
     opacity: 1;
     visibility: visible; /* Make the popup visible */

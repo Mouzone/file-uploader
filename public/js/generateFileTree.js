@@ -37,6 +37,7 @@ export function generateFileTree(fileStructure) {
 
         link.appendChild(text)
 
+        link.appendChild(popup)
         bar.appendChild(link)
         if (folders.length) {
             bar.insertAdjacentHTML("beforeend", `<div class="toggle-icon">
@@ -48,7 +49,6 @@ export function generateFileTree(fileStructure) {
         }
 
         container.appendChild(bar)
-        container.appendChild(popup)
         idToElements[currId] = container
 
         toSee.push(...folders)
