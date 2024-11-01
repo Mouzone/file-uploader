@@ -34,12 +34,14 @@ export function generateFileTree(fileStructure) {
         link.appendChild(text)
 
         bar.appendChild(link)
-        bar.insertAdjacentHTML("beforeend", `<div class="toggle-icon">
+        if (folders.length) {
+            bar.insertAdjacentHTML("beforeend", `<div class="toggle-icon">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                                                     <title>menu-up</title>
                                                                     <path d="M7,15L12,10L17,15H7Z" />
                                                                 </svg>
                                                             </div>`)
+        }
 
         container.appendChild(bar)
         idToElements[currId] = container
@@ -50,6 +52,9 @@ export function generateFileTree(fileStructure) {
 
     while (nextToSee.length) {
         const currId = nextToSee.shift()
+        if (currId !== fileStructure.home) {
+            idToElements[currId].style.display = "none";
+        }
         const { folders } = fileStructure[currId]
         const currLink = idToElements[currId]
         folders.forEach(folder => {
@@ -60,6 +65,52 @@ export function generateFileTree(fileStructure) {
 
     container.appendChild(idToElements[fileStructure.home])
 //     iterate from leaf nodes and add
+    addFileTreeFunctionality()
+}
+
+const icons = {
+    up: `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <title>menu-up</title>
+            <path d="M7,15L12,10L17,15H7Z" />
+        </svg>
+    `,
+    down: `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <title>menu-down</title>
+            <path d="M7,10L12,15L17,10H7Z" />
+        </svg>
+    `
+};
+
+function addFileTreeFunctionality() {
+    const containers = document.querySelectorAll("div.file-tree-link")
+    containers.forEach(container => {
+        const icon = container.querySelector(".toggle-icon")
+        if (!icon) {
+            return
+        }
+        icon.addEventListener("click", (event) => {
+            if (icon.innerHTML.includes("menu-up")) {
+                // shows direct children on click
+                const childFolders = container.querySelectorAll(":scope > div.file-tree-link")
+                childFolders.forEach(childFolder => {
+                    childFolder.style.display = childFolder.style.display === "flex" ? "none" : "flex"
+                })
+            } else {
+                // on all children if display="flex" close all folders regardless of children or not
+                const childFolders = container.querySelectorAll("div.file-tree-link")
+                childFolders.forEach(childFolder => {
+                    childFolder.style.display = "none"
+                    const childIcon = childFolder.querySelector(":scope > div.bar > div.toggle-icon")
+                    if (childIcon) {
+                        childIcon.innerHTML = icons.up
+                    }
+                })
+            }
+            icon.innerHTML = icon.innerHTML.includes("menu-up") ? icons.down : icons.up
+        })
+    })
 }
 
 // todo: create option to move folders and use this for the dropdown options
