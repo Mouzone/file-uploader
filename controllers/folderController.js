@@ -116,6 +116,7 @@ module.exports.folderDeletePost = async (req, res) => {
 // logic for moving folders into another folder
 module.exports.folderMovePost = async (req, res) => {
     const { dragTarget, dropTarget } = req.body
+    console.log(dragTarget, dropTarget)
 
     // do not allow moving if the folder is being dropped into itself
     if (dropTarget.id === dragTarget.id) {
@@ -129,6 +130,11 @@ module.exports.folderMovePost = async (req, res) => {
     // get the folder that that user is trying to move
     const currFolderId = parseInt(dragTarget.id)
     const currFolder = await Folder.getFolder(currFolderId)
+
+    // do not allow moving a folder back into the same parent folder
+    if (currFolder.outerFolder === newFolderId) {
+        return
+    }
 
     // compute the oldRoute and newRoute to move in file system
     const oldRoute = currFolder.relativeRoute

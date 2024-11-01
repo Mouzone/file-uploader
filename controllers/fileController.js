@@ -98,6 +98,11 @@ module.exports.fileMovePost = async (req, res) => {
     const currFileId = parseInt(dragTarget.id)
     const currFile = await File.getFile(currFileId)
 
+    // do not allow moving a file back into the same parent folder
+    if (currFile.folderId === newFolderId) {
+        return
+    }
+
     // compute the oldRoute and newRoute to move in file system
     const oldRoute = currFile.relativeRoute
     const newName = await getValidName(currFile.name, newFolderId, "file")
