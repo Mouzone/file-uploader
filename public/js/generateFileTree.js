@@ -8,7 +8,6 @@ export function getFileStructure() {
         .then(response => response.json())
 }
 
-// todo: redesign layout, and put a element to generate the divs
 export function generateFileTree(fileStructure) {
     const container = document.getElementById("file-structure")
     const toSee = [ fileStructure.home ]
@@ -27,6 +26,7 @@ export function generateFileTree(fileStructure) {
         container.classList.add("file-tree-link")
         bar.classList.add("bar")
         link.classList.add("link")
+        link.dataset.id = currId
 
         link.href = `/folder/${currId}`
         text.textContent = name
