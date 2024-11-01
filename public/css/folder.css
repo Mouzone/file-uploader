@@ -48,7 +48,6 @@ p.item-name {
 .item-popup {
     position: absolute;
     background-color: lightgoldenrodyellow;
-    border-radius: 8px;
     padding: 5px;
     font-size: 10px;
     opacity: 0;
