@@ -31,8 +31,8 @@ model File {
 
   account   Account @relation(fields: [accountId], references: [id])
   accountId Int
-  folder    Folder? @relation(fields: [folderId], references: [id])
-  folderId  Int?
+  folder    Folder @relation(fields: [folderId], references: [id])
+  folderId  Int
   share     Share? @relation(fields: [shareId], references: [id])
   shareId   Int? @unique
 }
