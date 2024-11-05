@@ -26,7 +26,13 @@ module.exports.fileGet = async (req, res) => {
     file.size = formatFileSize(file.size)
     file.uploadTime = formatDate(file.uploadTime)
 
-    res.render("file", { file, filePath })
+    let shareExpiration = null
+    if (file.shareId) {
+        const share = await Share.getShare(file.shareId)
+        shareExpiration = formatDate(share.expiration)
+    }
+
+    res.render("file", { file, filePath, shareExpiration })
 }
 
 module.exports.fileRenamePost = async (req, res) => {
