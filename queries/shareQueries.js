@@ -19,7 +19,7 @@ module.exports.getShare = async (id) =>{
 }
 
 module.exports.deleteShare = async (id) => {
-    await prisma.share.delete({
+    return prisma.share.delete({
         where: {
             id
         }

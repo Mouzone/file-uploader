@@ -13,7 +13,7 @@ module.exports.createFolder = async (accountId, name, relativeRoute, outerFolder
 }
 
 module.exports.deleteFolder = async (id) => {
-    await prisma.folder.delete({
+    return prisma.folder.delete({
         where: {
             id,
         }
@@ -55,7 +55,7 @@ module.exports.getHomeFolder = async (accountId) => {
 }
 
 module.exports.changeOuterFolder = async (id, outerFolder) => {
-    await prisma.folder.update({
+    return prisma.folder.update({
         where: {
             id,
         },
