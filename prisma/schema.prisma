@@ -33,8 +33,8 @@ model File {
   accountId Int
   folder    Folder? @relation(fields: [folderId], references: [id])
   folderId  Int?
-  share     Share @relation(fields: [shareId], references: [id])
-  shareId   Int @unique
+  share     Share? @relation(fields: [shareId], references: [id])
+  shareId   Int? @unique
 }
 
 model Share {
@@ -42,7 +42,7 @@ model Share {
   expiration DateTime
 
   file File?
-  fileId Int
+  fileId Int @unique
 }
 
 model Folder {
