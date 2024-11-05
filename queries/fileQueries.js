@@ -80,3 +80,14 @@ module.exports.changeName = async (id, name) => {
         }
     })
 }
+
+module.exports.changeShare = async (id, shareId) => {
+    await prisma.file.update({
+        where: {
+            id,
+        },
+        data: {
+            shareId,
+        }
+    })
+}

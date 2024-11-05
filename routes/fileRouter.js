@@ -9,12 +9,14 @@ const fileRouter = Router()
 const { isAuthenticated } = require('../utility/authentication')
 
 // use isAuthenticated middleware to prevent access from people that aren't the user
+// fileRouter.get("/share/:fileId", fileController.fileShareGet)
 fileRouter.use(isAuthenticated)
 fileRouter.get("/:fileId", fileController.fileGet)
 fileRouter.post("/:fileId/rename", fileController.fileRenamePost)
 fileRouter.post("/:folderId/upload", computeUploadPath, upload.single('file'), fileController.fileUploadPost)
 fileRouter.post("/:fileId/download", fileController.fileDownloadPost)
 fileRouter.post("/:fileId/delete", fileController.fileDeletePost)
+fileRouter.post("/:fileId/share", fileController.fileSharePost)
 fileRouter.post("/:folderId/move", fileController.fileMovePost)
 
 module.exports = fileRouter
