@@ -33,6 +33,17 @@ model File {
   accountId Int
   folder    Folder? @relation(fields: [folderId], references: [id])
   folderId  Int?
+  share     Share @relation(fields: [shareId], references: [id])
+  shareId   Int @unique
+}
+
+model Share {
+  id Int @id @default(autoincrement())
+  expriation DateTime
+  url_key String
+
+  file File?
+  fileId Int
 }
 
 model Folder {
