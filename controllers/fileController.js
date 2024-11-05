@@ -20,7 +20,13 @@ module.exports.fileGet = async (req, res) => {
 
     if (!req?.user) {
         if (file.shareId) {
-            return res.render("share-file", {file})
+            const share = await Share.getShare(file.shareId)
+            const currentDate = new Date()
+            if (currentDate < share.expiration) {
+                return res.render("share-file", {file})
+            } else {
+                await Share.deleteShare(file.shareId)
+            }
         }
         return res.redirect("/")
     }
