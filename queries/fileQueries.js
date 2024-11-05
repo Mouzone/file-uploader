@@ -1,15 +1,23 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
-module.exports.createFile = async (name, size, uploadTime, accountId, folderId, relativeRoute ) => {
+module.exports.createFile = async (name, size, uploadTime, accountId, folderId, relativeRoute) => {
     await prisma.file.create({
         data: {
             name,
             size,
             uploadTime,
-            accountId,
-            folderId,
-            relativeRoute
+            relativeRoute,
+            account: {
+                connect: {
+                    id: accountId,
+                }
+            },
+            folder: {
+                connect: {
+                    id: folderId,
+                }
+            },
         }
     })
 }

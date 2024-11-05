@@ -39,6 +39,17 @@
             <form action="/file/<%= id %>/delete" method="POST">
                 <button type="submit"> Delete </button>
             </form>
+            <form action="/file/<%= id %>/share" method="POST">
+                <label for="duration"></label>
+                <input type="number" id="duration" name="duration">
+                <label for="units"></label>
+                <select id="units" name="units">
+                    <option value="hours"> hrs </option>
+                    <option value="days"> days </option>
+                    <option value="weeks"> wks </option>
+                </select>
+                <button type="submit"> Share </button>
+            </form>
             <button type="button" id="rename-button"> Rename </button>
         </div>
     </body>
