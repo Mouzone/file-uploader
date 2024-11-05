@@ -12,11 +12,13 @@ const {getHomeFolder} = require("../queries/folderQueries");
 // get folders and files nested inside folder user is trying to retrieve
 module.exports.folderGet = async (req, res) => {
     // if user is not authenticated redirect to login page
-    if (!req?.user) {
+    const folderId = parseInt(req.params.folderId)
+
+    const { accountId } = await Folder.getFolder(folderId)
+    if (!req?.user || req.user.id !== accountId) {
         return res.render("log-in", { errorMessage: ""})
     }
 
-    const folderId = parseInt(req.params.folderId)
     const username = req.user.username
     const folderPath = await getFolderPath(folderId)
     const items = {

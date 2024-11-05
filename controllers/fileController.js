@@ -18,7 +18,7 @@ module.exports.fileGet = async (req, res) => {
     file.size = formatFileSize(file.size)
     file.uploadTime = formatDate(file.uploadTime)
 
-    if (!req?.user) {
+    if (!req?.user || req.user.id !== file.accountId) {
         if (file.shareId) {
             const share = await Share.getShare(file.shareId)
             const currentDate = new Date()
