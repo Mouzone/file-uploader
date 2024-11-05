@@ -8,6 +8,7 @@ const {getFolderPath} = require("../utility/folderGet.utility");
 const {formatFileSize, formatDate} = require("../utility/format")
 const {getNewRoute} = require("../utility/getNewRoute");
 const Share = require("../queries/shareQueries")
+const {getExpirationDate} = require("../utility/getExpirationDate");
 
 // get file metadata
 module.exports.fileGet = async (req, res) => {
@@ -121,7 +122,8 @@ module.exports.fileMovePost = async (req, res) => {
 
 module.exports.fileSharePost = async (req, res) => {
     const fileId = parseInt(req.params.fileId)
-    // convert req.body.expiration to current time and send that
-    const share = await Share.createShare(req.body.expiration, fileId)
+    const expirationDate = getExpirationDate(parseInt(req.body.duration), req.body.units)
+
+    const share = await Share.createShare(expirationDate, fileId)
     await File.changeShare(fileId, share.id)
 }
