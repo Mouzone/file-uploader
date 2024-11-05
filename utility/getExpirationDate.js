@@ -1,7 +1,5 @@
 module.exports.getExpirationDate = (duration, units) => {
-    const currentDateUTC = new Date().toISOString()
-    const currentDate = new Date(currentDateUTC)
-
+    const currentDate = new Date();
     const durationInMS = {
         "hours": duration * 60 * 60 * 1000,
         "days": duration * 24 * 60 * 60 * 1000,
@@ -9,6 +7,6 @@ module.exports.getExpirationDate = (duration, units) => {
         "months": duration * 30 * 24 * 60 * 60 * 1000,
     }
 
-    const expirationMs = currentDate.getTime() + durationInMS[units]
-    return new Date(expirationMs)
+    const expirationMs = currentDate.getTime() + durationInMS[units];
+    return new Date(expirationMs).toISOString();  // Returns the expiration date in UTC
 };
