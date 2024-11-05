@@ -145,3 +145,10 @@ module.exports.fileSharePost = async (req, res) => {
     await File.changeShare(fileId, share.id)
     res.redirect(`/file/${fileId}`)
 }
+
+module.exports.fileUnsharePost = async (req, res) => {
+    const { shareId } = await File.getFile(parseInt(req.params.fileId))
+    await Share.deleteShare(shareId)
+
+    res.redirect(`/file/${req.params.fileId}`)
+}
