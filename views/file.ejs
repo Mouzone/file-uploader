@@ -34,6 +34,9 @@
                 <p> <%= uploadTime %> </p>
                 <% if (shareExpiration) {%>
                     <p> Shared until: <%= shareExpiration %></p>
+                    <form action="/file/<%= id %>/unshare" method="POST">
+                        <button> Unshare </button>
+                    </form>
                 <% } %>
             </div>
             <form action="/file/<%= id %>/download" method="POST">
