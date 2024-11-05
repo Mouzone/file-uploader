@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="viewport" >
+    <title> File </title>
+    <link rel="stylesheet" href="/css/file.css">
+</head>
+<body>
+<% const { id, name, size, uploadTime, relativeRoute } = file %>
+<div>
+    <img src="/data/uploads<%= relativeRoute %>" alt=<%= relativeRoute %>>
+    <div id="info">
+        <p> <%= size %> </p>
+        <p> <%= uploadTime %> </p>
+
+    </div>
+</div>
+</body>
+<script type="module" src="/js/fileScript.js"></script>
+</html>

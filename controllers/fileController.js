@@ -13,18 +13,22 @@ const {getExpirationDate} = require("../utility/getExpirationDate");
 // get file metadata
 module.exports.fileGet = async (req, res) => {
     // if user is not authenticated redirect to log in page
+    const fileId = parseInt(req.params.fileId)
+    const file = await File.getFile(fileId)
+    file.size = formatFileSize(file.size)
+    file.uploadTime = formatDate(file.uploadTime)
+
     if (!req?.user) {
+        if (file.shareId) {
+            return res.render("share-file", {file})
+        }
         return res.redirect("/")
     }
 
-    const fileId = parseInt(req.params.fileId)
     // get file metadata and render it
-    const file = await File.getFile(fileId)
     const filePath = await getFolderPath(file.folderId)
     filePath.push([file.name, file.id])
 
-    file.size = formatFileSize(file.size)
-    file.uploadTime = formatDate(file.uploadTime)
 
     let shareExpiration = null
     if (file.shareId) {
