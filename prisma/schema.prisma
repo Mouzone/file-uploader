@@ -39,7 +39,7 @@ model File {
 
 model Share {
   id Int @id @default(autoincrement())
-  expriation DateTime
+  expiration DateTime
   url_key String
 
   file File?
