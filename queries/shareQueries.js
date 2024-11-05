@@ -1,7 +1,7 @@
 const {PrismaClient} = require('@prisma/client')
 const prisma = new PrismaClient()
 
-module.exports.createShare = (expiration, fileId) => {
+module.exports.createShare = async (expiration, fileId) => {
     return prisma.share.create({
         data: {
             expiration,
@@ -10,10 +10,18 @@ module.exports.createShare = (expiration, fileId) => {
     })
 }
 
-module.exports.getShare = (fileId) =>{
-    prisma.share.findUnique({
+module.exports.getShare = async (id) =>{
+    return prisma.share.findUnique({
         where: {
-            fileId
+            id
+        }
+    })
+}
+
+module.exports.deleteShare = async (id) => {
+    await prisma.share.delete({
+        where: {
+            id
         }
     })
 }

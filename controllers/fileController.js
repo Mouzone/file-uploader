@@ -79,7 +79,8 @@ module.exports.fileDownloadPost = async (req, res) => {
 // upon delete route triggered delete file from the record using file id and delete it from file system
 module.exports.fileDeletePost = async (req, res) => {
     const fileId = parseInt(req.params.fileId)
-    const { folderId, relativeRoute } = await File.getFile(fileId)
+    const { folderId, relativeRoute, shareId } = await File.getFile(fileId)
+    await Share.deleteShare(shareId)
     await File.deleteFile(fileId)
 
     const path = process.env.UPLOAD_ROOT_PATH + relativeRoute
@@ -126,4 +127,5 @@ module.exports.fileSharePost = async (req, res) => {
 
     const share = await Share.createShare(expirationDate, fileId)
     await File.changeShare(fileId, share.id)
+    res.redirect(`/file/${fileId}`)
 }

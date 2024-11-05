@@ -1,5 +1,6 @@
 const Folder = require("../queries/folderQueries");
 const File = require("../queries/fileQueries");
+const Share = require("../queries/shareQueries");
 
 // return all the folders that are nested in folderToDelete; folderToDelete to leaf nodes
 module.exports.getChildFolders = async ( folderToDelete ) => {
@@ -24,6 +25,7 @@ module.exports.getChildFolders = async ( folderToDelete ) => {
 module.exports.deleteFilesFromDB = async ( folderId ) => {
     const currFiles = await File.getFiles(folderId)
     for (const file of currFiles) {
+        await Share.deleteShare(file.shareId)
         await File.deleteFile(file.id)
     }
 }
