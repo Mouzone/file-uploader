@@ -26,7 +26,7 @@
                     <%- include('components/items', { items: items, folderId: folderId, pathLength: path.length }) %>
                 <% } else {%>
                     <% const { id, name, size, uploadTime, relativeRoute } = file %>
-                    <%- include('components/file-data', { size, uploadTime, shareExpiration, relativeRoute }) %>
+                    <%- include('components/file-data', { id, size, uploadTime, shareExpiration, relativeRoute }) %>
                     <%- include('components/file-actions', { id }) %>
                 <% } %>
             </div>
