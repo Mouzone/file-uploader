@@ -187,3 +187,19 @@ div#profile div.menu button {
     background-color: white;
     margin: 10px;
 }
+
+#share-info {
+    display: flex;
+    gap: 5px;
+}
+
+#file-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+#rest-actions {
+    display: flex;
+    gap: 10px;
+}
