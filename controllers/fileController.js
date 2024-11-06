@@ -51,7 +51,7 @@ module.exports.fileGet = async (req, res) => {
 
     const { username } = await Account.getAccount(file.accountId)
 
-    res.render("template", { folder: false, username, file, filePath, shareExpiration })
+    res.render("template", { isFolder: false, username, file, filePath, shareExpiration })
 }
 
 // logic to rename a file

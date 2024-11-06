@@ -14,7 +14,7 @@
             <div id="display">
                 <div id="navbar">
                     <!--    action menu that when clicked gives option to either upload file or create folder-->
-                    <% if (folder) { %>
+                    <% if (isFolder) { %>
                         <%- include('components/folder-actions', { folderId: folderId }) %>
                     <% } %>
                     <!--        show username in top right, and on click give user settings menu -->
@@ -22,7 +22,7 @@
                 </div>
 
                 <!--    iterates through the two lists in items and renders each item with the appropriate icon-->
-                <% if (folder) { %>
+                <% if (isFolder) { %>
                     <%- include('components/items', { items: items, folderId: folderId, pathLength: folderPath.length }) %>
                 <% } else {%>
                     <% const { id, name, size, uploadTime, relativeRoute } = file %>
@@ -31,7 +31,7 @@
                 <% } %>
             </div>
         </div>
-        <% if (folder) { %>
+        <% if (isFolder) { %>
             <%- include('components/folder-path', { folderPath: folderPath })%>
         <% } else { %>
             <%- include('components/file-path', { filePath: filePath }) %>

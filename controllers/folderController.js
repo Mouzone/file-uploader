@@ -30,7 +30,7 @@ module.exports.folderGet = async (req, res) => {
     // username to be rendered
     // folderPath to show user location along with id with each path to be able to redirect to prior folders
     // items contain files and folders inside first level fo current folder to be rendered
-    res.render("template", { folder: true, folderId, username, folderPath, items })
+    res.render("template", { isFolder: true, folderId, username, folderPath, items })
 }
 
 // logic for renaming folders
