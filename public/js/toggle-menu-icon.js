@@ -30,6 +30,7 @@ export function toggleMenuIcon() {
 
     setupToggle(profileMenu, profileHeader, profileToggleIcon)
 
+    // this prevents errors when rendering File due to lacking of actionMenu
     const actionMenu = document?.querySelector("div#actions div.menu")
     if (actionMenu) {
         const actionHeader = document.getElementById("actions-header")
