@@ -15,7 +15,7 @@
                 <div id="navbar">
                     <!--    action menu that when clicked gives option to either upload file or create folder-->
                     <% if (folder) { %>
-                        <%- include('components/actions', { folderId: folderId }) %>
+                        <%- include('components/folder-actions', { folderId: folderId }) %>
                     <% } %>
                     <!--        show username in top right, and on click give user settings menu -->
                     <%- include('components/profile', { username: username }) %>
