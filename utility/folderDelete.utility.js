@@ -25,7 +25,9 @@ module.exports.getChildFolders = async ( folderToDelete ) => {
 module.exports.deleteFilesFromDB = async ( folderId ) => {
     const currFiles = await File.getFiles(folderId)
     for (const file of currFiles) {
-        await Share.deleteShare(file.shareId)
+        if (file.shareId) {
+            await Share.deleteShare(file.shareId)
+        }
         await File.deleteFile(file.id)
     }
 }
