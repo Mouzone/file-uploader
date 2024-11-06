@@ -18,11 +18,15 @@ module.exports.fileGet = async (req, res) => {
     file.size = formatFileSize(file.size)
     file.uploadTime = formatDate(file.uploadTime)
 
+    // in the case the user is authenticated, or not the correct user check if this file is shared
+    // if shared, render it, else go to login page
     if (!req?.user || req.user.id !== file.accountId) {
+        // if there is a share record
         if (file.shareId) {
-            const share = await Share.getShare(file.shareId)
+            const { expiration } = await Share.getShare(file.shareId)
             const currentDate = new Date()
-            if (currentDate < share.expiration) {
+            // if expired then go straight to redirect and clear the record, else render it
+            if (currentDate < expiration) {
                 return res.render("share-file", {file})
             } else {
                 await Share.deleteShare(file.shareId)
@@ -33,10 +37,12 @@ module.exports.fileGet = async (req, res) => {
 
     // get file metadata and render it
     const filePath = await getFolderPath(file.folderId)
+    // add onto the file's details since it is not included in getFolderPath
     filePath.push([file.name, file.id])
 
 
     let shareExpiration = null
+    // add expiration date to be rendered if it exists
     if (file.shareId) {
         const share = await Share.getShare(file.shareId)
         shareExpiration = formatDate(share.expiration)
@@ -45,13 +51,17 @@ module.exports.fileGet = async (req, res) => {
     res.render("file", { file, filePath, shareExpiration })
 }
 
+// logic to rename a file
 module.exports.fileRenamePost = async (req, res) => {
+    // get the file's original datas
     const fileId = parseInt(req.params.fileId)
     const { relativeRoute, folderId} = await File.getFile(fileId)
 
+    // with the given name, make it such that it avoids file name collisions
     const name = await getValidName(req.body.name, folderId, "file")
     await File.changeName(fileId, name)
 
+    // generate the new route using string manipulation
     const newRelativeRoute = getNewRoute(relativeRoute, name)
     await File.changeRoute(fileId, newRelativeRoute)
 
@@ -96,12 +106,16 @@ module.exports.fileDownloadPost = async (req, res) => {
 module.exports.fileDeletePost = async (req, res) => {
     const fileId = parseInt(req.params.fileId)
     const { folderId, relativeRoute, shareId } = await File.getFile(fileId)
+    // delete the share record as well, since the file will no  longer exist
     await Share.deleteShare(shareId)
+    // remove from the db
     await File.deleteFile(fileId)
 
+    // remove from the file directory
     const path = process.env.UPLOAD_ROOT_PATH + relativeRoute
     await fs.promises.rm(path)
 
+    // redirect and render the updated folder page
     res.redirect(`/folder/${folderId}`)
 }
 
@@ -137,15 +151,21 @@ module.exports.fileMovePost = async (req, res) => {
     res.redirect(`/folder/${req.params.folderId}`)
 }
 
+// logic to update the share duration of the file
 module.exports.fileSharePost = async (req, res) => {
     const fileId = parseInt(req.params.fileId)
+    // get the duration the user wants to update, and convert it to a new date
     const expirationDate = getExpirationDate(parseInt(req.body.duration), req.body.units)
 
+    // create the share record, and get the share id
     const share = await Share.createShare(expirationDate, fileId)
+    // link the new share record with the original file
     await File.changeShare(fileId, share.id)
+    // redirect to the file and refresh to show the new share info
     res.redirect(`/file/${fileId}`)
 }
 
+// remove the share duration of the file and set it back to null
 module.exports.fileUnsharePost = async (req, res) => {
     const { shareId } = await File.getFile(parseInt(req.params.fileId))
     await Share.deleteShare(shareId)

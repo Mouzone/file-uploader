@@ -14,6 +14,7 @@ module.exports.folderGet = async (req, res) => {
     const folderId = parseInt(req.params.folderId)
 
     const { accountId } = await Folder.getFolder(folderId)
+    // if user is not authenticated or not the correct user for the folder, redirect to login page
     if (!req?.user || req.user.id !== accountId) {
         return res.render("log-in", { errorMessage: ""})
     }
@@ -158,19 +159,24 @@ module.exports.folderMovePost = async (req, res) => {
 module.exports.folderAllGet = async (req, res) => {
     // uses findMany so is an object inside a list
     const toSee = await Folder.getHomeFolder(req.user.id)
+    // add the home key so we can know which key to start iterating from
     const fileStructure = { home:toSee[0].id }
 
+    // iterate through each folder getting its name, and the folders that are direct children
     while (toSee.length) {
         const {id, name} = toSee.shift()
+        // the object to be the value to the id key that contains name and folders keys
         fileStructure[id] = {}
         fileStructure[id]["name"] = name
         fileStructure[id]["folders"] = []
 
+        // get each child folder, and add it to the "folders" key and add it to the queue
         const childFolders = await Folder.getFolders(id)
         childFolders.forEach(childFolder => {
             fileStructure[id]["folders"].push(childFolder.id)
             toSee.push(childFolder)
         })
     }
+    // return in json format the fileStructure
     res.json(fileStructure)
 }
