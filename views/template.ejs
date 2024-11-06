@@ -16,6 +16,8 @@
                     <!--    action menu that when clicked gives option to either upload file or create folder-->
                     <% if (isFolder) { %>
                         <%- include('components/folder-actions', { folderId }) %>
+                    <% } else { %>
+                        <%- include('components/file-actions', { id: file.id }) %>
                     <% } %>
                     <!--        show username in top right, and on click give user settings menu -->
                     <%- include('components/profile', { username }) %>
@@ -27,7 +29,7 @@
                 <% } else {%>
                     <% const { id, name, size, uploadTime, relativeRoute } = file %>
                     <%- include('components/file-data', { id, size, uploadTime, shareExpiration, relativeRoute }) %>
-                    <%- include('components/file-actions', { id }) %>
+                    <%- include('components/share-form', { id }) %>
                 <% } %>
             </div>
         </div>

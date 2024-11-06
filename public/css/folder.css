@@ -81,6 +81,7 @@ body {
 div#content {
     display: flex;
     width: 100%;
+    gap: 10px;
 }
 
 div#file-structure {
@@ -99,11 +100,13 @@ div#display {
 
 svg {
     width: 80px;
+    align-items: center;
 }
 
 div#navbar {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 20px;
 }
 
 div#path {
@@ -149,6 +152,7 @@ div#profile-header {
 div#actions-header {
     display: flex;
     width: 70px;
+    gap: 5px;
 }
 
 div.menu {
@@ -158,6 +162,20 @@ div.menu {
     position: absolute;
     background: white;
     border: solid black;
+    justify-content: left;
+}
+
+div.menu.file {
+    background-color: white;
+    gap: 5px;
+    padding: 5px 0 5px 0;
+}
+
+div.menu.file button {
+    background-color: white;
+    width: 100%;
+    border: none;
+    padding: 0 5px 0 5px;
 }
 
 div#actions div.menu svg {

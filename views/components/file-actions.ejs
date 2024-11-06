@@ -1,17 +1,14 @@
-<div id="file-actions">
-    <form action="/file/<%= id %>/share" method="POST">
-        <label for="duration"></label>
-        <input type="number" id="duration" name="duration" step="1">
-        <label for="units"></label>
-        <select id="units" name="units">
-            <option value="hours"> hr </option>
-            <option value="days"> day </option>
-            <option value="weeks"> wk </option>
-            <option value="months"> mo </option>
-        </select>
-        <button type="submit"> Share </button>
-    </form>
-    <div id="rest-actions">
+<div id="actions">
+    <div id="actions-header">
+        Options
+        <div class="toggle-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <title>menu-up</title>
+                <path d="M7,15L12,10L17,15H7Z" />
+            </svg>
+        </div>
+    </div>
+    <div class="menu file">
         <form action="/file/<%= id %>/download" method="POST">
             <button type="submit"> Download </button>
         </form>
