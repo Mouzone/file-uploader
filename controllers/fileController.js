@@ -37,9 +37,9 @@ module.exports.fileGet = async (req, res) => {
     }
 
     // get file metadata and render it
-    const filePath = await getFolderPath(file.folderId)
+    const path = await getFolderPath(file.folderId)
     // add onto the file's details since it is not included in getFolderPath
-    filePath.push([file.name, file.id])
+    path.push([file.name, file.id])
 
 
     let shareExpiration = null
@@ -51,7 +51,7 @@ module.exports.fileGet = async (req, res) => {
 
     const { username } = await Account.getAccount(file.accountId)
 
-    res.render("template", { isFolder: false, username, file, filePath, shareExpiration })
+    res.render("template", { isFolder: false, username, file, path, shareExpiration })
 }
 
 // logic to rename a file

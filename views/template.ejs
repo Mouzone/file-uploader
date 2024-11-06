@@ -23,7 +23,7 @@
 
                 <!--    iterates through the two lists in items and renders each item with the appropriate icon-->
                 <% if (isFolder) { %>
-                    <%- include('components/items', { items: items, folderId: folderId, pathLength: folderPath.length }) %>
+                    <%- include('components/items', { items: items, folderId: folderId, pathLength: path.length }) %>
                 <% } else {%>
                     <% const { id, name, size, uploadTime, relativeRoute } = file %>
                     <%- include('components/file-data', { size, uploadTime, shareExpiration, relativeRoute }) %>
@@ -31,11 +31,7 @@
                 <% } %>
             </div>
         </div>
-        <% if (isFolder) { %>
-            <%- include('components/folder-path', { folderPath: folderPath })%>
-        <% } else { %>
-            <%- include('components/file-path', { filePath: filePath }) %>
-        <% } %>
+        <%- include('components/path', { isFolder, path: path }) %>
     </body>
     <script type="module" src="/js/folderScript.js"> </script>
 </html>
