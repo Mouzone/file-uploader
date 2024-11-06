@@ -110,7 +110,9 @@ module.exports.fileDeletePost = async (req, res) => {
     const fileId = parseInt(req.params.fileId)
     const { folderId, relativeRoute, shareId } = await File.getFile(fileId)
     // delete the share record as well, since the file will no  longer exist
-    await Share.deleteShare(shareId)
+    if (shareId) {
+        await Share.deleteShare(shareId)
+    }
     // remove from the db
     await File.deleteFile(fileId)
 
