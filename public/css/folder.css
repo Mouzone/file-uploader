@@ -193,6 +193,12 @@ div#profile div.menu button {
     gap: 5px;
 }
 
+#folder-actions {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+
 #file-actions {
     display: flex;
     flex-direction: column;

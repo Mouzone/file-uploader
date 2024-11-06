@@ -26,8 +26,10 @@
 
 <!--    display the delete button if length is not 1 due to it being home folder and it not being psosible to delete it -->
 <% if (pathLength !== 1) { %>
-    <form action="/folder/<%= folderId %>/delete" method="POST">
-        <button type="submit"> Delete </button>
-    </form>
-    <button type="button" id="rename-button"> Rename </button>
+    <div id="folder-actions">
+        <form action="/folder/<%= folderId %>/delete" method="POST">
+            <button type="submit"> Delete </button>
+        </form>
+        <button type="button" id="rename-button"> Rename </button>
+    </div>
 <% } %>
