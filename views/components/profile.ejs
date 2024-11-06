@@ -1,0 +1,16 @@
+<div id="profile">
+    <div id="profile-header">
+        <%= username %>
+        <div class="toggle-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <title>menu-up</title>
+                <path d="M7,15L12,10L17,15H7Z" />
+            </svg>
+        </div>
+    </div>
+    <div class="menu">
+        <form action="/log-out" method="POST">
+            <button type="submit"> Log Out </button>
+        </form>
+    </div>
+</div>

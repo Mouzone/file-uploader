@@ -30,7 +30,7 @@ module.exports.folderGet = async (req, res) => {
     // username to be rendered
     // folderPath to show user location along with id with each path to be able to redirect to prior folders
     // items contain files and folders inside first level fo current folder to be rendered
-    res.render("folder", { folderId, username, folderPath, items })
+    res.render("template", { folder: true, folderId, username, folderPath, items })
 }
 
 // logic for renaming folders
@@ -159,7 +159,7 @@ module.exports.folderMovePost = async (req, res) => {
 module.exports.folderAllGet = async (req, res) => {
     // uses findMany so is an object inside a list
     const toSee = await Folder.getHomeFolder(req.user.id)
-    // add the home key so we can know which key to start iterating from
+    // add the home key, so we can know which key to start iterating from
     const fileStructure = { home:toSee[0].id }
 
     // iterate through each folder getting its name, and the folders that are direct children

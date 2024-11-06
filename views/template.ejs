@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> File Uploader </title>
+        <link rel="stylesheet" href="/css/folder.css">
+    </head>
+    <body>
+        <div id="content">
+            <div id="file-structure">
+
+            </div>
+            <div id="display">
+                <div id="navbar">
+                    <!--    action menu that when clicked gives option to either upload file or create folder-->
+                    <% if (folder) { %>
+                        <%- include('components/actions', { folderId: folderId }) %>
+                    <% } %>
+                    <!--        show username in top right, and on click give user settings menu -->
+                    <%- include('components/profile', { username: username }) %>
+                </div>
+
+                <!--    iterates through the two lists in items and renders each item with the appropriate icon-->
+                <% if (folder) { %>
+                    <%- include('components/items', { items: items, folderId: folderId, pathLength: folderPath.length })%>
+                <% } %>
+
+            </div>
+        </div>
+        <%- include('components/path', { folderPath: folderPath})%>
+    </body>
+    <script type="module" src="/js/folderScript.js"> </script>
+</html>
