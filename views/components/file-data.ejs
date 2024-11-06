@@ -1,0 +1,11 @@
+<img src="/data/uploads<%= relativeRoute %>" alt=<%= relativeRoute %>>
+<div id="info">
+    <p> <%= size %> </p>
+    <p> <%= uploadTime %> </p>
+    <% if (shareExpiration) {%>
+        <p> Shared until: <%= shareExpiration %></p>
+        <form action="/file/<%= id %>/unshare" method="POST">
+            <button> Unshare </button>
+        </form>
+    <% } %>
+</div>

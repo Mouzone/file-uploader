@@ -1,0 +1,19 @@
+<div id="path">
+    <!--            for filepath make sure that if the length of the path is 0 that the home button is not clickable-->
+    <!--            if we are at 0 index then it is the home index -->
+    <!--            make any segment that isn't the current segment the user is on to be clickable and to redirect-->
+    <% for (let i = 0; i < filePath.length; i++) {%>
+        <% let [ name, folderId ] = filePath[i] %>
+
+        <% if ( i !== filePath.length - 1) { %>
+            <a href="/folder/<%= folderId %>"><%= name %></a>
+            <p> > </p>
+        <% } else { %>
+            <!--                    folderId for filePath is actually fileId-->
+            <form data-curr-folder="<%= folderId %>" id="rename-form" action="/file/<%= folderId %>/rename" method="POST">
+                <label for="name"></label>
+                <input type="text" id="name" name="name" value="<%= name %>"  disabled>
+            </form>
+        <% } %>
+    <% }%>
+</div>

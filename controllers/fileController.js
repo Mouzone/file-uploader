@@ -8,6 +8,7 @@ const {getFolderPath} = require("../utility/folderGet.utility");
 const {formatFileSize, formatDate} = require("../utility/format")
 const {getNewRoute} = require("../utility/getNewRoute");
 const Share = require("../queries/shareQueries")
+const Account = require("../queries/accountQueries")
 const {getExpirationDate} = require("../utility/getExpirationDate");
 
 // get file metadata
@@ -48,7 +49,9 @@ module.exports.fileGet = async (req, res) => {
         shareExpiration = formatDate(share.expiration)
     }
 
-    res.render("file", { file, filePath, shareExpiration })
+    const { username } = await Account.getAccount(file.accountId)
+
+    res.render("template", { folder: false, username, file, filePath, shareExpiration })
 }
 
 // logic to rename a file
