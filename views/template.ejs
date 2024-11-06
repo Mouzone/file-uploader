@@ -33,5 +33,9 @@
         </div>
         <%- include('components/path', { isFolder, path: path }) %>
     </body>
-    <script type="module" src="/js/folderScript.js"> </script>
+    <% if (isFolder) { %>
+        <script type="module" src="/js/folderScript.js"></script>
+    <% } else { %>
+        <script type="module" src="/js/fileScript.js"></script>
+    <% } %>
 </html>

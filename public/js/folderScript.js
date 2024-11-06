@@ -22,6 +22,6 @@ addFolderFormLogic(currFolder)
 // add svg and menu toggles for user menu and action menu
 toggleMenuIcon()
 
-// add logic to make drag and drove to mvoe folders and files possible
+// add logic to make drag and drove to move folders and files possible
 addFolderFunctionality(currFolder)
 addFileFunctionality()

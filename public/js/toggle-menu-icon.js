@@ -28,10 +28,13 @@ export function toggleMenuIcon() {
     const profileHeader = document.getElementById("profile-header")
     const profileToggleIcon = profileHeader.querySelector(".toggle-icon")
 
-    const actionMenu = document.querySelector("div#actions div.menu")
-    const actionHeader = document.getElementById("actions-header")
-    const actionToggleIcon = actionHeader.querySelector(".toggle-icon")
-
     setupToggle(profileMenu, profileHeader, profileToggleIcon)
-    setupToggle(actionMenu, actionHeader, actionToggleIcon)
+
+    const actionMenu = document?.querySelector("div#actions div.menu")
+    if (actionMenu) {
+        const actionHeader = document.getElementById("actions-header")
+        const actionToggleIcon = actionHeader.querySelector(".toggle-icon")
+
+        setupToggle(actionMenu, actionHeader, actionToggleIcon)
+    }
 }
